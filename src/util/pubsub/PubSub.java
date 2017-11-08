@@ -15,7 +15,7 @@ import java.util.function.Function;
  * @author ramilmsh
  */
 public class PubSub {
-    private static PubSub pubsub;
+    private static PubSub instance;
 
     /**
      * Channel list
@@ -94,9 +94,9 @@ public class PubSub {
     }
 
     public static PubSub getInstance() {
-        if (pubsub == null)
-            pubsub = new PubSub();
+        if (instance == null)
+            instance = new PubSub();
 
-        return pubsub;
+        return instance;
     }
 }

@@ -1,5 +1,6 @@
 package util.pubsub;
 
+import util.pubsub.messages.ExceptionMessage;
 import util.pubsub.messages.Message;
 import util.pubsub.messages.TestMessage;
 
@@ -14,11 +15,14 @@ import java.util.function.Function;
  * @author ramilmsh
  */
 public class PubSub {
+    private static PubSub pubsub;
+
     /**
      * Channel list
      */
     public enum Channel {
-        TEST_MESSAGE(TestMessage.class);
+        TEST_MESSAGE(TestMessage.class),
+        EXCEPTION_MESSAGE(ExceptionMessage.class);
 
         Class<? extends Message> clazz;
 
@@ -87,5 +91,12 @@ public class PubSub {
         if (callbacksSync.containsKey(channel))
             return callbacksSync.get(channel).apply(msg);
         return null;
+    }
+
+    public static PubSub getInstance() {
+        if (pubsub == null)
+            pubsub = new PubSub();
+
+        return pubsub;
     }
 }

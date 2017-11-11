@@ -1,5 +1,6 @@
 package authoring;
 
+import authoring.panels.CameraPanel;
 import authoring.panels.MenuBarPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -41,6 +42,7 @@ public class Screen {
         root = new BorderPane();
 
         root.setTop(new MenuBarPanel().getRegion());
+        root.setBottom(new CameraPanel(20, WIDTH, HEIGHT).getRegion()); //size still need to be adjusted, just for testing
 
         Scene scene = new Scene(root,WIDTH, HEIGHT);
         stage.setScene(scene);

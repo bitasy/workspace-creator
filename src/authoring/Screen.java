@@ -1,5 +1,6 @@
 package authoring;
 
+import authoring.panels.CameraPanel;
 import authoring.panels.MenuBarPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -24,26 +25,31 @@ public class Screen {
     public static final int CAMERA = 4;
 
 
-    private final int WIDTH;
-    private final int HEIGHT;
-
     private BorderPane root;
+    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
 
     /**
      * Constructs a new Screen, which in turn creates a new environment in the specified Stage.
      * @param stage the stage that will display the screen
      */
     public Screen(Stage stage){
-        ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
-        WIDTH = Integer.parseInt(properties.getString("width"));
-        HEIGHT = Integer.parseInt(properties.getString("height"));
+        int width = getIntValue("width");
+        int height = getIntValue("height");
+        int cameraWidth = getIntValue("camerawidth");
+        int cameraHeight = getIntValue("cameraheight");
+        int gridNum = getIntValue("camerarownum");
 
         root = new BorderPane();
 
         root.setTop(new MenuBarPanel().getRegion());
+        root.setCenter(new CameraPanel(gridNum, cameraWidth, cameraHeight).getRegion());
 
-        Scene scene = new Scene(root,WIDTH, HEIGHT);
+        Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private int getIntValue(String key){
+        return Integer.parseInt(properties.getString(key));
     }
 }

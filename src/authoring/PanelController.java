@@ -1,5 +1,6 @@
 package authoring;
 
+import authoring.panels.CameraPanel;
 import engine.Engine;
 
 /**
@@ -9,9 +10,12 @@ import engine.Engine;
  */
 public class PanelController {
 	private Engine myEngine;
+	private CameraPanel myCamera;
 	
-	public PanelController() {
-		myEngine = new Engine();
+	public PanelController(CameraPanel camera) {
+		
+		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myCamera = camera;
 	}
 	
 }

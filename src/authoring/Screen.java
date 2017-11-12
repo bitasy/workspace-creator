@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 /**
  * Screen represents the container of the various areas of the authoring environment user interface. Areas can contain multiple Panels, and each Panel specifies what area it should be viewed in.
  * @author Brian Nieves
+ * @author estellehes
  */
 public class Screen {
 

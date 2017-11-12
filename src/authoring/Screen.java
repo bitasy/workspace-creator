@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 /**
  * Screen represents the container of the various areas of the authoring environment user interface. Areas can contain multiple Panels, and each Panel specifies what area it should be viewed in.
  * @author Brian Nieves
+ * @author estellehes
  */
 public class Screen {
 
@@ -25,27 +26,39 @@ public class Screen {
     public static final int CAMERA = 4;
 
 
-    private final int WIDTH;
-    private final int HEIGHT;
-
     private BorderPane root;
+    private PanelController myController;
+    private MenuBarPanel myMenuBar;
+    private CameraPanel myCameraPanel;
 
     /**
      * Constructs a new Screen, which in turn creates a new environment in the specified Stage.
      * @param stage the stage that will display the screen
      */
     public Screen(Stage stage){
-        ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
-        WIDTH = Integer.parseInt(properties.getString("width"));
-        HEIGHT = Integer.parseInt(properties.getString("height"));
+        int width = getIntValue("width");
+        int height = getIntValue("height");
+        int cameraWidth = getIntValue("camerawidth");
+        int cameraHeight = getIntValue("cameraheight");
+        int gridNum = getIntValue("camerarownum");
 
         root = new BorderPane();
+        myMenuBar = new MenuBarPanel();
+        myCameraPanel = new CameraPanel();
+        myController = new PanelController(myCameraPanel); //just for testing, should not pass camera panel into controller
+        
+        myMenuBar.setController();
+        myCameraPanel.setController();
 
-        root.setTop(new MenuBarPanel().getRegion());
-        root.setBottom(new CameraPanel(20, WIDTH, HEIGHT).getRegion()); //size still need to be adjusted, just for testing
+        root.setTop(myMenuBar.getRegion());
+        root.setCenter(myCameraPanel.getRegion()); //size still need to be adjusted, just for testing
 
-        Scene scene = new Scene(root,WIDTH, HEIGHT);
+        Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private int getIntValue(String key){
+        return Integer.parseInt(properties.getString(key));
     }
 }

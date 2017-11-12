@@ -21,9 +21,9 @@ public interface Panel {
     int getArea();
 
     /**
-     * Sets the controller with which this Panel will communicate with both other panels and the engine. This method will be called directly after the creation of any Panel object by the Screen. Its full implementation is not required for Panels that require no communication with other parts of the environment.
+     * Sets the controller with which this Panel will communicate with both other panels and the engine. This method will be called directly after the creation of any Panel object by the Screen. Its implementation is not required for Panels that require no communication with other parts of the environment.
      */
-    void setController();
+    default void setController(PanelController controller){}
 
     /**
      * Returns the title of the panel to be displayed in the authoring environment.

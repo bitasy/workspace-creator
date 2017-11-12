@@ -1,6 +1,5 @@
 package authoring;
 
-import authoring.panels.MenuBarPanel;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -36,7 +35,9 @@ public class Screen {
 
 
     private BorderPane root;
+    private PanelController controller;
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
+    private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
     private StringBuilder errorMessage = new StringBuilder();
 
     /**
@@ -46,9 +47,9 @@ public class Screen {
     public Screen(Stage stage){
         int width = getIntValue("width");
         int height = getIntValue("height");
-        int cameraWidth = getIntValue("camerawidth");
 
         root = new BorderPane();
+        controller = new PanelController();
 
         TabPane bottom_left = new TabPane();
         TabPane bottom_right = new TabPane();
@@ -80,8 +81,9 @@ public class Screen {
                     break;
                 case CAMERA:
                     root.setCenter(panel.getRegion());
+                    break;
                 default:
-                    errorMessage.append(panel.title() + " does not have a designated area and could not be loaded.\n");
+                    errorMessage.append(panel.title() + panelStrings.getString("noarea"));
                     break;
             }
         }
@@ -110,38 +112,39 @@ public class Screen {
     private List<Panel> getPanels(){
         List<Panel> panels = new ArrayList<>();
         try {
-            File panelsFolder = new File("src/authoring/panels");
+            File panelsFolder = new File(panelStrings.getString("path"));
             File[] panelFiles = panelsFolder.listFiles();
             String[] names = new String[panelFiles.length];
             for(int i = 0; i < panelFiles.length; i++){
                 names[i] = panelFiles[i].getName();
             }
 
-            String qualifier = "authoring.panels.";
+            String qualifier = panelStrings.getString("classqualifier");
 
             for(String panelName : names){
                 try {
                     Class<Panel> panelClass = (Class<Panel>) Class.forName(qualifier + panelName.replace(".java", ""));
                     Constructor<Panel> panelConstructor = panelClass.getConstructor();
                     Panel panel = panelConstructor.newInstance();
+                    panel.setController(controller);
                     panels.add(panel);
                 } catch (ClassNotFoundException e) {
-                    errorMessage.append("Could not find panel: " + e.getMessage() + "\n");
+                    errorMessage.append(String.format(panelStrings.getString("nopanel"), e.getMessage()));
                 } catch (NoSuchMethodException e) {
-                    errorMessage.append("Could not find default constructor: " + e.getMessage() + "\n");
+                    errorMessage.append(String.format(panelStrings.getString("noconstructor"), e.getMessage()));
                 } catch (InstantiationException e) {
-                    errorMessage.append("Could not create instance: " + e.getMessage() + "\n");
+                    errorMessage.append(String.format(panelStrings.getString("noinstance"), e.getMessage()));
                 } catch (IllegalAccessException e) {
-                    errorMessage.append("Could not access constructor: " + e.getMessage() + "\n");
+                    errorMessage.append(String.format(panelStrings.getString("hiddenconstructor"), e.getMessage()));
                 } catch (InvocationTargetException e) {
-                    errorMessage.append("Could not invocate panel: " + e.getMessage());
+                    errorMessage.append(String.format(panelStrings.getString("noinvocation"), e.getMessage()));
                 }
             }
 
             return panels;
 
         } catch (NullPointerException e){
-            errorMessage.append("Path " + "src/authoring/panels" + " could not be located. \n");
+            errorMessage.append(panelStrings.getString("nopath"));
             displayError();
             Platform.exit();
         }
@@ -151,7 +154,7 @@ public class Screen {
     private void displayError() {
         if(errorMessage.length() > 0) {
             Alert errors = new Alert(Alert.AlertType.ERROR);
-            errors.setTitle("Error Loading Panel(s)");
+            errors.setTitle(panelStrings.getString("errortitle"));
             errors.setContentText(errorMessage.toString());
 
             errors.showAndWait();

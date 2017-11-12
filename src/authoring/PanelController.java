@@ -19,12 +19,16 @@ public class PanelController {
 	private Button myPause;
 	
 	
-	public PanelController(CameraPanel camera) {
-		
+	public PanelController() {
 		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+	}
+
+	public void addCamera(CameraPanel camera){
 		myCamera = camera;
 		myPlay = camera.getPlay();
 		myPause = camera.getPause();
 	}
+
+
 	
 }

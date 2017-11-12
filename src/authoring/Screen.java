@@ -42,7 +42,7 @@ public class Screen {
         root = new BorderPane();
 
         root.setTop(new MenuBarPanel().getRegion());
-        root.setBottom(new CameraPanel(20, WIDTH, HEIGHT).getRegion()); //size still need to be adjusted, just for testing
+        root.setCenter(new CameraPanel().getRegion()); //size still need to be adjusted, just for testing
 
         Scene scene = new Scene(root,WIDTH, HEIGHT);
         stage.setScene(scene);

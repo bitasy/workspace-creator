@@ -16,7 +16,7 @@ public interface Panel {
 
     /**
      * Returns which area of the Screen the Panel will be displayed on. The return is expected to have the value of one of the area constants specified in the Screen class.
-     * @return
+     * @return the area to be displayed in
      */
     int getArea();
 
@@ -24,4 +24,10 @@ public interface Panel {
      * Sets the controller with which this Panel will communicate with both other panels and the engine. This method will be called directly after the creation of any Panel object by the Screen. Its full implementation is not required for Panels that require no communication with other parts of the environment.
      */
     void setController();
+
+    /**
+     * Returns the title of the panel to be displayed in the authoring environment.
+     * @return the title
+     */
+    String title();
 }

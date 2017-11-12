@@ -30,6 +30,7 @@ public class Screen {
     private PanelController myController;
     private MenuBarPanel myMenuBar;
     private CameraPanel myCameraPanel;
+    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
 
     /**
      * Constructs a new Screen, which in turn creates a new environment in the specified Stage.
@@ -38,9 +39,6 @@ public class Screen {
     public Screen(Stage stage){
         int width = getIntValue("width");
         int height = getIntValue("height");
-        int cameraWidth = getIntValue("camerawidth");
-        int cameraHeight = getIntValue("cameraheight");
-        int gridNum = getIntValue("camerarownum");
 
         root = new BorderPane();
         myMenuBar = new MenuBarPanel();

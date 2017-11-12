@@ -27,4 +27,6 @@ public class PanelController {
 		myPause = camera.getPause();
 	}
 	
+	
+	
 }

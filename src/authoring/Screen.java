@@ -35,17 +35,10 @@ public class Screen {
 
 
     private BorderPane root;
-<<<<<<< HEAD
-    private PanelController myController;
-    private MenuBarPanel myMenuBar;
-    private CameraPanel myCameraPanel;
-    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
-=======
     private PanelController controller;
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
     private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
     private StringBuilder errorMessage = new StringBuilder();
->>>>>>> 203091d9b1ad2f0e3d16d0c0e85539c36c08adcc
 
     /**
      * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.

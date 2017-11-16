@@ -7,8 +7,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -27,16 +25,15 @@ import java.util.ResourceBundle;
 public class Screen {
 
     /**
-     * Constants represent the various areas of the user interface.
-     * @see <a href="https://coursework.cs.duke.edu/CompSci308_2017Fall/voogasalad_programmersforpeaches/raw/master/doc/UI.png">UI Image</a>
+     * Constants represent the various areas of the user interface. The values MENU and CAMERA are expected to refer only to the MenuBarPanel and CameraPanel. The rest are tabbable, and are stored in a List of TabPane objects for each area.
      */
-
     public static final int BOTTOM = 0;
     public static final int TOP_LEFT = 1;
     public static final int TOP_RIGHT = 2;
     public static final int BOTTOM_LEFT = 3;
     public static final int BOTTOM_RIGHT = 4;
-    public static final int TOP = 5;
+    //Areas below this line ARE NOT TABBABLE.
+    public static final int MENU = 5;
     public static final int CAMERA = 6;
 
 
@@ -47,7 +44,7 @@ public class Screen {
     private StringBuilder errorMessage = new StringBuilder();
 
     /**
-     * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.
+     * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A TabPane is created for each tabbable area, as defined by the constants in this class. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.
      * @param stage the stage that will display the screen
      */
     public Screen(Stage stage){
@@ -63,9 +60,6 @@ public class Screen {
 
         int width = (int) primaryScreenBounds.getWidth();
         int height = (int) primaryScreenBounds.getHeight();
-
-
-
         int cameraWidth = getIntValue("camerawidth");
         int cameraHeight = getIntValue("cameraheight");
 
@@ -73,7 +67,7 @@ public class Screen {
         controller = new PanelController();
 
         List<TabPane> tabAreas = new ArrayList<>();
-        for(int i = 0; i <= TOP; i++){
+        for(int i = 0; i <= MENU; i++){
             tabAreas.add(new TabPane());
         }
 
@@ -96,7 +90,7 @@ public class Screen {
                 case BOTTOM_RIGHT:
                     makeTab(panel, tabAreas.get(panel.getArea()));
                     break;
-                case TOP:
+                case MENU:
                     root.setTop(panel.getRegion());
                     break;
                 case CAMERA:

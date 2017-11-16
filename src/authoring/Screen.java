@@ -1,5 +1,6 @@
 package authoring;
 
+<<<<<<< HEAD
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -14,6 +15,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+=======
+import authoring.panels.CameraPanel;
+import authoring.panels.MenuBarPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
+>>>>>>> a99dff4e041643300ea9ab418d2bfbd70f12f6a9
 import java.util.ResourceBundle;
 
 /**
@@ -35,6 +44,7 @@ public class Screen {
 
 
     private BorderPane root;
+<<<<<<< HEAD
     private PanelController controller;
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
     private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
@@ -42,11 +52,20 @@ public class Screen {
 
     /**
      * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.
+=======
+    private PanelController myController;
+    private MenuBarPanel myMenuBar;
+    private CameraPanel myCameraPanel;
+
+    /**
+     * Constructs a new Screen, which in turn creates a new environment in the specified Stage.
+>>>>>>> a99dff4e041643300ea9ab418d2bfbd70f12f6a9
      * @param stage the stage that will display the screen
      */
     public Screen(Stage stage){
         int width = getIntValue("width");
         int height = getIntValue("height");
+<<<<<<< HEAD
 
         root = new BorderPane();
         controller = new PanelController();
@@ -58,12 +77,29 @@ public class Screen {
         setupTabs(root, bottom_left, bottom_right, top_right);
 
         addPanels(bottom_left, bottom_right, top_right);
+=======
+        int cameraWidth = getIntValue("camerawidth");
+        int cameraHeight = getIntValue("cameraheight");
+        int gridNum = getIntValue("camerarownum");
+
+        root = new BorderPane();
+        myMenuBar = new MenuBarPanel();
+        myCameraPanel = new CameraPanel();
+        myController = new PanelController(myCameraPanel); //just for testing, should not pass camera panel into controller
+        
+        myMenuBar.setController();
+        myCameraPanel.setController();
+
+        root.setTop(myMenuBar.getRegion());
+        root.setCenter(myCameraPanel.getRegion()); //size still need to be adjusted, just for testing
+>>>>>>> a99dff4e041643300ea9ab418d2bfbd70f12f6a9
 
         Scene scene = new Scene(root, width, height);
         stage.setScene(scene);
         stage.show();
     }
 
+<<<<<<< HEAD
     private void addPanels(TabPane bottom_left, TabPane bottom_right, TabPane top_right) {
         for (Panel panel : getPanels()) {
             switch (panel.getArea()){
@@ -160,4 +196,9 @@ public class Screen {
             errors.showAndWait();
         }
     }
+=======
+    private int getIntValue(String key){
+        return Integer.parseInt(properties.getString(key));
+    }
+>>>>>>> a99dff4e041643300ea9ab418d2bfbd70f12f6a9
 }

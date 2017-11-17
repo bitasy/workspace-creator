@@ -29,8 +29,13 @@ public class PanelController {
 	private LibraryPanel myLibrary;
 	private TilePane myTile;
 	private ChoiceBox<String> myEntType;
+<<<<<<< HEAD
 
 
+=======
+	
+	
+>>>>>>> 98627e938089da10cbd978a16cccf0589ca307c2
 	public PanelController() {
 		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	}
@@ -44,7 +49,11 @@ public class PanelController {
 		myLayer = camera.getLayer();
 		myGrid = camera.getGridPane();
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 98627e938089da10cbd978a16cccf0589ca307c2
 	public void addLibrary(LibraryPanel library) {
 		myLibrary = library;
 		myTile = library.getTile();
@@ -52,8 +61,14 @@ public class PanelController {
 	}
 
 
+<<<<<<< HEAD
 
 
 
+=======
+	
+	
+	
+>>>>>>> 98627e938089da10cbd978a16cccf0589ca307c2
 }
 

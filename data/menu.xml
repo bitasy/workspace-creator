@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <menu>
+        <name>File</name>
+        <item>
+            <name>Save</name>
+            <type>button</type>
+            <strategy>save</strategy>
+        </item>
+    </menu>
+    <menu>
+        <name>View</name>
+        <item>
+            <name>ConsolePanel</name>
+            <type>button</type>
+            <strategy>toggleConsole</strategy>
+        </item>
+    </menu>
+</resources>

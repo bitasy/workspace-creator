@@ -1,6 +1,6 @@
 package authoring;
 
-import authoring.panels.CameraPanel;
+import authoring.panels.reserved.CameraPanel;
 import engine.Engine;
 import javafx.scene.control.Button;
 

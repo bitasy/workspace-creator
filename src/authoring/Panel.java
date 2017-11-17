@@ -15,10 +15,10 @@ public interface Panel {
     Region getRegion();
 
     /**
-     * Returns which area of the Screen the Panel will be displayed on. The return is expected to have the value of one of the area constants specified in the Screen class.
-     * @return the area to be displayed in
+     * Returns which area of the Screen the Panel will be displayed on.
+     * @return the position to be displayed in
      */
-    int getArea();
+    ScreenPosition getPosition();
 
     /**
      * Sets the controller with which this Panel will communicate with both other panels and the engine. This method will be called directly after the creation of any Panel object by the Screen. Its implementation is not required for Panels that require no communication with other parts of the environment.

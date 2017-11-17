@@ -9,6 +9,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 
+
 /**
  * TODO: Create the controller
  * 
@@ -17,7 +18,7 @@ import javafx.scene.layout.TilePane;
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController {
+public class PanelController implements IPanelDelegate {
 	private Engine myEngine;
 	private CameraPanel myCamera;
 	private Button myPlay;

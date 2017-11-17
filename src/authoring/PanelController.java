@@ -4,6 +4,7 @@ import authoring.panels.CameraPanel;
 import engine.Engine;
 import javafx.scene.control.Button;
 
+
 /**
  * TODO: Create the controller
  * 
@@ -12,7 +13,7 @@ import javafx.scene.control.Button;
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController {
+public class PanelController implements IPanelDelegate {
 	private Engine myEngine;
 	private CameraPanel myCamera;
 	private Button myPlay;

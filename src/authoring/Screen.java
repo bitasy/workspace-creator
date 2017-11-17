@@ -27,14 +27,14 @@ public class Screen {
     /**
      * Constants represent the various areas of the user interface. The values MENU and CAMERA are expected to refer only to the MenuBarPanel and CameraPanel. The rest are tabbable, and are stored in a List of TabPane objects for each area.
      */
-    public static final int BOTTOM = 0;
-    public static final int TOP_LEFT = 1;
-    public static final int TOP_RIGHT = 2;
-    public static final int BOTTOM_LEFT = 3;
-    public static final int BOTTOM_RIGHT = 4;
-    //Areas below this line ARE NOT TABBABLE.
-    public static final int MENU = 5;
-    public static final int CAMERA = 6;
+    public static final int CAMERA = 0;
+    public static final int MENU = 1;
+    //Areas above this line ARE NOT TABBABLE.
+    public static final int BOTTOM = 2;
+    public static final int TOP_LEFT = 3;
+    public static final int TOP_RIGHT = 4;
+    public static final int BOTTOM_LEFT = 5;
+    public static final int BOTTOM_RIGHT = 6;
 
 
     private BorderPane root;
@@ -60,14 +60,14 @@ public class Screen {
 
         int width = (int) primaryScreenBounds.getWidth();
         int height = (int) primaryScreenBounds.getHeight();
-        int cameraWidth = getIntValue("camerawidth");
-        int cameraHeight = getIntValue("cameraheight");
+        double cameraWidth = width*getDoubleValue("camerawidthscale");
+        double cameraHeight = cameraWidth*getDoubleValue("cameraheighttowidthratio");
 
         root = new BorderPane();
         controller = new PanelController();
 
         List<TabPane> tabAreas = new ArrayList<>();
-        for(int i = 0; i <= MENU; i++){
+        for(int i = MENU+1; i <= BOTTOM_RIGHT; i++){
             tabAreas.add(new TabPane());
         }
 
@@ -104,11 +104,15 @@ public class Screen {
         displayError();
     }
 
-    private int getIntValue(String key){
+/*    private int getIntValue(String key){
         return Integer.parseInt(properties.getString(key));
+    }*/
+
+    private double getDoubleValue(String key) {
+        return Double.parseDouble(properties.getString(key));
     }
 
-    private void setupTabs(BorderPane root, List<TabPane> tabAreas, int width, int height) {
+    private void setupTabs(BorderPane root, List<TabPane> tabAreas, double width, double height) {
         root.setBottom(tabAreas.get(BOTTOM));
 
         for(TabPane tabPane : tabAreas){

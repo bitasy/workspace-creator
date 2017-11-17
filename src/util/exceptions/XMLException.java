@@ -9,7 +9,3 @@ public class XMLException extends RuntimeException {
         return "Could not load menu bar. Check the XML file.";
     }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 98627e938089da10cbd978a16cccf0589ca307c2

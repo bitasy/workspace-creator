@@ -1,7 +1,7 @@
 package authoring;
 
 import authoring.panels.reserved.CameraPanel;
-import authoring.panels.LibraryPanel;
+import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -48,8 +48,8 @@ public class PanelController implements IPanelDelegate {
 	
 	public void addLibrary(LibraryPanel library) {
 		myLibrary = library;
-		myTile = library.getTile();
-		myEntType = library.getEntType();
+//		myTile = library.getTile();
+//		myEntType = library.getEntType();
 	}
 
 

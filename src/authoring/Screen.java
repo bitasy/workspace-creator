@@ -7,8 +7,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -24,21 +22,11 @@ import java.util.ResourceBundle;
  * @author Brian Nieves
  * @author estellehes
  */
-public class Screen {
+public class Screen {/*
 
-    /**
-     * Constants represent the various areas of the user interface.
-     * @see <a href="https://coursework.cs.duke.edu/CompSci308_2017Fall/voogasalad_programmersforpeaches/raw/master/doc/UI.png">UI Image</a>
-     */
-
-    public static final int BOTTOM = 0;
-    public static final int TOP_LEFT = 1;
-    public static final int TOP_RIGHT = 2;
-    public static final int BOTTOM_LEFT = 3;
-    public static final int BOTTOM_RIGHT = 4;
-    public static final int TOP = 5;
-    public static final int CAMERA = 6;
-
+    *//**
+     * Constants represent the various areas of the user interface. The values MENU and CAMERA are expected to refer only to the MenuBarPanel and CameraPanel. The rest are tabbable, and are stored in a List of TabPane objects for each area.
+     *//*
 
     private BorderPane root;
     private PanelController controller;
@@ -46,15 +34,15 @@ public class Screen {
     private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
     private StringBuilder errorMessage = new StringBuilder();
 
-    /**
-     * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.
+    *//**
+     * Constructs a new Screen, which in turn creates a new environment in the specified Stage. The screen's layout is defined by  a BorderPanel, and each Panel src/authoring/panels is loaded, if possible, and added to the correct area of the Screen. A TabPane is created for each tabbable area, as defined by the constants in this class. A tailored error message is displayed on any errors that have occured, and if the Screen cannot find the panels folder, the program exits.
      * @param stage the stage that will display the screen
-     */
+     *//*
     public Screen(Stage stage){
 
-        /*
+        *//*
          * Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
-         */
+         *//*
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         stage.setX(primaryScreenBounds.getMinX());
         stage.setY(primaryScreenBounds.getMinY());
@@ -63,18 +51,17 @@ public class Screen {
 
         int width = (int) primaryScreenBounds.getWidth();
         int height = (int) primaryScreenBounds.getHeight();
-
-
-
-        int cameraWidth = getIntValue("camerawidth");
-        int cameraHeight = getIntValue("cameraheight");
+        double cameraWidth = width*getDoubleValue("camerawidthscale");
+        double cameraHeight = cameraWidth*getDoubleValue("cameraheighttowidthratio");
 
         root = new BorderPane();
         controller = new PanelController();
 
         List<TabPane> tabAreas = new ArrayList<>();
-        for(int i = 0; i <= TOP; i++){
-            tabAreas.add(new TabPane());
+        for(ScreenPosition pos : ScreenPosition.values()){
+            if(pos.isTabbed()){
+                tabAreas.add(new TabPane());
+            }
         }
 
         setupTabs(root, tabAreas, (width - cameraWidth) / 2, cameraHeight / 2);
@@ -87,16 +74,21 @@ public class Screen {
     }
 
     private void addPanels(List<TabPane> tabAreas) {
+
+
+
+
+
         for (Panel panel : getPanels()) {
-            switch (panel.getArea()){
+            switch (panel.getPosition()){
                 case BOTTOM:
                 case TOP_LEFT:
                 case TOP_RIGHT:
                 case BOTTOM_LEFT:
                 case BOTTOM_RIGHT:
-                    makeTab(panel, tabAreas.get(panel.getArea()));
+                    makeTab(panel, tabAreas.get(panel.getPosition()));
                     break;
-                case TOP:
+                case MENU:
                     root.setTop(panel.getRegion());
                     break;
                 case CAMERA:
@@ -110,11 +102,11 @@ public class Screen {
         displayError();
     }
 
-    private int getIntValue(String key){
-        return Integer.parseInt(properties.getString(key));
+    private double getDoubleValue(String key) {
+        return Double.parseDouble(properties.getString(key));
     }
 
-    private void setupTabs(BorderPane root, List<TabPane> tabAreas, int width, int height) {
+    private void setupTabs(BorderPane root, List<TabPane> tabAreas, double width, double height) {
         root.setBottom(tabAreas.get(BOTTOM));
 
         for(TabPane tabPane : tabAreas){
@@ -147,7 +139,7 @@ public class Screen {
         try {
             File panelsFolder = new File(panelStrings.getString("path"));
             File[] panelFiles = panelsFolder.listFiles();
-            String[] names = new String[panelFiles.length];
+            String[] names = new String[panelFiles.length-1];
             for(int i = 0; i < panelFiles.length; i++){
                 names[i] = panelFiles[i].getName();
             }
@@ -192,5 +184,5 @@ public class Screen {
 
             errors.showAndWait();
         }
-    }
+    }*/
 }

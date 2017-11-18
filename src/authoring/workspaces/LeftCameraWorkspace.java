@@ -74,6 +74,8 @@ public class LeftCameraWorkspace implements Workspace {
         cameraPanel.setMinWidth(0);
         cameraPanel.setMinHeight(0);
         ((SplitPane)body.getItems().get(0)).getItems().set(0, cameraPanel);
+        body.setDividerPositions(bodyDivision);
+        middle.setDividerPositions(middleDivision);
     }
 
 
@@ -110,7 +112,6 @@ public class LeftCameraWorkspace implements Workspace {
         File file = new File(String.format(data.getString("filepath"), this.getClass().getSimpleName()));
         if(file.exists()){
             FileInputStream input = new FileInputStream(file);
-            Properties properties = new Properties();
             properties.load(input);
             for(String panel : manager.getPanels()){
                 Position position = Position.getEnum(properties.getProperty(panel));
@@ -140,6 +141,8 @@ public class LeftCameraWorkspace implements Workspace {
                     break;
             }
         }
+        body.setDividerPositions(bodyDivision);
+        middle.setDividerPositions(middleDivision);
     }
 
     private void createFile(File location) throws IOException{

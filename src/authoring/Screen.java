@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 /**
- * Screen represents the container of the various areas of the authoring environment user interface. Areas can contain multiple Panels, and each Panel specifies what area it should be viewed in.
+ * Screen contains the display of the VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
  * @author Brian Nieves
  */
 public class Screen {
@@ -31,6 +31,10 @@ public class Screen {
     private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
     private ErrorDisplay errorMessage = new ErrorDisplay(panelStrings.getString("errortitle"));
 
+    /**
+     * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
+     * @param stage the stage to add the Screen to
+     */
     public Screen(Stage stage){
         root = new VBox();
         controller = new PanelController();
@@ -41,8 +45,22 @@ public class Screen {
         setupStage(stage, primaryScreenBounds);
         int width = (int) primaryScreenBounds.getWidth();
         int height = (int) primaryScreenBounds.getHeight();
+
+        createWorkspace(width, height);
+
         setupScreen(width);
 
+        Scene scene = new Scene(root, width, height);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    /**
+     * Creates a workspace to be added to the Screen. //TODO: Create another workspace and allow the user to choose via the MenuBar.
+     * @param width the width of the workspace
+     * @param height the height of the workspace
+     */
+    private void createWorkspace(int width, int height) {
         workspace = null;
         try {
             workspace = new LeftCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
@@ -53,17 +71,20 @@ public class Screen {
             errorMessage.addMessage(String.format(panelStrings.getString("IOerror"), e.getMessage()));
             quitOnError();
         }
-
-        Scene scene = new Scene(root, width, height);
-        stage.setScene(scene);
-        stage.show();
     }
 
+    /**
+     * Displays the accumulated errors and terminates the program due to a fatal error.
+     */
     private void quitOnError(){
         errorMessage.displayError();
         Platform.exit();
     }
 
+    /**
+     * Sets up the Screen by creating the Menu Bar and the Camera. Then adds the camera's display Region to the workspace and adds all the elements to the Screen.
+     * @param width the width of the Screen, used to scale the camera appropriately.
+     */
     private void setupScreen(int width) {
         double cameraWidthRatio = getDoubleValue("camerawidthscale");
         double cameraWidth = width * cameraWidthRatio;
@@ -81,6 +102,11 @@ public class Screen {
         root.getChildren().addAll(bar.getRegion(), workspace.getWorkspace());
     }
 
+    /**
+     * Sets the stage to be maximized.
+     * @param stage the stage
+     * @param primaryScreenBounds the computer screen's bounds
+     */
     private void setupStage(Stage stage, Rectangle2D primaryScreenBounds) {
         stage.setX(primaryScreenBounds.getMinX());
         stage.setY(primaryScreenBounds.getMinY());
@@ -92,6 +118,11 @@ public class Screen {
         //TODO: allow workspace, engine to save to local/database
     }
 
+    /**
+     * Returns a double from the screenlayout properties file.
+     * @param key the property
+     * @return the property's double value
+     */
     private double getDoubleValue(String key) {
         return Double.parseDouble(properties.getString(key));
     }

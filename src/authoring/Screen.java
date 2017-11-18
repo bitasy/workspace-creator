@@ -28,7 +28,7 @@ public class Screen {
     private PanelController controller;
 
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
-    private ResourceBundle panelStrings = ResourceBundle.getBundle("screenerrors");
+    private ResourceBundle panelStrings = ResourceBundle.getBundle("paneldata");
     private ErrorDisplay errorMessage = new ErrorDisplay(panelStrings.getString("errortitle"));
 
     /**

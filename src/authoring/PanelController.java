@@ -1,13 +1,14 @@
 package authoring;
 
-import authoring.panels.CameraPanel;
-import authoring.panels.LibraryPanel;
+import authoring.panels.reserved.CameraPanel;
+import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+
 
 /**
  * TODO: Create the controller
@@ -17,7 +18,7 @@ import javafx.scene.layout.TilePane;
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController {
+public class PanelController implements IPanelDelegate {
 	private Engine myEngine;
 	private CameraPanel myCamera;
 	private Button myPlay;
@@ -46,8 +47,8 @@ public class PanelController {
 
 	public void addLibrary(LibraryPanel library) {
 		myLibrary = library;
-		myTile = library.getTile();
-		myEntType = library.getEntType();
+//		myTile = library.getTile();
+//		myEntType = library.getEntType();
 	}
 
 

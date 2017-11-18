@@ -2,7 +2,6 @@ package authoring.panels.reserved;
 
 import authoring.Panel;
 import authoring.IPanelDelegate;
-import authoring.Screen;
 import authoring.ScreenPosition;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;

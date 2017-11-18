@@ -2,7 +2,6 @@ package authoring.panels.tabbable;
 
 import authoring.IPanelDelegate;
 import authoring.Panel;
-import authoring.Screen;
 import authoring.ScreenPosition;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Background;

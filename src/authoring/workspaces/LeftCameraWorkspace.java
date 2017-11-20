@@ -1,6 +1,6 @@
 package authoring.workspaces;
 
-import authoring.DraggableTab;
+import authoring.TabManager;
 import authoring.panels.PanelManager;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -51,6 +51,7 @@ public class LeftCameraWorkspace implements Workspace {
     private final String DEFAULT_VISIBILITY = data.getString("defaultvisibility");
 
     private PanelManager manager;
+    private TabManager tabManager;
     private Map<String, Position> panelPositions;
 
     private SplitPane body;
@@ -89,6 +90,7 @@ public class LeftCameraWorkspace implements Workspace {
         middle = new SplitPane();
         bottom = new TabPane();
         right = new TabPane();
+        tabManager = new TabManager(bottom, right);
     }
 
     private void setupWorkspace(double width, double height) {
@@ -163,7 +165,7 @@ public class LeftCameraWorkspace implements Workspace {
     }
 
     private void makeTab(String panel, TabPane tabPane){
-        Tab tab = new DraggableTab(manager.getPanelTitle(panel));
+        Tab tab = tabManager.newTab(manager.getPanelTitle(panel));
         Region region = manager.getPanelDisplay(panel);
         tab.setContent(region);
         tab.setOnCloseRequest(event -> {

@@ -47,6 +47,7 @@ public class YoutubePanel implements Panel {
 
 
     private void playVideo(String video) {
+        //https://stackoverflow.com/questions/35204638/using-javafx-project-to-play-youtube-videos-and-control-the-playback-functionali
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
         webEngine.load(getString(video));

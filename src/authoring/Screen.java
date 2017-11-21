@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Screen contains the display of the VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
  * @author Brian Nieves
+ * @author Kelly Zhang
  */
 public class Screen {
 
@@ -27,7 +28,7 @@ public class Screen {
 
     private PanelController controller;
 
-    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the data folder as a resource folder
+    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the settings folder as a resource folder
     private ResourceBundle panelStrings = ResourceBundle.getBundle("paneldata");
     private ErrorDisplay errorMessage = new ErrorDisplay(panelStrings.getString("errortitle"));
 

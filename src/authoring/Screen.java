@@ -4,7 +4,7 @@ import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
 import authoring.workspaces.LeftCameraWorkspace;
-import authoring.workspaces.Workspace;
+import authoring.workspaces.MiddleCameraWorkspace;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -63,7 +63,7 @@ public class Screen {
     private void createWorkspace(int width, int height) {
         workspace = null;
         try {
-            workspace = new LeftCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
+            workspace = new MiddleCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
         } catch (FileNotFoundException e) {
             errorMessage.addMessage(panelStrings.getString("nopath"));
             quitOnError();

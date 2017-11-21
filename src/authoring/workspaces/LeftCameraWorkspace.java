@@ -1,5 +1,7 @@
 package authoring.workspaces;
 
+import authoring.Positions;
+import authoring.Positions.Position;
 import authoring.TabManager;
 import authoring.Workspace;
 import authoring.panels.PanelManager;
@@ -18,37 +20,12 @@ import java.util.ResourceBundle;
 
 public class LeftCameraWorkspace implements Workspace {
 
-    private enum Position {
-        BOTTOM("bottom"),
-        RIGHT("right");
+    private final Positions positions = new Positions("right", "bottom");
 
-        private String name;
+    private final Properties properties = new Properties();
+    private final ResourceBundle data = ResourceBundle.getBundle("workspacedata");
 
-        Position (String name){
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        private static Position getEnum(String name){
-            switch (name) {
-                case "right":
-                    return RIGHT;
-                case "bottom":
-                    return BOTTOM;
-                default:
-                    return null;
-            }
-        }
-    }
-
-    private Properties properties = new Properties();
-    private ResourceBundle data = ResourceBundle.getBundle("workspacedata");
-
-    private final Position DEFAULT_POSITION = Position.RIGHT;
+    private final Position DEFAULT_POSITION = positions.getPosition("right");
     private final String DEFAULT_VISIBILITY = data.getString("defaultvisibility");
 
     private PanelManager manager;
@@ -64,7 +41,6 @@ public class LeftCameraWorkspace implements Workspace {
 
     public LeftCameraWorkspace(double width, double height, PanelManager manager) throws IOException{
         this.manager = manager;
-        panelPositions = new HashMap<>();
         initialize();
         loadFile();
         setupWorkspace(width, height);
@@ -87,11 +63,12 @@ public class LeftCameraWorkspace implements Workspace {
     }
 
     private void initialize() {
+        panelPositions = new HashMap<>();
         body = new SplitPane();
         middle = new SplitPane();
         bottom = new TabPane();
         right = new TabPane();
-        tabManager = new TabManager(bottom, right);
+        tabManager = new TabManager(positions);
     }
 
     private void setupWorkspace(double width, double height) {
@@ -117,7 +94,7 @@ public class LeftCameraWorkspace implements Workspace {
             FileInputStream input = new FileInputStream(file);
             properties.load(input);
             for(String panel : manager.getPanels()){
-                Position position = Position.getEnum(properties.getProperty(panel));
+                Position position = positions.getPosition(properties.getProperty(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
                 } else {
@@ -135,17 +112,20 @@ public class LeftCameraWorkspace implements Workspace {
 
     private void populateScreen(){
         for(String panel : panelPositions.keySet()){
-            switch (panelPositions.get(panel)){
-                case RIGHT:
-                    makeTab(panel, right);
-                    break;
-                case BOTTOM:
-                    makeTab(panel, bottom);
-                    break;
-            }
+            panelPositions.get(panel).addTab(newTab(panel));
         }
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
+    }
+
+    private Tab newTab(String panel) {
+        Tab tab = tabManager.newTab(panel);
+        tab.setOnCloseRequest(event -> {
+            if(tab.getTabPane().getTabs().size() == 1){
+                event.consume();
+            }
+        });
+        return tab;
     }
 
     private void createFile(File location) throws IOException{
@@ -163,18 +143,6 @@ public class LeftCameraWorkspace implements Workspace {
         OutputStream output = new FileOutputStream(file);
         properties.store(output, String.format(data.getString("dataheader"), getClass().getSimpleName()));
         output.close();
-    }
-
-    private void makeTab(String panel, TabPane tabPane){
-        Tab tab = tabManager.newTab(manager.getPanelTitle(panel));
-        Region region = manager.getPanelDisplay(panel);
-        tab.setContent(region);
-        tab.setOnCloseRequest(event -> {
-            if(tab.getTabPane().getTabs().size() == 1){
-                event.consume();
-            }
-        });
-        tabPane.getTabs().add(tab);
     }
 
     private double getDoubleValue(String key) {

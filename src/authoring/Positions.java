@@ -26,6 +26,14 @@ public class Positions {
         return null;
     }
 
+    public String[] allPositions(){
+        String[] names = new String[positions.length];
+        for(int i = 0; i < positions.length; i++){
+            names[i] = positions[i].toString();
+        }
+        return names;
+    }
+
     public class Position {
         private String position;
         private TabPane pane;
@@ -37,6 +45,10 @@ public class Positions {
 
         public void addTab(Tab tab) {
             pane.getTabs().add(tab);
+        }
+
+        public TabPane getPane(){
+            return pane;
         }
 
         @Override

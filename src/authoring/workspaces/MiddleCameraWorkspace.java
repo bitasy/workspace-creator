@@ -66,10 +66,10 @@ public class MiddleCameraWorkspace implements Workspace {
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
-        left = new TabPane();
-        bottom = new TabPane();
-        right = new TabPane();
-        tabManager = new TabManager(bottom, right, left);
+        left = positions.getPosition("left").getPane();
+        bottom = positions.getPosition("bottom").getPane();
+        right = positions.getPosition("right").getPane();
+        tabManager = new TabManager(positions);
         panelPositions = new HashMap<>();
     }
 

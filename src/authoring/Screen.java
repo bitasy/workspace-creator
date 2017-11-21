@@ -63,7 +63,7 @@ public class Screen {
     private void createWorkspace(int width, int height) {
         workspace = null;
         try {
-            workspace = new MiddleCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
+            workspace = new LeftCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
         } catch (FileNotFoundException e) {
             errorMessage.addMessage(panelStrings.getString("nopath"));
             quitOnError();

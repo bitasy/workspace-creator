@@ -31,11 +31,13 @@ public class TabManager {
     private final Stage markerStage;
 
     /**
-     * Creates a new TabManager and initializes the indicator for moving DraggableTabs.
-     * @param tabPanes all tabPanes specified by the workspace.
+     * Creates a new TabManager, adds the panes for every position in the workspace, and initializes the indicator for moving DraggableTabs.
+     * @param positions all positions specified by the workspace.
      */
-    public TabManager(TabPane... tabPanes) {
-        Collections.addAll(this.tabPanes, tabPanes);
+    public TabManager(Positions positions) {
+        for(String position : positions.allPositions()){
+            tabPanes.add(positions.getPosition(position).getPane());
+        }
         markerStage = new Stage();
         markerStage.setAlwaysOnTop(true);
         markerStage.initStyle(StageStyle.UNDECORATED);

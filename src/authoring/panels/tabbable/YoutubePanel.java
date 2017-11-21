@@ -31,7 +31,7 @@ public class YoutubePanel implements Panel {
         myTutorial.setStyle(getString("nodeStyle"));*/
 
 
-        playVideo("video");
+        playVideo("catembed");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class YoutubePanel implements Panel {
     private void playVideo(String video) {
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-        webEngine.load(getString("catVideo"));
+        webEngine.load(getString(video));
 
         myPane.getChildren().add(webView);
     }

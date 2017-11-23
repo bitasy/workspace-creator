@@ -66,8 +66,8 @@ public class LeftCameraWorkspace implements Workspace {
         panelPositions = new HashMap<>();
         body = new SplitPane();
         middle = new SplitPane();
-        bottom = new TabPane();
-        right = new TabPane();
+        bottom = positions.getPosition("bottom").getPane();
+        right = positions.getPosition("right").getPane();
         tabManager = new TabManager(positions);
     }
 
@@ -110,7 +110,7 @@ public class LeftCameraWorkspace implements Workspace {
         }
     }
 
-    private void populateScreen(){//TODO: Fix issue, panels aren't added to tabs
+    private void populateScreen(){
         for(String panel : panelPositions.keySet()){
             panelPositions.get(panel).addTab(newTab(panel));
         }

@@ -7,6 +7,7 @@ import engine.managers.EntityManager;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 import util.math.num.Vector;
@@ -32,6 +33,8 @@ public class PanelController implements IPanelController {
 	private LibraryPanel myLibrary;
 	private TilePane myTile;
 	private ChoiceBox<String> myEntType;
+	private EntityManager myManager;
+	private ScrollPane myView;
 
 	private EntityManager myEntityManager;
 
@@ -48,7 +51,9 @@ public class PanelController implements IPanelController {
 		myWhole = camera.getWhole();
 		myLocal = camera.getLocal();
 		myLayer = camera.getLayer();
-		myGrid = camera.getGridPane();
+		myPlay.setOnMouseClicked(e -> myManager.addBG(new Vector(0, 0)));
+		myPause.setOnMouseClicked(e -> myEngine.print());
+		myCamera.getView(myView);
 	}
 
 	public void addLibrary(LibraryPanel library) {
@@ -60,6 +65,8 @@ public class PanelController implements IPanelController {
     public void addBGTile(){
 	    myEntityManager.addBG(new Vector(0, 0));
     }
+
+
 
 }
 

@@ -22,7 +22,6 @@ public class ConsolePanel implements Panel{
 
     @Override
     public void setController(IPanelDelegate controller) {
-        //TODO: Create controller
     }
 
     @Override

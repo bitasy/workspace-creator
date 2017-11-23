@@ -56,7 +56,7 @@ public class Screen {
     }
 
     /**
-     * Creates a workspace to be added to the Screen. //TODO: Create another workspace and allow the user to choose via the MenuBar.
+     * Creates a workspace to be added to the Screen.
      * @param width the width of the workspace
      * @param height the height of the workspace
      */

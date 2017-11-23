@@ -110,7 +110,7 @@ public class LeftCameraWorkspace implements Workspace {
         }
     }
 
-    private void populateScreen(){
+    private void populateScreen(){//TODO: Fix issue, panels aren't added to tabs
         for(String panel : panelPositions.keySet()){
             panelPositions.get(panel).addTab(newTab(panel));
         }

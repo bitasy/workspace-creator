@@ -1,7 +1,7 @@
 package authoring.panels.reserved;
 
 import authoring.Panel;
-import authoring.IPanelDelegate;
+import authoring.IPanelController;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -23,7 +23,7 @@ public class MenuBarPanel implements Panel {
 
     private HBox hbar;
     private MenuBar bar;
-    private IPanelDelegate controller;
+    private IPanelController controller;
 
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
     private String path = properties.getString("menubarpath");
@@ -76,7 +76,7 @@ public class MenuBarPanel implements Panel {
     }
 
     @Override
-    public void setController(IPanelDelegate controller) {
+    public void setController(IPanelController controller) {
         this.controller = controller;
     }
 

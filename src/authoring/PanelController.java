@@ -21,7 +21,7 @@ import util.math.num.Vector;
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController implements IPanelDelegate {
+public class PanelController implements IPanelController {
 	private Engine myEngine;
 	private CameraPanel myCamera;
 	private Button myPlay;
@@ -36,14 +36,15 @@ public class PanelController implements IPanelDelegate {
 	private EntityManager myManager;
 	private ScrollPane myView;
 
+	private EntityManager myEntityManager;
+
 	public PanelController() {
 		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
-	    myManager = myEngine.getEntityManager();
-	    myView = myEngine.getCameraView(new Vector(0, 0), new Vector(100, 100));
-
+	    myEntityManager = myEngine.getEntityManager();
 	}
 
 	public void addCamera(CameraPanel camera){
+	    camera.setCameraView(myEngine.getCameraView(new Vector(0, 0), new Vector(10, 10)));
 		myCamera = camera;
 		myPlay = camera.getPlay();
 		myPause = camera.getPause();
@@ -61,7 +62,9 @@ public class PanelController implements IPanelDelegate {
 //		myEntType = library.getEntType();
 	}
 
-
+    public void addBGTile(){
+	    myEntityManager.addBG(new Vector(0, 0));
+    }
 
 
 

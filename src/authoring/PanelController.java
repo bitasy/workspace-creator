@@ -44,14 +44,14 @@ public class PanelController implements IPanelController {
 	}
 
 	public void addCamera(CameraPanel camera){
-	    camera.setCameraView(myEngine.getCameraView(new Vector(0, 0), new Vector(10, 10)));
+	    camera.setCameraView(myEngine.getCameraView(new Vector(0, 0), new Vector(800, 500)));
 		myCamera = camera;
 		myPlay = camera.getPlay();
 		myPause = camera.getPause();
 		myWhole = camera.getWhole();
 		myLocal = camera.getLocal();
 		myLayer = camera.getLayer();
-		myPlay.setOnMouseClicked(e -> myManager.addBG(new Vector(0, 0)));
+		myPlay.setOnMouseClicked(e -> myEntityManager.addBG(new Vector(0, 0)));
 		myPause.setOnMouseClicked(e -> myEngine.print());
 		myCamera.getView(myView);
 	}

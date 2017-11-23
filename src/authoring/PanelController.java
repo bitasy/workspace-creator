@@ -33,7 +33,6 @@ public class PanelController implements IPanelController {
 	private LibraryPanel myLibrary;
 	private TilePane myTile;
 	private ChoiceBox<String> myEntType;
-	private EntityManager myManager;
 	private ScrollPane myView;
 
 	private EntityManager myEntityManager;
@@ -51,7 +50,7 @@ public class PanelController implements IPanelController {
 		myWhole = camera.getWhole();
 		myLocal = camera.getLocal();
 		myLayer = camera.getLayer();
-		myPlay.setOnMouseClicked(e -> myManager.addBG(new Vector(0, 0)));
+		myPlay.setOnMouseClicked(e -> myEntityManager.addBG(new Vector(0, 0)));
 		myPause.setOnMouseClicked(e -> myEngine.print());
 		myCamera.getView(myView);
 	}

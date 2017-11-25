@@ -31,7 +31,7 @@ public class YoutubePanel implements Panel {
         myTutorial.setStyle(getString("nodeStyle"));*/
 
 
-        playVideo("catembed");
+        playVideo("lokiValentines");
     }
 
     @Override

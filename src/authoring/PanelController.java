@@ -12,9 +12,9 @@ import javafx.scene.layout.TilePane;
 
 /**
  * TODO: Create the controller
- * 
- * Currently impelementation is just for testing 
- * 
+ *
+ * Currently impelementation is just for testing
+ *
  * @author Brian Nieves
  * @author Estelle He
  */
@@ -30,8 +30,7 @@ public class PanelController implements IPanelDelegate {
 	private LibraryPanel myLibrary;
 	private TilePane myTile;
 	private ChoiceBox<String> myEntType;
-	
-	
+
 	public PanelController() {
 		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	}
@@ -45,7 +44,7 @@ public class PanelController implements IPanelDelegate {
 		myLayer = camera.getLayer();
 		myGrid = camera.getGridPane();
 	}
-	
+
 	public void addLibrary(LibraryPanel library) {
 		myLibrary = library;
 //		myTile = library.getTile();
@@ -53,7 +52,6 @@ public class PanelController implements IPanelDelegate {
 	}
 
 
-	
-	
-	
+
 }
+

@@ -33,7 +33,6 @@ public class PanelController implements IPanelController {
 	private LibraryPanel myLibrary;
 	private TilePane myTile;
 	private ChoiceBox<String> myEntType;
-	private EntityManager myManager;
 	private ScrollPane myView;
 
 	private EntityManager myEntityManager;

@@ -44,7 +44,7 @@ public class PanelController implements IPanelController {
 	}
 
 	public void addCamera(CameraPanel camera){
-	    camera.setCameraView(myEngine.getCameraView(new Vector(0, 0), new Vector(800, 500)));
+	    myView = myEngine.getCameraView(new Vector(250, 250), new Vector(500, 500));
 		myCamera = camera;
 		myPlay = camera.getPlay();
 		myPause = camera.getPause();
@@ -62,9 +62,13 @@ public class PanelController implements IPanelController {
 //		myEntType = library.getEntType();
 	}
 
-    public void addBGTile(){
-	    myEntityManager.addBG(new Vector(0, 0));
+
+    public void addBGTile(Vector pos){
+
+		myEntityManager.addBG(pos);
     }
+
+
 
 
 

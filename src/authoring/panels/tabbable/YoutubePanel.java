@@ -15,60 +15,63 @@ import javafx.scene.web.WebView;
 import java.util.*;
 
 /**
- * youtube panel inside the authoring environment, used to view some default tutorials but can also be used to browse other youtube videos
+ * youtube panel inside the authoring environment, used to view some default videos but can also be used to browse other youtube videos
  * @author Kelly Zhang
  */
 public class YoutubePanel implements Panel {
 
     private Pane myPane = new Pane();
-    private ResourceBundle videoLinks = ResourceBundle.getBundle("tutorials");
-    private ChoiceBox<String> tutorialList;
-    private List<String> linkList;
+    private ResourceBundle videoLinks;
+    private ChoiceBox<String> videosDropDown;
+    private List<String> videos;
+    private List<String> links;
     private WebView myVideo;
 
 
     public YoutubePanel() {
         myPane = new Pane();
+        setupVideoLinkMap();
+        createDropDownMenu();
+
+        VBox videoLayout = new VBox(5);
+        videoLayout.getChildren().addAll(videosDropDown);
+
+        myPane.getChildren().add(videoLayout);
+        //myPane.getChildren().add(new VBox(videosDropDown, myVideo));
+    }
+
+
+    private void setupVideoLinkMap() {
         videoLinks = ResourceBundle.getBundle("tutorials");
         //https://kodejava.org/how-do-i-sort-items-in-a-set/
-        List<String> tutorials = new ArrayList<>();
-        tutorials.addAll(videoLinks.keySet());
-        Collections.sort(tutorials, String.CASE_INSENSITIVE_ORDER);
+        videos = new ArrayList<>();
+        videos.addAll(videoLinks.keySet());
+        //https://stackoverflow.com/questions/2108103/can-the-key-in-a-java-property-include-a-blank-character
+        //TODO: quick fix to get spaces in keys, can make better
+
+        Collections.sort(videos, String.CASE_INSENSITIVE_ORDER);
         //TODO: should really make nodestyle a global property that can be accessed in any panel
 
-        linkList = new ArrayList<>();
-        for (int i = 0; i < tutorials.size(); i++) {
-            linkList.add(getString(tutorials.get(i)));
+        links = new ArrayList<>();
+        for (int i = 0; i < videos.size(); i++) {
+            links.add(getString(videos.get(i)));
         }
+    }
 
+    private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
-        tutorialList = new ChoiceBox<>(FXCollections.observableArrayList(tutorials));
-        tutorialList.getSelectionModel().selectFirst();
-        tutorialList.setStyle(getString("nodeStyle"));
-        tutorialList.setTooltip(new Tooltip(getString("tool tip")));
+        videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videos));
+        videosDropDown.getSelectionModel().selectFirst();
+        videosDropDown.setStyle(getString("nodeStyle"));
+        videosDropDown.setTooltip(new Tooltip(getString("tool tip")));
 
-        tutorialList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+        videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                myVideo = playVideo(linkList.get(newValue.intValue()));
+                myVideo = playVideo(links.get(newValue.intValue()));
             }
         });
-
-        myPane.getChildren().add(tutorialList);
-        //myPane.getChildren().add(new VBox(tutorialList, myVideo));
     }
-
-    @Override
-    public Region getRegion() {
-        return myPane;
-    }
-
-    @Override
-    public String title() {
-        return "Youtube";
-    }
-
-
 
     private WebView playVideo(String video) {
         //https://stackoverflow.com/questions/35204638/using-javafx-project-to-play-youtube-videos-and-control-the-playback-functionali
@@ -81,5 +84,15 @@ public class YoutubePanel implements Panel {
 
     private String getString(String key) {
         return videoLinks.getString(key);
+    }
+
+    @Override
+    public Region getRegion() {
+        return myPane;
+    }
+
+    @Override
+    public String title() {
+        return "Youtube";
     }
 }

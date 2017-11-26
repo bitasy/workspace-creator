@@ -23,17 +23,6 @@ import util.math.num.Vector;
  */
 public class PanelController implements IPanelController {
 	private Engine myEngine;
-	private CameraPanel myCamera;
-	private Button myPlay;
-	private Button myPause;
-	private GridPane myGrid;
-	private RadioButton myWhole;
-	private RadioButton myLocal;
-	private ChoiceBox<String> myLayer;
-	private LibraryPanel myLibrary;
-	private TilePane myTile;
-	private ChoiceBox<String> myEntType;
-	private ScrollPane myView;
 
 	private EntityManager myEntityManager;
 
@@ -42,39 +31,20 @@ public class PanelController implements IPanelController {
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
+    /**
+     * get camera view
+     * @return camera view
+     */
 	public ScrollPane getCamera(){
 	    return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
 	}
 
-	public void addLibrary(LibraryPanel library) {
-		myLibrary = library;
-	}
-
-
-    public void addBGTile(Vector pos){
-
-		myEntityManager.addBG(pos);
-    }
-
     /**
-     * select layer for display mode
-     *
-     * 0 is bg layer, -1 is all layer
-     *
-     * @param layer
+     * get entitymanager
+     * @return entitymanager
      */
-    public void selectLayer(int layer) {
-        if (layer == 0) {
-            myEntityManager.selectBGLayer();
-        }
-        else if (layer == -1) {
-            myEntityManager.allLayer();
-        }
-        else {
-            myEntityManager.selectLayer(layer);
-        }
+    public EntityManager getManager() {
+	    return myEntityManager;
     }
-
-
 }
 

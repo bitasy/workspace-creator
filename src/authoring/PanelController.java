@@ -42,23 +42,12 @@ public class PanelController implements IPanelController {
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
-	public void addCamera(CameraPanel camera){
-	    myView = myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
-		myCamera = camera;
-		myPlay = camera.getPlay();
-		myPause = camera.getPause();
-		myWhole = camera.getWhole();
-		myLocal = camera.getLocal();
-		myLayer = camera.getLayer();
-		myPlay.setOnMouseClicked(e -> myEntityManager.addBG(new Vector(0, 0)));
-		myPause.setOnMouseClicked(e -> myEngine.print());
-		myCamera.getView(myView);
+	public ScrollPane getCamera(){
+	    return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
 	}
 
 	public void addLibrary(LibraryPanel library) {
 		myLibrary = library;
-//		myTile = library.getTile();
-//		myEntType = library.getEntType();
 	}
 
 
@@ -67,8 +56,24 @@ public class PanelController implements IPanelController {
 		myEntityManager.addBG(pos);
     }
 
-
-
+    /**
+     * select layer for display mode
+     *
+     * 0 is bg layer, -1 is all layer
+     *
+     * @param layer
+     */
+    public void selectLayer(int layer) {
+        if (layer == 0) {
+            myEntityManager.selectBGLayer();
+        }
+        else if (layer == -1) {
+            myEntityManager.allLayer();
+        }
+        else {
+            myEntityManager.selectLayer(layer);
+        }
+    }
 
 
 }

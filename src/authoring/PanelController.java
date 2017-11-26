@@ -46,5 +46,19 @@ public class PanelController implements IPanelController {
     public EntityManager getManager() {
 	    return myEntityManager;
     }
-}
+
+    /**
+     * engine start to run script
+     */
+    public void play() {
+        myEngine.play();
+    }
+
+    /**
+     * engine stop to run script
+     */
+    public void pause() {
+        myEngine.pause();
+    }
+ }
 

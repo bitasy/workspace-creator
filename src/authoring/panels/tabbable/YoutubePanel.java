@@ -20,7 +20,8 @@ import java.util.*;
  */
 public class YoutubePanel implements Panel {
 
-    private Pane myPane = new Pane();
+    private Pane myPane;
+    private VBox videoLayout;
     private ResourceBundle videoLinks;
     private ChoiceBox<String> videosDropDown;
     private List<String> videos;
@@ -33,11 +34,10 @@ public class YoutubePanel implements Panel {
         setupVideoLinkMap();
         createDropDownMenu();
 
-        VBox videoLayout = new VBox(5);
-        videoLayout.getChildren().addAll(videosDropDown);
+        videoLayout = new VBox();
+        videoLayout.getChildren().add(videosDropDown);
 
         myPane.getChildren().add(videoLayout);
-        //myPane.getChildren().add(new VBox(videosDropDown, myVideo));
     }
 
 
@@ -46,6 +46,7 @@ public class YoutubePanel implements Panel {
         //https://kodejava.org/how-do-i-sort-items-in-a-set/
         videos = new ArrayList<>();
         videos.addAll(videoLinks.keySet());
+        videos.removeAll(new ArrayList<String>(Arrays.asList("nodeStyle", "tool tip", "Information")));
         //https://stackoverflow.com/questions/2108103/can-the-key-in-a-java-property-include-a-blank-character
         //TODO: quick fix to get spaces in keys, can make better
 
@@ -54,7 +55,7 @@ public class YoutubePanel implements Panel {
 
         links = new ArrayList<>();
         for (int i = 0; i < videos.size(); i++) {
-            links.add(getString(videos.get(i)));
+            links.add(videoLinks.getString(videos.get(i)));
         }
     }
 
@@ -62,13 +63,19 @@ public class YoutubePanel implements Panel {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videos));
         videosDropDown.getSelectionModel().selectFirst();
-        videosDropDown.setStyle(getString("nodeStyle"));
-        videosDropDown.setTooltip(new Tooltip(getString("tool tip")));
+        videosDropDown.setStyle(videoLinks.getString("nodeStyle"));
+        videosDropDown.setTooltip(new Tooltip(videoLinks.getString("tool tip")));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (videoLayout.getChildren().contains(myVideo)) {
+                    videoLayout.getChildren().remove(myVideo);
+                }
                 myVideo = playVideo(links.get(newValue.intValue()));
+                System.out.println(myVideo);
+                //myPane.getChildren().add(myVideo);
+                videoLayout.getChildren().add(myVideo);
             }
         });
     }
@@ -77,14 +84,11 @@ public class YoutubePanel implements Panel {
         //https://stackoverflow.com/questions/35204638/using-javafx-project-to-play-youtube-videos-and-control-the-playback-functionali
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-        webEngine.load(getString(video));
+        webEngine.load(video);
 
         return webView;
     }
 
-    private String getString(String key) {
-        return videoLinks.getString(key);
-    }
 
     @Override
     public Region getRegion() {

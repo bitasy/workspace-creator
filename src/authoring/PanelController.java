@@ -43,7 +43,7 @@ public class PanelController implements IPanelController {
 	}
 
 	public void addCamera(CameraPanel camera){
-	    myView = myEngine.getCameraView(new Vector(250, 250), new Vector(500, 500));
+	    myView = myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
 		myCamera = camera;
 		myPlay = camera.getPlay();
 		myPause = camera.getPause();

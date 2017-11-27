@@ -32,8 +32,7 @@ public class PanelController implements IPanelDelegate {
 	private ChoiceBox<String> myEntType;
 
 	public PanelController() {
-		//breaks frontend VoogaPeaches (does not compiles)
-		//myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	}
 
 	public void addCamera(CameraPanel camera){

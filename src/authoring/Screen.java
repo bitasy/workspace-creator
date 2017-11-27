@@ -4,7 +4,7 @@ import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
 import authoring.workspaces.LeftCameraWorkspace;
-import authoring.workspaces.Workspace;
+import authoring.workspaces.MiddleCameraWorkspace;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -27,6 +27,7 @@ public class Screen {
     private Workspace workspace;
 
     private PanelController controller;
+    private PanelManager panelManager;
 
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the settings folder as a resource folder
     private ResourceBundle panelStrings = ResourceBundle.getBundle("paneldata");
@@ -41,13 +42,23 @@ public class Screen {
         controller = new PanelController();
 
 
+
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         setupStage(stage, primaryScreenBounds);
         int width = (int) primaryScreenBounds.getWidth();
         int height = (int) primaryScreenBounds.getHeight();
 
-        createWorkspace(width, height);
+        try{
+            panelManager = new PanelManager(controller, errorMessage);
+            createWorkspace(width, height);
+        } catch (FileNotFoundException e) {
+            errorMessage.addMessage(panelStrings.getString("nopath"));
+            quitOnError();
+        } catch (IOException e){
+            errorMessage.addMessage(String.format(panelStrings.getString("IOerror"), e.getMessage()));
+            quitOnError();
+        }
 
         setupScreen(width);
 
@@ -57,21 +68,12 @@ public class Screen {
     }
 
     /**
-     * Creates a workspace to be added to the Screen. //TODO: Create another workspace and allow the user to choose via the MenuBar.
+     * Creates a workspace to be added to the Screen.
      * @param width the width of the workspace
      * @param height the height of the workspace
      */
-    private void createWorkspace(int width, int height) {
-        workspace = null;
-        try {
-            workspace = new LeftCameraWorkspace(width, height, new PanelManager(controller, errorMessage));
-        } catch (FileNotFoundException e) {
-            errorMessage.addMessage(panelStrings.getString("nopath"));
-            quitOnError();
-        } catch (IOException e){
-            errorMessage.addMessage(String.format(panelStrings.getString("IOerror"), e.getMessage()));
-            quitOnError();
-        }
+    private void createWorkspace(int width, int height) throws IOException{
+            workspace = new MiddleCameraWorkspace(width, height, panelManager);//TODO: better way to select workspace
     }
 
     /**
@@ -93,7 +95,7 @@ public class Screen {
 
         CameraPanel camera = new CameraPanel(cameraWidth, cameraHeight);
         camera.setController(controller);
-        MenuBarPanel bar = new MenuBarPanel();
+        MenuBarPanel bar = new MenuBarPanel(panelManager);
         bar.setController(controller);
 
         Region cameraRegion = camera.getRegion();

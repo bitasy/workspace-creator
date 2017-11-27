@@ -61,6 +61,9 @@ public class MenuBarPanel implements Panel {
         }
         Map<String, MenuItem[]> panelMap = new HashMap<>();
         panelMap.put("panels", panelitems);
+        MenuItem[] themes = new MenuItem[1];
+        themes[0] = new MenuItem("test");
+        panelMap.put("themes", themes);
         return panelMap;
     }
 

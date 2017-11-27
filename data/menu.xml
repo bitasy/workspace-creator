@@ -15,5 +15,10 @@
             <type>loaded</type>
             <strategy>panels</strategy>
         </item>
+        <item>
+            <name>Themes...</name>
+            <type>loaded</type>
+            <strategy>themes</strategy>
+        </item>
     </menu>
 </resources>

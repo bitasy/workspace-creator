@@ -26,6 +26,7 @@ public class YoutubePanel implements Panel {
     private ChoiceBox<String> videosDropDown;
     private List<String> videos;
     private List<String> links;
+    private List<WebView> loadedVideos;
     private WebView myVideo;
 
 
@@ -54,8 +55,10 @@ public class YoutubePanel implements Panel {
         //TODO: should really make nodestyle a global property that can be accessed in any panel
 
         links = new ArrayList<>();
+        loadedVideos = new ArrayList<>();
         for (int i = 0; i < videos.size(); i++) {
             links.add(videoLinks.getString(videos.get(i)));
+            loadedVideos.add(loadVideo(links.get(i)));
         }
     }
 
@@ -72,20 +75,17 @@ public class YoutubePanel implements Panel {
                 if (videoLayout.getChildren().contains(myVideo)) {
                     videoLayout.getChildren().remove(myVideo);
                 }
-                myVideo = playVideo(links.get(newValue.intValue()));
-                System.out.println(myVideo);
-                //myPane.getChildren().add(myVideo);
+                myVideo = loadedVideos.get(newValue.intValue());
                 videoLayout.getChildren().add(myVideo);
             }
         });
     }
 
-    private WebView playVideo(String video) {
+    private WebView loadVideo(String video) {
         //https://stackoverflow.com/questions/35204638/using-javafx-project-to-play-youtube-videos-and-control-the-playback-functionali
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
         webEngine.load(video);
-
         return webView;
     }
 

@@ -23,12 +23,15 @@ import java.util.ResourceBundle;
 /**
  * The Menu Bar is displayed at the top of the authoring environment and contains the buttons for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
  * @author Brian Nieves
+ * @author Simran
+ *
  */
 public class MenuBarPanel implements Panel {
 
     private HBox hbar;
     private MenuBar bar;
     private IPanelController controller;
+    private PanelManager panelManager;
 
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
     private String path = properties.getString("menubarpath");
@@ -39,11 +42,12 @@ public class MenuBarPanel implements Panel {
     private Color color = Color.web(properties.getString("menubarcolor"));
     private Color onHoverColor = Color.web(properties.getString("menubaronhovercolor"));
 
-    public MenuBarPanel(PanelManager panelManager){
+    public MenuBarPanel(PanelManager pm){
         hbar = new HBox();
         bar = new MenuBar();
+        panelManager = pm;
 
-        MenuReader reader = new MenuReader(path, this, getPanelList(panelManager));
+        MenuReader reader = new MenuReader(path, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
 
         hbar.setPrefHeight(height);
@@ -55,7 +59,25 @@ public class MenuBarPanel implements Panel {
         hbar.getChildren().addAll(file, view);
     }
 
-    private Map<String, MenuItem[]> getPanelList(PanelManager panelManager) {
+    /**
+     * This returns the map that is used to create the Views section in the menu. It currently draws information for
+     * the panels (from panelManager) and themes (resource file)
+     *
+     * @return
+     */
+    private Map<String, MenuItem[]> getViewList() {
+        Map<String, MenuItem[]> viewMap = getPanelList();
+
+        MenuItem[] themes = new MenuItem[1];
+        MenuItem testItem = new MenuItem("test");
+        setupItem(testItem, "themes");
+        themes[0] = testItem;
+        viewMap.put("themes", themes);
+        
+        return viewMap;
+    }
+
+    private Map<String, MenuItem[]> getPanelList() {
         String[] panels = panelManager.getPanels();
         MenuItem[] panelitems = new MenuItem[panels.length];
         for(int i = 0; i < panels.length; i++){
@@ -63,15 +85,6 @@ public class MenuBarPanel implements Panel {
         }
         Map<String, MenuItem[]> panelMap = new HashMap<>();
         panelMap.put("panels", panelitems);
-
-
-        MenuItem[] themes = new MenuItem[1];
-        MenuItem testItem = new MenuItem("test");
-        setupItem(testItem, "themes");
-        themes[0] = testItem;
-        panelMap.put("themes", themes);
-
-
         return panelMap;
     }
 

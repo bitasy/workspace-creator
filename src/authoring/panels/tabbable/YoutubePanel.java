@@ -32,6 +32,7 @@ public class YoutubePanel implements Panel {
 
     public YoutubePanel() {
         myPane = new Pane();
+        myPane.getStyleClass().add("testPane");
         setupVideoLinkMap();
         createDropDownMenu();
 

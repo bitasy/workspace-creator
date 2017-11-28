@@ -3,6 +3,8 @@ package authoring.panels.reserved;
 import authoring.Panel;
 import authoring.IPanelController;
 import authoring.panels.PanelManager;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -16,9 +18,7 @@ import util.MenuReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * The Menu Bar is displayed at the top of the authoring environment and contains the buttons for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
@@ -33,6 +33,7 @@ public class MenuBarPanel implements Panel {
     private IPanelController controller;
     private PanelManager panelManager;
 
+    private ResourceBundle themes = ResourceBundle.getBundle("themes");
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
     private String path = properties.getString("menubarpath");
     private double height = Double.parseDouble(properties.getString("menubarheight"));
@@ -67,13 +68,14 @@ public class MenuBarPanel implements Panel {
      */
     private Map<String, MenuItem[]> getViewList() {
         Map<String, MenuItem[]> viewMap = getPanelList();
-
-        MenuItem[] themes = new MenuItem[1];
-        MenuItem testItem = new MenuItem("test");
-        setupItem(testItem, "themes");
-        themes[0] = testItem;
-        viewMap.put("themes", themes);
-        
+        List<String> keys = Collections.list(themes.getKeys());
+        MenuItem[] themeItems = new MenuItem[keys.size()];
+        for(int i = 0; i < keys.size(); i++){
+            MenuItem item = new MenuItem(keys.get(i));
+            setupThemes(item);
+            themeItems[i] = item;
+        }
+        viewMap.put("themes", themeItems);
         return viewMap;
     }
 
@@ -128,10 +130,16 @@ public class MenuBarPanel implements Panel {
 
     public void setupItem(MenuItem newItem, String strategy) {
         //TODO: Attach onAction to controller actions, style stuff
-        if (strategy.equals("themes")) {
-            PubSub pubsub = PubSub.getInstance();
-            pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(newItem.getText()));
-        }
+    }
+
+    public void setupThemes(MenuItem item) {
+        item.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PubSub pubsub = PubSub.getInstance();
+                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()));
+            }
+        });
     }
 
 }

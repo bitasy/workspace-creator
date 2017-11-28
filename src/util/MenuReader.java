@@ -24,15 +24,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * This class is important because it allows the user to create any number of
  * submenus
  * @author Albert
- *
- * I chose this class as my masterpiece because, while it does not necessarily implement any specific design patterns, I think that
- * this class and this feature is the best way to show that I completely understand the open to extension and closed to modification principle.
- * In essence, this class allows people to create any number of submenus within submenus within submenus, no matter how many levels you want to go down, without
- * changing any kind of code within the actual project besides adding a corresponding class for reflection. I feel that a lot of teams would write code that only reads menus
- * down to a certain level, but this menu reader will read down to any level, which makes it completely reusable.
- *
- * All a user has to do is add an item into the xml file. In addition, this class is completely modular and is completely reusable, because the idea of
- * recursively reading in menus is not restricted to slogo.
+ * @author Brian Nieves
  *
  */
 public class MenuReader {
@@ -41,19 +33,26 @@ public class MenuReader {
     private static final String ITEM_TAG = "item";
     private static final String MENU_TAG = "menu";
     private static final String STRATEGY_TAG = "strategy";
-    private static final String PREFIX = "frontend.menus.strategies.";
+    private static final String BUTTON_TAG = "button";
 
     private Map<String, Menu> mySubMenus;
+    private Map<String, MenuItem[]> loads;
     Document dom;
     MenuBarPanel bar;
 
     /**
      * Creates a new MenuReader and reads from file
-     * @param path			path of file to read
+     *
+     * @param path path of file to read
      * @throws XMLException
      * @throws IOException
      */
-    public MenuReader(String path, MenuBarPanel bar) throws XMLException {
+    public MenuReader(String path, MenuBarPanel bar) {
+        this(path, bar, null);
+    }
+
+    public MenuReader(String path, MenuBarPanel bar, Map<String, MenuItem[]> loads) throws XMLException {
+        this.loads = loads;
         this.bar = bar;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -66,9 +65,9 @@ public class MenuReader {
         readFromFile();
     }
 
-    public Menu[] getMenus(){
+    public Menu[] getMenus() {
         List<Menu> menus = new ArrayList<>();
-        for(String s : mySubMenus.keySet()){
+        for (String s : mySubMenus.keySet()) {
             menus.add(mySubMenus.get(s));
         }
         return menus.toArray(new Menu[menus.size()]);
@@ -94,9 +93,9 @@ public class MenuReader {
     }
 
     /**
-     * @param e        xml element to read over
-     * @param tag    tag to search for
-     * @return        List of nodes identifying with that tag
+     * @param e   xml element to read over
+     * @param tag tag to search for
+     * @return List of nodes identifying with that tag
      */
     private NodeList getNodeList(Element e, String tag) {
         NodeList nList = e.getElementsByTagName(tag);
@@ -105,9 +104,10 @@ public class MenuReader {
 
     /**
      * parses the top level menus, which can only be javafx Menus because of the way a MenuBar is set up
+     *
      * @param menu
      */
-    private void parseMenu(Element menu) throws XMLException{
+    private void parseMenu(Element menu) throws XMLException {
         Node itemHead = menu.getFirstChild();
         NodeList subItems = menu.getChildNodes();
         String menuName = StringLevelParse(itemHead, subItems.getLength(), NAME_TAG);
@@ -117,11 +117,12 @@ public class MenuReader {
 
     /**
      * Parses through the siblings of a node to find an xml element that matches the given tag
-     * @param head		Node that represents head of linkedlist of siblings
-     * @param length	length of linkedlist
-     * @param tag		tag to search for
-     * @return			read in string value whose xml identifier matches tag
+     *
+     * @param head   Node that represents head of linkedlist of siblings
+     * @param length length of linkedlist
+     * @param tag    tag to search for
      * @throws XMLException
+     * @return read in string value whose xml identifier matches tag
      */
     private String StringLevelParse(Node head, int length, String tag) throws XMLException {
         Node current = head;
@@ -139,17 +140,18 @@ public class MenuReader {
 
     /**
      * Creates a SubMenu by recursively reading in all items from the siblings of an initial node
-     * @param menu		Element that represents the root menu element in the menubar
-     * @param head		head of linkedlist of sibling nodes to read over
-     * @param length	length of above linkedlist
-     * @return			a recursively defined submenu
+     *
+     * @param menu   Element that represents the root menu element in the menubar
+     * @param head   head of linkedlist of sibling nodes to read over
+     * @param length length of above linkedlist
      * @throws XMLException
+     * @return a recursively defined submenu
      */
-    private Menu parseSubMenu(Element menu, Node head, int length) throws XMLException{
+    private Menu parseSubMenu(Element menu, Node head, int length) throws XMLException {
         Menu newMenu = new Menu(StringLevelParse(head, length, NAME_TAG));
         Node current = head;
         for (int j = 0; j < length; j++) {
-            if(current == null) {
+            if (current == null) {
                 continue;
             }
 
@@ -166,45 +168,45 @@ public class MenuReader {
     }
 
     /**
-     * Determines whether a given item shoudld be a menu or a button. If menu, recurse; if button, create button and return
-     * @param menu		Element that represents the root menu in the menubar
-     * @param menuItem	Element to be created that is either a button or a submenu
-     * @return			the correct MenuItem, whether it is button or menu
+     * Determines whether a given item should be a menu or a button. If menu, recurse; if button, create button and return
+     *
+     * @param menu     Element that represents the root menu in the menubar
+     * @param menuItem Element to be created that is either a button or a submenu
      * @throws XMLException
+     * @return the correct MenuItem, whether it is button or menu
      */
     private MenuItem createMenuItem(Element menu, Element menuItem) throws XMLException {
         if (getContent(menuItem, TYPE_TAG).equals(MENU_TAG)) {
             int length = menuItem.getChildNodes().getLength();
             Node head = menuItem.getFirstChild();
-            while(head.getNodeType() != Node.ELEMENT_NODE) {
+            while (head.getNodeType() != Node.ELEMENT_NODE) {
                 head = head.getNextSibling();
             }
 
             Menu subMenu = parseSubMenu(menuItem, head, length);
             return subMenu;
-        } else {
+        } else if (getContent(menuItem, TYPE_TAG).equals(BUTTON_TAG)) {
             String name = getContent(menuItem, NAME_TAG);
             MenuItem newItem = new MenuItem(name);
             String strategy = getContent(menuItem, STRATEGY_TAG);
             bar.setupItem(newItem, strategy);
             return newItem;
+        } else {
+            String load = getContent(menuItem, STRATEGY_TAG);
+            Menu loadedMenu = new Menu(getContent(menuItem, NAME_TAG));
+            loadedMenu.getItems().addAll(loads.get(load));
+            return loadedMenu;
         }
     }
 
     /**
      * return the first element's text content which is identified by tag
+     *
      * @param element
      * @param tag
      * @return
      */
     private String getContent(Element element, String tag) {
         return element.getElementsByTagName(tag).item(0).getTextContent();
-    }
-
-    /**
-     * @return	a map of menutext to Menus
-     */
-    public Map<String, Menu> getSubMenus() {
-        return mySubMenus;
     }
 }

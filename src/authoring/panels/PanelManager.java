@@ -1,6 +1,6 @@
 package authoring.panels;
 
-import authoring.IPanelDelegate;
+import authoring.IPanelController;
 import authoring.Panel;
 import javafx.scene.layout.Region;
 import util.ErrorDisplay;
@@ -21,7 +21,7 @@ public class PanelManager {
     private Map<String, Panel> panels;
     private ResourceBundle paneldata = ResourceBundle.getBundle("paneldata");
     private ErrorDisplay errorMessage;
-    private IPanelDelegate controller;
+    private IPanelController controller;
 
     /**
      * Creates a new PanelManager and loads all existing panels. Any errors in the process of loading panels are recorded in an ErrorDisplay and handled by the Screen.
@@ -29,7 +29,7 @@ public class PanelManager {
      * @param errorMessage the screen's current ErrorDisplay object
      * @throws FileNotFoundException if the package specified by tabpath in paneldata does not exist
      */
-    public PanelManager(IPanelDelegate controller, ErrorDisplay errorMessage) throws FileNotFoundException{
+    public PanelManager(IPanelController controller, ErrorDisplay errorMessage) throws FileNotFoundException{
         this.errorMessage = errorMessage;
         panels = new HashMap<>();
         this.controller = controller;

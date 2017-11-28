@@ -1,9 +1,8 @@
 package authoring.panels.reserved;
 
 import authoring.Panel;
-import authoring.IPanelDelegate;
-import authoring.Screen;
-import authoring.ScreenPosition;
+import authoring.IPanelController;
+import authoring.panels.PanelManager;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -15,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import util.MenuReader;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -25,7 +26,7 @@ public class MenuBarPanel implements Panel {
 
     private HBox hbar;
     private MenuBar bar;
-    private IPanelDelegate controller;
+    private IPanelController controller;
 
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
     private String path = properties.getString("menubarpath");
@@ -36,12 +37,11 @@ public class MenuBarPanel implements Panel {
     private Color color = Color.web(properties.getString("menubarcolor"));
     private Color onHoverColor = Color.web(properties.getString("menubaronhovercolor"));
 
-    @Override
-    public Region getRegion(){
+    public MenuBarPanel(PanelManager panelManager){
         hbar = new HBox();
         bar = new MenuBar();
 
-        MenuReader reader = new MenuReader(path, this);
+        MenuReader reader = new MenuReader(path, this, getPanelList(panelManager));
         bar.getMenus().addAll(reader.getMenus());
 
         hbar.setPrefHeight(height);
@@ -51,6 +51,21 @@ public class MenuBarPanel implements Panel {
         Pane view = getOption("View");
 
         hbar.getChildren().addAll(file, view);
+    }
+
+    private Map<String, MenuItem[]> getPanelList(PanelManager panelManager) {
+        String[] panels = panelManager.getPanels();
+        MenuItem[] panelitems = new MenuItem[panels.length];
+        for(int i = 0; i < panels.length; i++){
+            panelitems[i] = new MenuItem(panels[i]);
+        }
+        Map<String, MenuItem[]> panelMap = new HashMap<>();
+        panelMap.put("panels", panelitems);
+        return panelMap;
+    }
+
+    @Override
+    public Region getRegion(){
         return bar;
     }
 
@@ -78,12 +93,7 @@ public class MenuBarPanel implements Panel {
     }
 
     @Override
-    public ScreenPosition getPosition(){
-        return ScreenPosition.MENU;
-    }
-
-    @Override
-    public void setController(IPanelDelegate controller) {
+    public void setController(IPanelController controller) {
         this.controller = controller;
     }
 

@@ -66,8 +66,8 @@ public class LeftCameraWorkspace implements Workspace {
         panelPositions = new HashMap<>();
         body = new SplitPane();
         middle = new SplitPane();
-        bottom = new TabPane();
-        right = new TabPane();
+        bottom = positions.getPosition("bottom").getPane();
+        right = positions.getPosition("right").getPane();
         tabManager = new TabManager(positions);
     }
 

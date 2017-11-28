@@ -32,7 +32,7 @@ public class YoutubePanel implements Panel {
 
     public YoutubePanel() {
         myPane = new Pane();
-        myPane.getStyleClass().add("testPane");
+        setStyle();
         setupVideoLinkMap();
         createDropDownMenu();
 
@@ -40,6 +40,11 @@ public class YoutubePanel implements Panel {
         videoLayout.getChildren().add(videosDropDown);
 
         myPane.getChildren().add(videoLayout);
+    }
+
+    private void setStyle() {
+        //TODO: make a static method for each of the styles for our predefined objects
+        myPane.getStyleClass().add("panel");
     }
 
 

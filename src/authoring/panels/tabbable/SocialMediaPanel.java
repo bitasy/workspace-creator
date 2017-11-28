@@ -1,21 +1,47 @@
 package authoring.panels.tabbable;
 
-import authoring.*;
+import authoring.IPanelController;
+import authoring.Panel;
 import extensions.ExtensionWebView;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class SocialMediaPanel implements Panel{
 
-    private ExtensionWebView myExtensionView;
+public class SocialMediaPanel implements Panel {
+
     private VBox myArea;
+    private ExtensionWebView myExtensionView;
 
     public SocialMediaPanel() {
         myArea = new VBox();
-        myExtensionView = new ExtensionWebView("SocialMedia.html",300,600);
+        myArea.fillWidthProperty().setValue(true);
+        myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());
+        createHistoryButtons();
+    }
+
+    private void createHistoryButtons() {
+        ToolBar bar = new ToolBar();
+        Button forwards = new Button() {
+            @Override
+            public void fire() {
+                myExtensionView.goForward();
+            }
+        };
+        forwards.setText("Forward >");
+        Button backwards = new Button() {
+            @Override
+            public void fire() {
+                myExtensionView.goBack();
+            }
+        };
+        backwards.setText("< Backward");
+        bar.getItems().add(backwards);
+        bar.getItems().add(forwards);
+        myArea.getChildren().add(bar);
     }
 
     @Override

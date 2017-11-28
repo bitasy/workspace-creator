@@ -1,0 +1,17 @@
+.button {
+    -fx-base: dimgray;
+    -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+}
+
+.choice-box > .context-menu {
+    -fx-background-radius: 6, 5, 4;
+}
+
+.panel {
+    -fx-background-color: white;
+}
+
+.menuBar {
+    -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
+    -fx-background-color: silver; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+}

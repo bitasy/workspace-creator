@@ -22,17 +22,6 @@ import util.math.num.Vector;
  */
 public class PanelController implements IPanelController {
 	private Engine myEngine;
-	private CameraPanel myCamera;
-	private Button myPlay;
-	private Button myPause;
-	private GridPane myGrid;
-	private RadioButton myWhole;
-	private RadioButton myLocal;
-	private ChoiceBox<String> myLayer;
-	private LibraryPanel myLibrary;
-	private TilePane myTile;
-	private ChoiceBox<String> myEntType;
-	private ScrollPane myView;
 
 	private EntityManager myEntityManager;
 
@@ -41,30 +30,34 @@ public class PanelController implements IPanelController {
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
-	public void addCamera(CameraPanel camera){
-	    camera.setCameraView(myEngine.getCameraView(new Vector(0, 0), new Vector(10, 10)));
-		myCamera = camera;
-		myPlay = camera.getPlay();
-		myPause = camera.getPause();
-		myWhole = camera.getWhole();
-		myLocal = camera.getLocal();
-		myLayer = camera.getLayer();
-		myPlay.setOnMouseClicked(e -> myEntityManager.addBG(new Vector(0, 0)));
-		myPause.setOnMouseClicked(e -> myEngine.print());
-		myCamera.getView(myView);
+    /**
+     * get camera view
+     * @return camera view
+     */
+	public ScrollPane getCamera(){
+	    return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
 	}
 
-	public void addLibrary(LibraryPanel library) {
-		myLibrary = library;
-//		myTile = library.getTile();
-//		myEntType = library.getEntType();
-	}
-
-    public void addBGTile(){
-	    myEntityManager.addBG(new Vector(0, 0));
+    /**
+     * get entitymanager
+     * @return entitymanager
+     */
+    public EntityManager getManager() {
+	    return myEntityManager;
     }
 
+    /**
+     * engine start to run script
+     */
+    public void play() {
+        myEngine.play();
+    }
 
-
-}
+    /**
+     * engine stop to run script
+     */
+    public void pause() {
+        myEngine.pause();
+    }
+ }
 

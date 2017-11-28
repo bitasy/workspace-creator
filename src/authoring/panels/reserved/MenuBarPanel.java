@@ -137,7 +137,7 @@ public class MenuBarPanel implements Panel {
             @Override
             public void handle(ActionEvent event) {
                 PubSub pubsub = PubSub.getInstance();
-                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()));
+                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(themes.getString(item.getText())));
             }
         });
     }

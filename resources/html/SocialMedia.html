@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Media Page</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        .list-group-item:hover {
+            background-color: lightgrey;
+        }
+
+        .list-group {
+            margin-top: 15px;
+        }
+
+        h3 {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="fb-root"></div>
+
+<script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.11';
+        fjs.parentNode.insertBefore(js, fjs);
+    } ( document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="container-fluid">
+    <ul class="list-group">
+        <li class="list-group-item text-center">
+            <h3>
+                <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=I%20just%20got%20a%20new%20high%20score!" data-size="large">
+                    Send a Tweet
+                </a>
+            </h3>
+        </li>
+        <li class="list-group-item text-center">
+            <h3>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cs.duke.edu%2Fcourses%2Fcompsci308%2Fcurrent%2Fassign%2F04_voogasalad%2F&amp;src=sdkpreparse">
+                    Share to Facebook
+                </a>
+            </h3>
+        </li>
+        <li class="list-group-item text-center">
+            <h3>
+                <a href="https://plus.google.com/">Google Plus</a>
+            </h3>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

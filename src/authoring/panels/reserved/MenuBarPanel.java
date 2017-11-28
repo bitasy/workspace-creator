@@ -15,8 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import util.MenuReader;
+<<<<<<< HEAD
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
+=======
+import util.PropertiesReader;
+>>>>>>> 410daeb0424d2bd8e55395d88fef904942b73e53
 
 import java.util.*;
 
@@ -33,6 +37,7 @@ public class MenuBarPanel implements Panel {
     private IPanelController controller;
     private PanelManager panelManager;
 
+<<<<<<< HEAD
     private ResourceBundle themes = ResourceBundle.getBundle("themes");
     private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
     private String path = properties.getString("menubarpath");
@@ -42,6 +47,15 @@ public class MenuBarPanel implements Panel {
     private double spacing = Double.parseDouble(properties.getString("menubarspacing"));
     private Color color = Color.web(properties.getString("menubarcolor"));
     private Color onHoverColor = Color.web(properties.getString("menubaronhovercolor"));
+=======
+    private String path = PropertiesReader.value("screenlayout","menubarpath");
+    private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
+    private String style = PropertiesReader.value("screenlayout","menubarstyle");
+    private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
+    private double spacing = Double.parseDouble(PropertiesReader.value("screenlayout","menubarspacing"));
+    private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
+    private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
+>>>>>>> 410daeb0424d2bd8e55395d88fef904942b73e53
 
     public MenuBarPanel(PanelManager pm){
         hbar = new HBox();

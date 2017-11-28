@@ -4,8 +4,11 @@ package extensions.example;
 import extensions.ExtensionWebView;
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 
 public class SocialMediaApp extends Application {
@@ -14,7 +17,6 @@ public class SocialMediaApp extends Application {
 
     private Group myRoot;
     private Scene myScene;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -32,8 +34,14 @@ public class SocialMediaApp extends Application {
         Button btn = new Button() {
             @Override
             public void fire() {
-                ExtensionWebView e = new ExtensionWebView("SocialMedia.html");
-                e.showAndWait();
+                Dialog d = new Dialog();
+                ExtensionWebView e = new ExtensionWebView("SocialMedia.html",400,400);
+                d.getDialogPane().setContent(e.getView());
+                d.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+                Node closeButton = d.getDialogPane().lookupButton(ButtonType.CLOSE);
+                closeButton.managedProperty().bind(closeButton.visibleProperty());
+                closeButton.setVisible(false);
+                d.showAndWait();
             }
         };
         btn.setPrefHeight(100);

@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import util.MenuReader;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -61,9 +60,15 @@ public class MenuBarPanel implements Panel {
         }
         Map<String, MenuItem[]> panelMap = new HashMap<>();
         panelMap.put("panels", panelitems);
+
+
         MenuItem[] themes = new MenuItem[1];
-        themes[0] = new MenuItem("test");
+        MenuItem testItem = new MenuItem("test");
+        setupItem(testItem, "themes");
+        themes[0] = testItem;
         panelMap.put("themes", themes);
+
+
         return panelMap;
     }
 
@@ -107,7 +112,9 @@ public class MenuBarPanel implements Panel {
 
     public void setupItem(MenuItem newItem, String strategy) {
         //TODO: Attach onAction to controller actions, style stuff
+        if (strategy.equals("themes")) {
+            System.out.println(newItem.getText());
+        }
     }
-
 
 }

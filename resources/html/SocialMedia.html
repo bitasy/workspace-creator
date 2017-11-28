@@ -31,17 +31,40 @@
     </style>
 </head>
 <body>
+<div id="fb-root"></div>
+
+<script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.11';
+        fjs.parentNode.insertBefore(js, fjs);
+    } ( document, 'script', 'facebook-jssdk'));
+</script>
+
 <div class="container-fluid">
     <ul class="list-group">
         <li class="list-group-item text-center">
             <h3>
-                <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Hello%20world" data-size="large">
-                    Tweet
+                <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=I%20just%20got%20a%20new%20high%20score!" data-size="large">
+                    Send a Tweet
                 </a>
             </h3>
         </li>
-        <li class="list-group-item text-center"><h3><a>Facebook</a></h3></li>
-        <li class="list-group-item text-center"><h3><a>Google Plus</a></h3></li>
+        <li class="list-group-item text-center">
+            <h3>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cs.duke.edu%2Fcourses%2Fcompsci308%2Fcurrent%2Fassign%2F04_voogasalad%2F&amp;src=sdkpreparse">
+                    Share to Facebook
+                </a>
+            </h3>
+        </li>
+        <li class="list-group-item text-center">
+            <h3>
+                <a href="https://plus.google.com/">Google Plus</a>
+            </h3>
+        </li>
     </ul>
 </div>
 </body>

@@ -13,6 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import util.MenuReader;
+import util.pubsub.PubSub;
+import util.pubsub.messages.ThemeMessage;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -113,7 +116,8 @@ public class MenuBarPanel implements Panel {
     public void setupItem(MenuItem newItem, String strategy) {
         //TODO: Attach onAction to controller actions, style stuff
         if (strategy.equals("themes")) {
-            System.out.println(newItem.getText());
+            PubSub pubsub = PubSub.getInstance();
+            pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(newItem.getText()));
         }
     }
 

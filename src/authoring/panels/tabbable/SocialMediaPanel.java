@@ -6,7 +6,6 @@ import extensions.ExtensionWebView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 

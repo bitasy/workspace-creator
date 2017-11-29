@@ -2,7 +2,7 @@ package util.pubsub;
 
 import util.pubsub.messages.ExceptionMessage;
 import util.pubsub.messages.Message;
-import util.pubsub.messages.TestMessage;
+import util.pubsub.messages.ThemeMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class PubSub {
      * Channel list
      */
     public enum Channel {
-        TEST_MESSAGE(TestMessage.class),
+        THEME_MESSAGE(ThemeMessage.class),
         EXCEPTION_MESSAGE(ExceptionMessage.class);
 
         Class<? extends Message> clazz;

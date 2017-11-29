@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import util.ErrorDisplay;
-import util.PropertiesReader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,7 +29,9 @@ public class Screen {
     private PanelController controller;
     private PanelManager panelManager;
 
-    private ErrorDisplay errorMessage;
+    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout"); //If this doesn't work, mark the settings folder as a resource folder
+    private ResourceBundle panelStrings = ResourceBundle.getBundle("paneldata");
+    private ErrorDisplay errorMessage = new ErrorDisplay(panelStrings.getString("errortitle"));
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
@@ -39,7 +40,7 @@ public class Screen {
     public Screen(Stage stage){
         root = new VBox();
         controller = new PanelController();
-        errorMessage = new ErrorDisplay(PropertiesReader.value("paneldata","errortitle"));
+
 
 
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
@@ -52,10 +53,10 @@ public class Screen {
             panelManager = new PanelManager(controller, errorMessage);
             createWorkspace(width, height);
         } catch (FileNotFoundException e) {
-            errorMessage.addMessage(PropertiesReader.value("paneldata","nopath"));
+            errorMessage.addMessage(panelStrings.getString("nopath"));
             quitOnError();
         } catch (IOException e){
-            errorMessage.addMessage(String.format(PropertiesReader.value("paneldata","IOerror"), e.getMessage()));
+            errorMessage.addMessage(String.format(panelStrings.getString("IOerror"), e.getMessage()));
             quitOnError();
         }
 
@@ -72,7 +73,7 @@ public class Screen {
      * @param height the height of the workspace
      */
     private void createWorkspace(int width, int height) throws IOException{
-            workspace = new MiddleCameraWorkspace(width, height, panelManager);//TODO: better way to select workspace
+        workspace = new MiddleCameraWorkspace(width, height, panelManager);//TODO: better way to select workspace
     }
 
     /**
@@ -126,7 +127,7 @@ public class Screen {
      * @return the property's double value
      */
     private double getDoubleValue(String key) {
-        return Double.parseDouble(PropertiesReader.value("screenlayout", key));
+        return Double.parseDouble(properties.getString(key));
     }
 
 }

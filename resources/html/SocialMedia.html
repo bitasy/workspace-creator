@@ -13,12 +13,29 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <style>
+        body {
+            background-color: cornflowerblue;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+
+        .list-group-item {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
         .list-group-item:hover {
-            background-color: lightgrey;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-underline: none;
         }
 
         .list-group {
             margin-top: 15px;
+        }
+
+        h2 {
+            color: #ffffff;
         }
 
         h3 {
@@ -44,25 +61,46 @@
     } ( document, 'script', 'facebook-jssdk'));
 </script>
 
+<h2 class="text-center"><strong>Share Your Work Online!</strong></h2>
+<hr>
+
 <div class="container-fluid">
     <ul class="list-group">
         <li class="list-group-item text-center">
             <h3>
                 <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=I%20just%20got%20a%20new%20high%20score!" data-size="large">
-                    Send a Tweet
+                    Send a Tweet!
                 </a>
             </h3>
         </li>
+    </ul>
+
+    <ul class="list-group">
         <li class="list-group-item text-center">
             <h3>
                 <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.cs.duke.edu%2Fcourses%2Fcompsci308%2Fcurrent%2Fassign%2F04_voogasalad%2F&amp;src=sdkpreparse">
-                    Share to Facebook
+                    Share to Facebook!
                 </a>
             </h3>
         </li>
+    </ul>
+
+    <ul class="list-group">
         <li class="list-group-item text-center">
             <h3>
-                <a href="https://plus.google.com/">Google Plus</a>
+                <a href="https://www.reddit.com/submit">
+                    Post to Reddit!
+                </a>
+            </h3>
+        </li>
+    </ul>
+
+    <ul class="list-group">
+        <li class="list-group-item text-center">
+            <h3>
+                <a href="https://stackoverflow.com/questions/ask/advice?#">
+                    Post to Stack Overflow!
+                </a>
             </h3>
         </li>
     </ul>

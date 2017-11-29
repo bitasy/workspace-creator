@@ -94,7 +94,6 @@ public class PanelManager {
             } catch (IllegalAccessException e) {
                 errorMessage.addMessage(String.format(paneldata.getString("hiddenconstructor"), e.getMessage()));
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
                 errorMessage.addMessage(String.format(paneldata.getString("noinvocation"), e.getMessage()));
             }
         }

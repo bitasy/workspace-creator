@@ -26,17 +26,13 @@ public class SocialMediaPanel implements Panel {
         ToolBar bar = new ToolBar();
         Button forwards = new Button() {
             @Override
-            public void fire() {
-                myExtensionView.goForward();
-            }
+            public void fire() { myExtensionView.goForward(); }
         };
-        forwards.setText("Forward >");
         Button backwards = new Button() {
             @Override
-            public void fire() {
-                myExtensionView.goBack();
-            }
+            public void fire() { myExtensionView.goBack(); }
         };
+        forwards.setText("Forward >");
         backwards.setText("< Backward");
         bar.getItems().add(backwards);
         bar.getItems().add(forwards);

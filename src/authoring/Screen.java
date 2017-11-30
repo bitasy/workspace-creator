@@ -64,10 +64,18 @@ public class Screen {
         Scene scene = new Scene(root, width, height);
         PubSub.getInstance().subscribe(
                 PubSub.Channel.THEME_MESSAGE,
-                (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                (message) -> updateStyles(scene, ((ThemeMessage) message).readMessage()));
         stage.setScene(scene);
         stage.show();
     }
+
+    private void updateStyles(Scene myScene, String css) {
+        if (myScene.getStylesheets().size() >= 1) {
+            myScene.getStylesheets().remove(0);
+        }
+        myScene.getStylesheets().add(css);
+    }
+
 
     /**
      * Creates a workspace to be added to the Screen.

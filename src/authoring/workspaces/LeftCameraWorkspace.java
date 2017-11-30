@@ -84,6 +84,7 @@ public class LeftCameraWorkspace implements Workspace {
         body.setDividerPosition(0, bodyDivision);
         right.setMinWidth(0);
         middle.setMinWidth(width);
+        middle.setMaxWidth(width);
         middle.setMinHeight(0);
         body.setMinHeight(height);
     }

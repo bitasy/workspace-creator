@@ -159,8 +159,8 @@ public class TabManager {
                     if(!detachable) {
                         return;
                     }
-                    Stage newStage = new Stage();
-                    TabPane pane = new TabPane();
+                    final Stage newStage = new Stage();
+                    final TabPane pane = new TabPane();
                     tabPanes.add(pane);
                     newStage.setOnHiding(t1 -> {
                         tabPanes.remove(pane);

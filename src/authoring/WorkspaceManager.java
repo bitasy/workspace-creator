@@ -54,14 +54,15 @@ public class WorkspaceManager {
                 width, height, panelManager);
         for(String space : workspaces.keySet()){
             Workspace workspace = (Workspace) workspaces.get(space);
-            workspace.addCameraPanel(cameraPanel.getRegion());
             this.workspaces.put(space, workspace);
         }
         switchWorkspace(PropertiesReader.value("screenlayout", "currentworkspace"));
     }
 
     private void switchWorkspace(String newWorkspace){
+        Workspace workspace = workspaces.get(newWorkspace);
+        workspace.addCameraPanel(cameraPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
-        currentWorkspaceArea.getChildren().add(workspaces.get(newWorkspace).getWorkspace());
+        currentWorkspaceArea.getChildren().add(workspace.getWorkspace());
     }
 }

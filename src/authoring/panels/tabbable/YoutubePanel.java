@@ -71,8 +71,7 @@ public class YoutubePanel implements Panel {
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videos));
-        videosDropDown.getSelectionModel().selectFirst();
-        videosDropDown.setStyle(videoLinks.getString("nodeStyle"));
+        videosDropDown.getStyleClass().add("choice-box");
         videosDropDown.setTooltip(new Tooltip(videoLinks.getString("tool tip")));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {

@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import util.ErrorDisplay;
+import util.pubsub.PubSub;
+import util.pubsub.messages.ThemeMessage;
 import util.PropertiesReader;
 
 import java.io.FileNotFoundException;
@@ -62,6 +64,9 @@ public class Screen {
         setupScreen(width);
 
         Scene scene = new Scene(root, width, height);
+        PubSub.getInstance().subscribe(
+                PubSub.Channel.THEME_MESSAGE,
+                (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
         stage.setScene(scene);
         stage.show();
     }

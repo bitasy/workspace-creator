@@ -1,6 +1,9 @@
 package util;
 
+import javafx.application.Platform;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -18,6 +21,9 @@ public class PropertiesReader {
     private static final String PROPERTIES_FILES_DIRECTORY = "./resources/properties/";
     private static final String PROPERTIES_SUFFIX = "properties";
     private static final String PATH_PROPERTIES = "filepaths";
+    private static final String NO_PROPERTIES = "No Properties Directory";
+    private static final String NO_PROP_MESSAGE = String.format("Could not find the directory %s. Settings could not be loaded.", PROPERTIES_FILES_DIRECTORY);
+    private static final String NO_PROP_FOUND = "The specified property or properties files is not loaded or does not exist.";
 
     /**
      * Reads in all the property files from the /resources/properties folder
@@ -26,13 +32,18 @@ public class PropertiesReader {
      */
     private static Map<String, ResourceBundle> readInPropertyFiles() {
         Map<String, ResourceBundle> propertyBundles = new HashMap<>();
-        File propertiesFolder = new File(PROPERTIES_FILES_DIRECTORY);
-        for(File file : propertiesFolder.listFiles()) {
-            if(isPropertiesFile(file)){
-                // Remove the .properties suffix at the end of the string and at the bundle to the map
-                String fileName = file.getName().substring(0, file.getName().length() - PROPERTIES_SUFFIX.length() - 1);
-                propertyBundles.put(fileName, ResourceBundle.getBundle(fileName));
-            }
+        String[] propfiles = new String[0];
+        try {
+            propfiles = Loader.validFiles(PROPERTIES_FILES_DIRECTORY, PROPERTIES_SUFFIX);
+        } catch (FileNotFoundException e) {
+            ErrorDisplay ed = new ErrorDisplay(NO_PROPERTIES);
+            ed.addMessage(NO_PROP_MESSAGE);
+            ed.displayError();
+            Platform.exit();
+        }
+
+        for(String file : propfiles) {
+            propertyBundles.put(file, ResourceBundle.getBundle(file));
         }
         return propertyBundles;
     }
@@ -60,7 +71,7 @@ public class PropertiesReader {
         try {
             return (String) propertyBundles.get(propertiesFile).getObject(key);
         } catch (Exception e) {
-            return "";
+            throw new IllegalStateException(NO_PROP_FOUND);
         }
     }
 

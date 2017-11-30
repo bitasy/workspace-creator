@@ -16,9 +16,14 @@
             <strategy>panels</strategy>
         </item>
         <item>
-            <name>Themes...</name>
+            <name>Theme...</name>
             <type>loaded</type>
             <strategy>themes</strategy>
+        </item>
+        <item>
+            <name>Workspace...</name>
+            <type>loaded</type>
+            <strategy>workspaces</strategy>
         </item>
     </menu>
 </resources>

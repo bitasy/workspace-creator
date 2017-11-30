@@ -1,14 +1,13 @@
 .button {
-    -fx-base: dimgray;
-    -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+    -fx-base: dimgray; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
 }
 
-.choice-box > .context-menu {
-    -fx-background-radius: 6, 5, 4;
+.choice-box {
+    -fx-background-color: blue;
 }
 
 .panel {
-    -fx-background-color: white;
+    -fx-background-color: black;
 }
 
 .menuBar {

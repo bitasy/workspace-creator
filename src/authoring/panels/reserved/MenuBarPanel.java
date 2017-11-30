@@ -36,15 +36,13 @@ public class MenuBarPanel implements Panel {
     private IPanelController controller;
     private PanelManager panelManager;
 
-    private ResourceBundle themes = ResourceBundle.getBundle("themes");
-    private ResourceBundle properties = ResourceBundle.getBundle("screenlayout");
-    private String path = properties.getString("menubarpath");
-    private double height = Double.parseDouble(properties.getString("menubarheight"));
-    private String style = properties.getString("menubarstyle");
-    private Color textColor = Color.web(properties.getString("menubartextcolor"));
-    private double spacing = Double.parseDouble(properties.getString("menubarspacing"));
-    private Color color = Color.web(properties.getString("menubarcolor"));
-    private Color onHoverColor = Color.web(properties.getString("menubaronhovercolor"));
+    private String path = PropertiesReader.value("screenlayout","menubarpath");
+    private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
+    private String style = PropertiesReader.value("screenlayout","menubarstyle");
+    private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
+    private double spacing = Double.parseDouble(PropertiesReader.value("screenlayout","menubarspacing"));
+    private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
+    private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
     public MenuBarPanel(PanelManager pm){
         hbar = new HBox();
@@ -71,7 +69,7 @@ public class MenuBarPanel implements Panel {
      */
     private Map<String, MenuItem[]> getViewList() {
         Map<String, MenuItem[]> viewMap = getPanelList();
-        List<String> keys = Collections.list(themes.getKeys());
+        List<String> keys = PropertiesReader.keySet("themes");
         MenuItem[] themeItems = new MenuItem[keys.size()];
         for(int i = 0; i < keys.size(); i++){
             MenuItem item = new MenuItem(keys.get(i));
@@ -140,7 +138,7 @@ public class MenuBarPanel implements Panel {
             @Override
             public void handle(ActionEvent event) {
                 PubSub pubsub = PubSub.getInstance();
-                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(themes.getString(item.getText())));
+                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(PropertiesReader.value("themes", item.getText())));
             }
         });
     }

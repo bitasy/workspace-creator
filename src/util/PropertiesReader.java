@@ -1,9 +1,7 @@
 package util;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Static class that reads in the properties files and returns requested
@@ -60,7 +58,23 @@ public class PropertiesReader {
         try {
             return (String) propertyBundles.get(propertiesFile).getObject(key);
         } catch (Exception e) {
+            //TODO: reload from database to try to find the correct propertiesFile and/or key
+            // if that fails then return empty string/error message
             return "";
+        }
+    }
+
+    /**
+     * Retrieves the set of keys
+     * @param propertiesFile is a {@code String} representing the properties file (without the
+     *                       extension) to look for the key inside of
+     * @return {@code String} representing an ArrayList of all the keys in the properties file
+     */
+    public static ArrayList<String> keySet(String propertiesFile) {
+        try {
+            return new ArrayList(propertyBundles.keySet());
+        } catch (Exception e) {
+            return new ArrayList<String>(Arrays.asList("hi"));
         }
     }
 

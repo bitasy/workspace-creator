@@ -18,9 +18,7 @@ import util.MenuReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 import util.PropertiesReader;
-import util.pubsub.PubSub;
-import util.pubsub.messages.ThemeMessage;
-import util.PropertiesReader;
+
 import java.util.*;
 
 /**
@@ -37,7 +35,7 @@ public class MenuBarPanel implements Panel {
     private IPanelController controller;
     private PanelManager panelManager;
 
-    private String path = PropertiesReader.value("screenlayout","menubarpath");
+    private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
     private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
     private String style = PropertiesReader.value("screenlayout","menubarstyle");
     private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
@@ -50,7 +48,7 @@ public class MenuBarPanel implements Panel {
         bar = new MenuBar();
         panelManager = pm;
 
-        MenuReader reader = new MenuReader(path, this, getViewList());
+        MenuReader reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
 
         hbar.setPrefHeight(height);

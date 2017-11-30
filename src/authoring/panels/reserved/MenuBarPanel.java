@@ -2,9 +2,12 @@ package authoring.panels.reserved;
 
 import authoring.Panel;
 import authoring.IPanelController;
+import authoring.Workspace;
+import authoring.WorkspaceManager;
 import authoring.panels.PanelManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
@@ -14,11 +17,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import util.Loader;
 import util.MenuReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 import util.PropertiesReader;
+import util.pubsub.messages.WorkspaceChange;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -33,9 +39,12 @@ public class MenuBarPanel implements Panel {
     private HBox hbar;
     private MenuBar bar;
     private IPanelController controller;
-    private PanelManager panelManager;
+    private Set<String> panels;
+    private Set<String> workspaces;
 
+    private ResourceBundle themes = ResourceBundle.getBundle("themes");
     private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
+    private MenuReader reader;
     private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
     private String style = PropertiesReader.value("screenlayout","menubarstyle");
     private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
@@ -43,16 +52,17 @@ public class MenuBarPanel implements Panel {
     private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
     private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
-    public MenuBarPanel(PanelManager pm){
+    public MenuBarPanel(Set<String> workspaces, Set<String> panels) {
         hbar = new HBox();
         bar = new MenuBar();
         bar.getStyleClass().add("menuBar");
-        panelManager = pm;
+        this.workspaces = workspaces;
+        this.panels = panels;
 
-        MenuReader reader = new MenuReader(menuPath, this, getViewList());
+        reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
 
-        hbar.setPrefHeight(height);
+        hbar.setPrefHeight(this.height);
         hbar.setStyle(style);
 
         Pane file = getOption("File"); //TODO: Style the menu bar and remove hbar
@@ -68,27 +78,42 @@ public class MenuBarPanel implements Panel {
      * @return
      */
     private Map<String, MenuItem[]> getViewList() {
-        Map<String, MenuItem[]> viewMap = getPanelList();
-        List<String> keys = PropertiesReader.keySet("themes");
-        MenuItem[] themeItems = new MenuItem[keys.size()];
-        for(int i = 0; i < keys.size(); i++){
-            MenuItem item = new MenuItem(keys.get(i));
-            setupThemes(item);
-            themeItems[i] = item;
-        }
-        viewMap.put("themes", themeItems);
+        Map<String, MenuItem[]> viewMap = new HashMap<>();
+        viewMap.put("panels", getPanelList());
+        viewMap.put("themes", getThemeList());
+        viewMap.put("workspaces", getWorkspaceList());
         return viewMap;
     }
 
-    private Map<String, MenuItem[]> getPanelList() {
-        String[] panels = panelManager.getPanels();
-        MenuItem[] panelitems = new MenuItem[panels.length];
-        for(int i = 0; i < panels.length; i++){
-            panelitems[i] = new MenuItem(panels[i]);
+    private MenuItem[] getThemeList() {
+        List<String> keys = Collections.list(themes.getKeys());
+        MenuItem[] themeItems = new MenuItem[keys.size()];
+        for(int i = 0; i < keys.size(); i++){
+            MenuItem item = new MenuItem(keys.get(i));
+            setupTheme(item);
+            themeItems[i] = item;
         }
-        Map<String, MenuItem[]> panelMap = new HashMap<>();
-        panelMap.put("panels", panelitems);
-        return panelMap;
+        return themeItems;
+    }
+
+    private MenuItem[] getPanelList() {
+        List<MenuItem> panelTabs = new ArrayList<>();
+        for(String space : panels){
+            MenuItem item = new MenuItem(space);
+            item.setOnAction(e -> handlePanel(item));
+            panelTabs.add(item);
+        }
+        return panelTabs.toArray(new MenuItem[panelTabs.size()]);
+    }
+
+    private MenuItem[] getWorkspaceList() {
+        List<MenuItem> workspaceTabs = new ArrayList<>();
+        for(String space : workspaces){
+            MenuItem item = new MenuItem(space);
+            item.setOnAction(e -> handleWorkspace(item));
+            workspaceTabs.add(item);
+        }
+        return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
     }
 
     @Override
@@ -133,14 +158,21 @@ public class MenuBarPanel implements Panel {
         //TODO: Attach onAction to controller actions, style stuff
     }
 
-    public void setupThemes(MenuItem item) {
+    public void setupTheme(MenuItem item) {
         item.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 PubSub pubsub = PubSub.getInstance();
                 pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(PropertiesReader.value("themes", item.getText())));
-            }
-        });
+            }});
     }
 
+
+    private void handlePanel(MenuItem item) {
+        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
+    }
+
+    private void handleWorkspace(MenuItem item) {
+        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
+    }
 }

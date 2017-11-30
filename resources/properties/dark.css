@@ -1,16 +1,20 @@
 .button {
-    -fx-base: dimgray; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+    -fx-base: #bdbdbd; -fx-focus-color: #ffffff; -fx-faint-focus-color: #f0f0f0;
 }
 
 .choice-box {
-    -fx-background-color: blue;
+    -fx-background-color: #bdbdbd;
 }
 
 .panel {
-    -fx-background-color: black;
+    -fx-background-color: #525252;
+}
+
+.camera {
+    -fx-background-color: #969696;
 }
 
 .menuBar {
     -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
-    -fx-background-color: black; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+    -fx-background-color: #bdbdbd; -fx-focus-color: #ffffff; -fx-faint-focus-color: #f0f0f0;
 }

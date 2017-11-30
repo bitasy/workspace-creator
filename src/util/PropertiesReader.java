@@ -8,12 +8,13 @@ import java.util.*;
  * values from specific properties files
  *
  * @author  Walker Willetts
+ * @author Kelly Zhang
  */
 public class PropertiesReader {
 
     /* Final Variables */
-    private static final Map<String, ResourceBundle> propertyBundles = readInPropertyFiles();
     private static final String PROPERTIES_FILES_DIRECTORY = "./resources/properties/";
+    private static final Map<String, ResourceBundle> propertyBundles = readInPropertyFiles(PROPERTIES_FILES_DIRECTORY);
     private static final String PROPERTIES_SUFFIX = "properties";
     private static final String PATH_PROPERTIES = "filepaths";
 
@@ -22,9 +23,9 @@ public class PropertiesReader {
      * @return A {@code Map<String, ResourceBundle>} that contains all the
      * properties files mapped to their respective resource bundle
      */
-    private static Map<String, ResourceBundle> readInPropertyFiles() {
+    private static Map<String, ResourceBundle> readInPropertyFiles(String folder) {
         Map<String, ResourceBundle> propertyBundles = new HashMap<>();
-        File propertiesFolder = new File(PROPERTIES_FILES_DIRECTORY);
+        File propertiesFolder = new File(folder);
         for(File file : propertiesFolder.listFiles()) {
             if(isPropertiesFile(file)){
                 // Remove the .properties suffix at the end of the string and at the bundle to the map
@@ -72,7 +73,7 @@ public class PropertiesReader {
      */
     public static ArrayList<String> keySet(String propertiesFile) {
         try {
-            return new ArrayList(propertyBundles.keySet());
+            return new ArrayList(propertyBundles.get(propertiesFile).keySet());
         } catch (Exception e) {
             return new ArrayList<String>(Arrays.asList("hi"));
         }

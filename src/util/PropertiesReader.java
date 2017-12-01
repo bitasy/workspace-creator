@@ -1,6 +1,10 @@
 package util;
 
+import javafx.application.Platform;
+
 import java.io.File;
+import java.util.*;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -10,29 +14,48 @@ import java.util.ResourceBundle;
  * values from specific properties files
  *
  * @author  Walker Willetts
+ * @author Kelly Zhang
  */
 public class PropertiesReader {
 
     /* Final Variables */
-    private static final Map<String, ResourceBundle> propertyBundles = readInPropertyFiles();
     private static final String PROPERTIES_FILES_DIRECTORY = "./resources/properties/";
+    private static final Map<String, ResourceBundle> propertyBundles = readInPropertyFiles(PROPERTIES_FILES_DIRECTORY);
     private static final String PROPERTIES_SUFFIX = "properties";
     private static final String PATH_PROPERTIES = "filepaths";
+    private static final String NO_PROPERTIES = "No Properties Directory";
+    private static final String NO_PROP_MESSAGE = String.format("Could not find the directory %s. Settings could not be loaded.", PROPERTIES_FILES_DIRECTORY);
+    private static final String NO_PROP_FOUND = "The specified property or properties files is not loaded or does not exist.";
 
     /**
      * Reads in all the property files from the /resources/properties folder
      * @return A {@code Map<String, ResourceBundle>} that contains all the
      * properties files mapped to their respective resource bundle
      */
-    private static Map<String, ResourceBundle> readInPropertyFiles() {
+    private static Map<String, ResourceBundle> readInPropertyFiles(String folder) {
         Map<String, ResourceBundle> propertyBundles = new HashMap<>();
-        File propertiesFolder = new File(PROPERTIES_FILES_DIRECTORY);
+
+        File propertiesFolder = new File(folder);
         for(File file : propertiesFolder.listFiles()) {
             if(isPropertiesFile(file)){
                 // Remove the .properties suffix at the end of the string and at the bundle to the map
                 String fileName = file.getName().substring(0, file.getName().length() - PROPERTIES_SUFFIX.length() - 1);
                 propertyBundles.put(fileName, ResourceBundle.getBundle(fileName));
             }
+//=======
+//        String[] propfiles = new String[0];
+//        try {
+//            propfiles = Loader.validFiles(PROPERTIES_FILES_DIRECTORY, PROPERTIES_SUFFIX);
+//        } catch (FileNotFoundException e) {
+//            ErrorDisplay ed = new ErrorDisplay(NO_PROPERTIES);
+//            ed.addMessage(NO_PROP_MESSAGE);
+//            ed.displayError();
+//            Platform.exit();
+//        }
+//
+//        for(String file : propfiles) {
+//            propertyBundles.put(file, ResourceBundle.getBundle(file));
+//>>>>>>> 9a905311d9677cae69ffb27d6f52cd7465afc0b9
         }
         return propertyBundles;
     }
@@ -60,7 +83,23 @@ public class PropertiesReader {
         try {
             return (String) propertyBundles.get(propertiesFile).getObject(key);
         } catch (Exception e) {
-            return "";
+            //TODO: reload from database to try to find the correct propertiesFile and/or key
+            // if that fails then return empty string/error message
+            throw new IllegalStateException(NO_PROP_FOUND);
+        }
+    }
+
+    /**
+     * Retrieves the set of keys
+     * @param propertiesFile is a {@code String} representing the properties file (without the
+     *                       extension) to look for the key inside of
+     * @return {@code String} representing an ArrayList of all the keys in the properties file
+     */
+    public static ArrayList<String> keySet(String propertiesFile) {
+        try {
+            return new ArrayList(propertyBundles.get(propertiesFile).keySet());
+        } catch (Exception e) {
+            return new ArrayList<String>(Arrays.asList("hi"));
         }
     }
 

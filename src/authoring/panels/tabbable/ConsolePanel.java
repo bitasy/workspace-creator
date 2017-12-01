@@ -3,12 +3,21 @@ package authoring.panels.tabbable;
 import authoring.IPanelController;
 import authoring.Panel;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import util.Console;
 
 /**
  *
  */
 public class ConsolePanel implements Panel{
+
+    private Pane myPane;
+
+    public ConsolePanel() {
+        myPane = new Pane();
+        myPane.getStyleClass().add("panel");
+    }
 
     private TextArea consoleField = new TextArea();
     {
@@ -17,7 +26,7 @@ public class ConsolePanel implements Panel{
 
     @Override
     public Region getRegion() {
-        return consoleField;
+        return myPane;
     }
 
     @Override

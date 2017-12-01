@@ -1,8 +1,6 @@
 package util.pubsub;
 
-import util.pubsub.messages.ExceptionMessage;
-import util.pubsub.messages.Message;
-import util.pubsub.messages.ThemeMessage;
+import util.pubsub.messages.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +20,10 @@ public class PubSub {
      */
     public enum Channel {
         THEME_MESSAGE(ThemeMessage.class),
-        EXCEPTION_MESSAGE(ExceptionMessage.class);
+        EXCEPTION_MESSAGE(ExceptionMessage.class),
+        TRANSFORM_MESSAGE(TransformMessage.class),
+        WORKSPACE_CHANGE(WorkspaceChange.class),
+        PANEL_TOGGLE(PanelToggle.class);
 
         Class<? extends Message> clazz;
 

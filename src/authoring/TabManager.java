@@ -9,15 +9,17 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import util.pubsub.PubSub;
+import util.pubsub.messages.ThemeMessage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -44,7 +46,11 @@ public class TabManager {
         Rectangle dummy = new Rectangle(3, 10, Color.web("#555555"));
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
-        markerStage.setScene(new Scene(markerStack));
+        Scene myScene = new Scene(markerStack);
+        PubSub.getInstance().subscribe(
+                PubSub.Channel.THEME_MESSAGE,
+                (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+        markerStage.setScene(myScene);
     }
 
     /**
@@ -167,7 +173,12 @@ public class TabManager {
                             newStage.hide();
                         }
                     });
-                    newStage.setScene(new Scene(pane));
+                    Scene newScene = new Scene(pane);
+                    PubSub.getInstance().subscribe(
+                            PubSub.Channel.THEME_MESSAGE,
+                            (message) -> newScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                    //newScene.getStylesheets().add("panel");
+                    newStage.setScene(newScene);
                     newStage.initStyle(StageStyle.UTILITY);
                     newStage.setX(t.getScreenX());
                     newStage.setY(t.getScreenY());

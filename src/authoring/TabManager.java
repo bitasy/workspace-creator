@@ -9,6 +9,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,7 +20,6 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -173,7 +173,12 @@ public class TabManager {
                             newStage.hide();
                         }
                     });
-                    newStage.setScene(new Scene(pane));
+                    Scene newScene = new Scene(pane);
+                    PubSub.getInstance().subscribe(
+                            PubSub.Channel.THEME_MESSAGE,
+                            (message) -> newScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                    //newScene.getStylesheets().add("panel");
+                    newStage.setScene(newScene);
                     newStage.initStyle(StageStyle.UTILITY);
                     newStage.setX(t.getScreenX());
                     newStage.setY(t.getScreenY());

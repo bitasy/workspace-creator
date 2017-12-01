@@ -31,6 +31,7 @@ import java.util.*;
  * The Menu Bar is displayed at the top of the authoring environment and contains the buttons for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
  * @author Brian Nieves
  * @author Simran
+ * @author Kelly Zhang
  *
  */
 public class MenuBarPanel implements Panel {
@@ -42,7 +43,8 @@ public class MenuBarPanel implements Panel {
     private Set<String> workspaces;
 
     private ResourceBundle themes = ResourceBundle.getBundle("themes");
-    private String path = PropertiesReader.value("screenlayout","menubarpath");
+    private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
+    private MenuReader reader;
     private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
     private String style = PropertiesReader.value("screenlayout","menubarstyle");
     private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
@@ -53,10 +55,11 @@ public class MenuBarPanel implements Panel {
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) {
         hbar = new HBox();
         bar = new MenuBar();
+        bar.getStyleClass().add("menuBar");
         this.workspaces = workspaces;
         this.panels = panels;
 
-        MenuReader reader = new MenuReader(path, this, getViewList());
+        reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
 
         hbar.setPrefHeight(this.height);
@@ -97,7 +100,7 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> panelTabs = new ArrayList<>();
         for(String space : panels){
             MenuItem item = new MenuItem(space);
-            item.setOnAction(e -> handlePanel(item.getText()));
+            item.setOnAction(e -> handlePanel(item));
             panelTabs.add(item);
         }
         return panelTabs.toArray(new MenuItem[panelTabs.size()]);
@@ -107,7 +110,7 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> workspaceTabs = new ArrayList<>();
         for(String space : workspaces){
             MenuItem item = new MenuItem(space);
-            item.setOnAction(e -> handleWorkspace(item.getText()));
+            item.setOnAction(e -> handleWorkspace(item));
             workspaceTabs.add(item);
         }
         return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
@@ -155,18 +158,21 @@ public class MenuBarPanel implements Panel {
         //TODO: Attach onAction to controller actions, style stuff
     }
 
-    private void setupTheme(MenuItem item) {
-        item.setOnAction(event -> {
-            PubSub pubsub = PubSub.getInstance();
-            pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(themes.getString(item.getText())));
-        });
+    public void setupTheme(MenuItem item) {
+        item.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                PubSub pubsub = PubSub.getInstance();
+                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(PropertiesReader.value("themes", item.getText())));
+            }});
     }
 
-    private void handlePanel(String text){
-        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(text));
+
+    private void handlePanel(MenuItem item) {
+        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
     }
 
-    private void handleWorkspace(String text){
-        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(text));
+    private void handleWorkspace(MenuItem item) {
+        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
     }
 }

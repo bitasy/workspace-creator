@@ -41,6 +41,8 @@ public class Positions {
         private Position(String position){
             this.position = position;
             pane = new TabPane();
+            pane.setMinWidth(0);
+            pane.setMinHeight(0);
         }
 
         public void addTab(Tab tab) {

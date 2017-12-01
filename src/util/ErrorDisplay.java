@@ -23,7 +23,7 @@ public class ErrorDisplay {
      * @param message the error message
      */
     public void addMessage(String message){
-        errorMessage.append(message).append("\n");
+        errorMessage.append(message).append("\n\n");
     }
 
     /**

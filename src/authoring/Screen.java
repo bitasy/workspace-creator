@@ -43,7 +43,7 @@ public class Screen {
 
 
 
-        //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
+        SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         setupStage(stage, primaryScreenBounds);
         int width = (int) primaryScreenBounds.getWidth();
@@ -94,9 +94,9 @@ public class Screen {
         double cameraHeight = cameraWidth * getDoubleValue("cameraheighttowidthratio");
 
         CameraPanel camera = new CameraPanel(cameraWidth, cameraHeight);
-        camera.setController(controller);
+//        camera.setController(controller);
         MenuBarPanel bar = new MenuBarPanel(panelManager);
-        bar.setController(controller);
+//        bar.setController(controller);
 
         Region cameraRegion = camera.getRegion();
         cameraRegion.setMinWidth(0);

@@ -101,6 +101,7 @@ public class Screen {
         workspaceArea.setMinWidth(width);
         workspaceArea.setMinHeight(height);
 
+
         WorkspaceManager workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
         MenuBarPanel bar = new MenuBarPanel(workspaceManager.getWorkspaces(), panelManager.getPanels());
         bar.setController(controller);

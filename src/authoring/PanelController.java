@@ -35,7 +35,7 @@ public class PanelController implements IPanelController {
      * @return camera view
      */
 	public ScrollPane getCamera(){
-	    return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
+	    return myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
 	}
 
     /**

@@ -10,6 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import util.math.num.Vector;
 
@@ -59,6 +60,14 @@ public class PanelController implements IPanelController {
      */
     public void pause() {
         myEngine.pause();
+    }
+
+    /**
+     * get minimap
+     * @return
+     */
+    public Pane getMiniMap() {
+        return myEngine.getMiniMap(new Vector(75, 75));
     }
 
  }

@@ -4,6 +4,7 @@ import authoring.panels.reserved.CameraPanel;
 import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
 import engine.managers.EntityManager;
+import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
@@ -26,7 +27,7 @@ public class PanelController implements IPanelController {
 	private EntityManager myEntityManager;
 
 	public PanelController() {
-		myEngine = new Engine(20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(70, 5000, 5000); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
@@ -59,5 +60,6 @@ public class PanelController implements IPanelController {
     public void pause() {
         myEngine.pause();
     }
+
  }
 

@@ -49,7 +49,7 @@ public class YoutubePanel implements Panel {
         //TODO: quick fix to get spaces in keys, can make better
 
         Collections.sort(videos, String.CASE_INSENSITIVE_ORDER);
-
+        
         links = new ArrayList<>();
         loadedVideos = new ArrayList<>();
         for (int i = 0; i < videos.size(); i++) {

@@ -1,5 +1,5 @@
 .button {
-    -fx-base: rgba(153,255,153,1); -fx-focus-color: #rgba(0,77,0,1); -fx-faint-focus-color: #f0f0f0;
+    -fx-base: rgba(153,255,153,1); -fx-focus-color: rgba(0,77,0,1); -fx-faint-focus-color: #f0f0f0;
 }
 
 .choice-box {

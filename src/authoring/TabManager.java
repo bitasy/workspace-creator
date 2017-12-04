@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -174,10 +175,12 @@ public class TabManager {
                         }
                     });
                     Scene newScene = new Scene(pane);
-                    PubSub.getInstance().subscribe(
-                            PubSub.Channel.THEME_MESSAGE,
-                            (message) -> newScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
-                    newScene.getStylesheets().add("panel");
+                    //TODO: WHY ISNT THIS WORKING ANYMORE, make the extra stages change theme
+//                    PubSub.getInstance().subscribe(
+//                            PubSub.Channel.THEME_MESSAGE,
+//                            (message) -> updateStyles(pane, ((ThemeMessage) message).readMessage()));
+//                    newStage.getScene().getRoot().getStylesheets().add("panel");
+                    //newScene.getStylesheets().add("panel");
                     newStage.setScene(newScene);
                     newStage.initStyle(StageStyle.UTILITY);
                     newStage.setX(t.getScreenX());
@@ -190,6 +193,13 @@ public class TabManager {
                     pane.requestFocus();
                 }
             });
+        }
+
+        private void updateStyles(Region region, String css) {
+            if (region.getStylesheets().size() >= 1) {
+                region.getStylesheets().remove(0);
+            }
+            region.getStylesheets().add(css);
         }
 
         /**

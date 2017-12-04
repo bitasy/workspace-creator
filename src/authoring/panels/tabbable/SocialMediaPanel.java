@@ -33,10 +33,18 @@ public class SocialMediaPanel implements Panel {
             @Override
             public void fire() { myExtensionView.goBack(); }
         };
+        Button history = new Button() {
+            @Override
+            public void fire() {
+                myExtensionView.loadHTML("SocialMedia.html");
+            }
+        };
         forwards.setText("Forward >");
         backwards.setText("< Backward");
+        history.setText("Home");
         bar.getItems().add(backwards);
         bar.getItems().add(forwards);
+        bar.getItems().add(history);
         myArea.getChildren().add(bar);
     }
 

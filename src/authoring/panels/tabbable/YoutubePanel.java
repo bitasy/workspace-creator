@@ -1,6 +1,7 @@
 package authoring.panels.tabbable;
 
 import authoring.Panel;
+import extensions.ExtensionWebView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,8 +21,7 @@ import java.util.*;
  */
 public class YoutubePanel implements Panel {
 
-    private Pane myPane;
-    private VBox videoLayout;
+    private VBox myArea;
     private ResourceBundle videoLinks;
     private ChoiceBox<String> videosDropDown;
     private List<String> videos;
@@ -31,22 +31,13 @@ public class YoutubePanel implements Panel {
 
 
     public YoutubePanel() {
-        myPane = new Pane();
-        setStyle();
+        myArea = new VBox();
+        myArea.fillWidthProperty().setValue(true);
+        myArea.getStyleClass().add("panel");
         setupVideoLinkMap();
         createDropDownMenu();
-
-        videoLayout = new VBox();
-        videoLayout.getChildren().add(videosDropDown);
-
-        myPane.getChildren().add(videoLayout);
+        myArea.getChildren().add(videosDropDown);
     }
-
-    private void setStyle() {
-        //TODO: make a static method for each of the styles for our predefined objects
-        myPane.getStyleClass().add("panel");
-    }
-
 
     private void setupVideoLinkMap() {
         videoLinks = ResourceBundle.getBundle("tutorials");
@@ -58,8 +49,7 @@ public class YoutubePanel implements Panel {
         //TODO: quick fix to get spaces in keys, can make better
 
         Collections.sort(videos, String.CASE_INSENSITIVE_ORDER);
-        //TODO: should really make nodestyle a global property that can be accessed in any panel
-
+        
         links = new ArrayList<>();
         loadedVideos = new ArrayList<>();
         for (int i = 0; i < videos.size(); i++) {
@@ -77,11 +67,11 @@ public class YoutubePanel implements Panel {
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (videoLayout.getChildren().contains(myVideo)) {
-                    videoLayout.getChildren().remove(myVideo);
+                if (myArea.getChildren().contains(myVideo)) {
+                    myArea.getChildren().remove(myVideo);
                 }
                 myVideo = loadedVideos.get(newValue.intValue());
-                videoLayout.getChildren().add(myVideo);
+                myArea.getChildren().add(myVideo);
             }
         });
     }
@@ -97,7 +87,7 @@ public class YoutubePanel implements Panel {
 
     @Override
     public Region getRegion() {
-        return myPane;
+        return myArea;
     }
 
     @Override

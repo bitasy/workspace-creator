@@ -177,7 +177,7 @@ public class TabManager {
                     PubSub.getInstance().subscribe(
                             PubSub.Channel.THEME_MESSAGE,
                             (message) -> newScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
-                    //newScene.getStylesheets().add("panel");
+                    newScene.getStylesheets().add("panel");
                     newStage.setScene(newScene);
                     newStage.initStyle(StageStyle.UTILITY);
                     newStage.setX(t.getScreenX());

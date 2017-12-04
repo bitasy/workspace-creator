@@ -65,16 +65,21 @@ public class Screen {
             quitOnError();
         }
 
-
-
         Scene scene = new Scene(root, width, height);
         PubSub.getInstance().subscribe(
                 PubSub.Channel.THEME_MESSAGE,
-                (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                (message) -> updateStyles(root,((ThemeMessage) message).readMessage()));
         stage.setScene(scene);
         stage.show();
 
         errorMessage.displayError();
+    }
+
+    private void updateStyles(Region region, String css) {
+        if (region.getStylesheets().size() >= 1) {
+            region.getStylesheets().remove(0);
+        }
+        region.getStylesheets().add(css);
     }
 
     /**

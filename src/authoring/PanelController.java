@@ -3,7 +3,6 @@ package authoring;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
-import engine.managers.EntityManager;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
@@ -34,6 +33,7 @@ public class PanelController implements IPanelController {
      * get camera view
      * @return camera view
      */
+	@Override
 	public ScrollPane getCamera(){
 	    return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
 	}
@@ -42,21 +42,24 @@ public class PanelController implements IPanelController {
      * get entitymanager
      * @return entitymanager
      */
-    public EntityManager getManager() {
+    @Override
+	public EntityManager getManager() {
 	    return myEntityManager;
     }
 
     /**
      * engine start to run script
      */
-    public void play() {
+    @Override
+	public void play() {
         myEngine.play();
     }
 
     /**
      * engine stop to run script
      */
-    public void pause() {
+    @Override
+	public void pause() {
         myEngine.pause();
     }
  }

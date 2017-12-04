@@ -1,6 +1,5 @@
 package authoring;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -16,7 +15,7 @@ public class Positions {
         for(String name : names){
             set.add(new Position(name));
         }
-        positions = (Position[]) set.toArray(new Position[set.size()]);
+        positions = set.toArray(new Position[set.size()]);
     }
 
     public Position getPosition(String name){

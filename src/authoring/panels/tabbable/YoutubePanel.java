@@ -39,7 +39,7 @@ public class YoutubePanel implements Panel {
     }
 
     private void setupVideoLinkMap() {
-        videoLinks = PropertiesReader.keySet("tutorials");
+        videoLinks = new ArrayList(PropertiesReader.map("tutorials").keySet());
         //TODO: quick fix to get spaces in keys, can make better
 
         Collections.sort(videoLinks, String.CASE_INSENSITIVE_ORDER);

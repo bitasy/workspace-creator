@@ -12,6 +12,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import util.PropertiesReader;
 
 import java.util.*;
 
@@ -22,10 +23,8 @@ import java.util.*;
 public class YoutubePanel implements Panel {
 
     private VBox myArea;
-    private ResourceBundle videoLinks;
+    private List<String> videoLinks;
     private ChoiceBox<String> videosDropDown;
-    private List<String> videos;
-    private List<String> links;
     private List<WebView> loadedVideos;
     private WebView myVideo;
 
@@ -40,29 +39,22 @@ public class YoutubePanel implements Panel {
     }
 
     private void setupVideoLinkMap() {
-        videoLinks = ResourceBundle.getBundle("tutorials");
-        //https://kodejava.org/how-do-i-sort-items-in-a-set/
-        videos = new ArrayList<>();
-        videos.addAll(videoLinks.keySet());
-        videos.removeAll(new ArrayList<String>(Arrays.asList("nodeStyle", "tool tip", "Information")));
-        //https://stackoverflow.com/questions/2108103/can-the-key-in-a-java-property-include-a-blank-character
+        videoLinks = PropertiesReader.keySet("tutorials");
         //TODO: quick fix to get spaces in keys, can make better
 
-        Collections.sort(videos, String.CASE_INSENSITIVE_ORDER);
-        
-        links = new ArrayList<>();
+        Collections.sort(videoLinks, String.CASE_INSENSITIVE_ORDER);
+
         loadedVideos = new ArrayList<>();
-        for (int i = 0; i < videos.size(); i++) {
-            links.add(videoLinks.getString(videos.get(i)));
-            loadedVideos.add(loadVideo(links.get(i)));
+        for (int i = 0; i < videoLinks.size(); i++) {
+            loadedVideos.add(loadVideo(PropertiesReader.value("tutorials", videoLinks.get(i))));
         }
     }
 
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
-        videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videos));
+        videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
         videosDropDown.getStyleClass().add("choice-box");
-        videosDropDown.setTooltip(new Tooltip(videoLinks.getString("tool tip")));
+        videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override

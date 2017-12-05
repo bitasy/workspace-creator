@@ -41,6 +41,8 @@ public class Positions {
         private Position(String position){
             this.position = position;
             pane = new TabPane();
+            pane.getStyleClass().add("dragTab");
+            //pane.setStyle("-fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;");
         }
 
         public void addTab(Tab tab) {

@@ -1,15 +1,8 @@
 package authoring;
 
-import authoring.panels.reserved.CameraPanel;
-import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
-import engine.managers.EntityManager;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
+import engine.EntityManager;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
 import util.math.num.Vector;
 
 

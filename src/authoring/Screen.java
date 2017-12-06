@@ -69,7 +69,7 @@ public class Screen {
 
         Scene scene = new Scene(root, width, height);
         PubSub.getInstance().subscribe(
-                PubSub.Channel.THEME_MESSAGE,
+                "THEME_MESSAGE",
                 (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
         stage.setScene(scene);
         stage.show();
@@ -100,6 +100,7 @@ public class Screen {
         Pane workspaceArea = new Pane();
         workspaceArea.setMinWidth(width);
         workspaceArea.setMinHeight(height);
+
 
         WorkspaceManager workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
         MenuBarPanel bar = new MenuBarPanel(workspaceManager.getWorkspaces(), panelManager.getPanels());

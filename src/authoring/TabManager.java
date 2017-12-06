@@ -48,7 +48,7 @@ public class TabManager {
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
         PubSub.getInstance().subscribe(
-                PubSub.Channel.THEME_MESSAGE,
+                "THEME_MESSAGE",
                 (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
         markerStage.setScene(myScene);
     }
@@ -175,7 +175,7 @@ public class TabManager {
                     });
                     Scene newScene = new Scene(pane);
                     PubSub.getInstance().subscribe(
-                            PubSub.Channel.THEME_MESSAGE,
+                            "THEME_MESSAGE",
                             (message) -> newScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
                     //newScene.getStylesheets().add("panel");
                     newStage.setScene(newScene);

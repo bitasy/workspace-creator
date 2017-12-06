@@ -54,7 +54,6 @@ public class MenuBarPanel implements Panel {
     private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
-        hbar = new HBox();
         bar = new MenuBar();
         bar.getStyleClass().add("menuBar");
         this.workspaces = workspaces;
@@ -63,11 +62,7 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-
-        hbar.setPrefHeight(this.height);
-        hbar.setStyle(style);
-
-        Pane file = getOption("File"); //TODO: Style the menu bar and remove hbar
+        Pane file = getOption("File"); //TODO: Style the menu bar
         Pane view = getOption("View");
 
         hbar.getChildren().addAll(file, view);
@@ -172,15 +167,15 @@ public class MenuBarPanel implements Panel {
     }
 
     public void handleTheme(MenuItem item) {
-        //PubSub.getInstance().publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()+".css"));//TODO: Reimplement PubSub
+        PubSub.getInstance().publish("THEME_MESSAGE", new ThemeMessage(item.getText()+".css"));
     }
 
 
     private void handlePanel(MenuItem item) {
-        //PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));
     }
 
     private void handleWorkspace(MenuItem item) {
-        //PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("WORKSPACE_CHANGE", new WorkspaceChange(item.getText()));
     }
 }

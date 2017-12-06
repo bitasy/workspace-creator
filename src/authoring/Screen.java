@@ -72,16 +72,16 @@ public class Screen {
         errorMessage.displayError();
     }
 
-    private void updateTheme() {//TODO: Implement new pubsub
-        /*PubSub.getInstance().subscribe(
-                PubSub.THEME_MESSAGE,
+    private void updateTheme() {
+        PubSub.getInstance().subscribe(
+                "THEME_MESSAGE",
                 (message) -> {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
                     }
                     root.getStylesheets().add(((ThemeMessage) message).readMessage());
                 }
-        );*/
+        );
     }
 
     /**

@@ -19,11 +19,20 @@ public class ErrorDisplay {
     }
 
     /**
+     * Creates a new ErrorDisplay and sets its title.
+     * @param title the title of the ErrorDisplay
+     */
+    public ErrorDisplay(String title, String message){
+        this.title = title;
+        addMessage(message);
+    }
+
+    /**
      * Adds a message to be displayed.
      * @param message the error message
      */
     public void addMessage(String message){
-        errorMessage.append(message).append("\n");
+        errorMessage.append(message).append("\n\n");
     }
 
     /**

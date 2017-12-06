@@ -1,0 +1,20 @@
+.button {
+    -fx-base: #d9d9d9; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+}
+
+.choice-box {
+    -fx-background-color: #d9d9d9;
+}
+
+.panel {
+    -fx-background-color: #f0f0f0;
+}
+
+.camera {
+    -fx-background: #ffffff;
+}
+
+.menuBar {
+    -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
+    -fx-background-color: #ffffff; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+}

@@ -5,6 +5,7 @@ import javafx.scene.layout.Region;
 /**
  * A Panel is the functional unit of the VoogaSalad authoring environment. Every panel has a single purpose and a single place to be shown on the screen. Panels can be opened and closed at will by the user, and are held in a TabView for each area with the exception of the Menu Bar.
  * @author Brian Nieves
+ * @author Kelly Zhang
  */
 public interface Panel {
 
@@ -17,7 +18,7 @@ public interface Panel {
     /**
      * Sets the controller with which this Panel will communicate with both other panels and the engine. This method will be called directly after the creation of any Panel object by the Screen. Its implementation is not required for Panels that require no communication with other parts of the environment.
      */
-    default void setController(IPanelDelegate controller){}
+    default void setController(IPanelController controller){}
 
     /**
      * Returns the title of the panel to be displayed in the authoring environment.

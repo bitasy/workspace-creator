@@ -65,25 +65,16 @@ public class Screen {
             quitOnError();
         }
 
-        Scene scene = new Scene(root, width, height);
-        updateTheme();
 
+
+        Scene scene = new Scene(root, width, height);
+        PubSub.getInstance().subscribe(
+                "THEMES",
+                (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
         stage.setScene(scene);
         stage.show();
 
         errorMessage.displayError();
-    }
-
-    private void updateTheme() {
-        PubSub.getInstance().subscribe(
-                PubSub.Channel.THEME_MESSAGE,
-                (message) -> {
-                    if (root.getStylesheets().size() >= 1) {
-                        root.getStylesheets().remove(0);
-                    }
-                    root.getStylesheets().add(((ThemeMessage) message).readMessage());
-                }
-        );
     }
 
     /**

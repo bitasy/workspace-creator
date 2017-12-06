@@ -1,9 +1,7 @@
 package authoring;
 
-import authoring.panels.reserved.CameraPanel;
-import authoring.panels.tabbable.LibraryPanel;
 import engine.Engine;
-import engine.managers.EntityManager;
+import engine.entities.Entity;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -12,6 +10,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import engine.EntityManager;
+import javafx.scene.control.ScrollPane;
 import util.math.num.Vector;
 
 
@@ -28,7 +28,7 @@ public class PanelController implements IPanelController {
 	private EntityManager myEntityManager;
 
 	public PanelController() {
-		myEngine = new Engine(70, 5000, 5000); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(new Entity(), 70); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 

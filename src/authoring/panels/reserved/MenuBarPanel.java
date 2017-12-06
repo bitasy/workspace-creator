@@ -171,15 +171,15 @@ public class MenuBarPanel implements Panel {
     }
 
     public void handleTheme(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()+".css"));
+        PubSub.getInstance().publish("THEMES", new ThemeMessage(item.getText()+".css"));
     }
 
 
     private void handlePanel(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("THEMES", new WorkspaceChange(item.getText()));
     }
 
     private void handleWorkspace(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("THEMES", new WorkspaceChange(item.getText()));
     }
 }

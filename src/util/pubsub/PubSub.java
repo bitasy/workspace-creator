@@ -1,9 +1,12 @@
 package util.pubsub;
 
-import util.pubsub.messages.*;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import util.pubsub.messages.Message;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -15,30 +18,21 @@ import java.util.function.Function;
 public class PubSub {
     private static PubSub instance;
 
-    /**
-     * Channel list
-     */
-    public enum Channel {
-        THEME_MESSAGE(ThemeMessage.class),
-        EXCEPTION_MESSAGE(ExceptionMessage.class),
-        TRANSFORM_MESSAGE(TransformMessage.class),
-        WORKSPACE_CHANGE(WorkspaceChange.class),
-        PANEL_TOGGLE(PanelToggle.class);
+    private HashMap<String, ArrayList<Consumer<Message>>> callbacks;
+    private HashMap<String, Function<Message, Object>> callbacksSync;
 
-        Class<? extends Message> clazz;
-
-        Channel(Class<? extends Message> clazz) {
-            this.clazz = clazz;
-        }
-    }
-
-    private HashMap<Channel, ArrayList<Consumer<Message>>> callbacks;
-    private HashMap<Channel, Function<Message, Object>> callbacksSync;
+    private HashMap<String, Class> channels;
 
     /**
      * Create a new instance of PubSub
      */
-    public PubSub() {
+    public PubSub(Properties config) {
+        channels = new HashMap<>();
+        for (String name : config.stringPropertyNames()) {
+            try {
+                channels.put(name.toLowerCase(), Class.forName(config.getProperty(name)));
+            } catch (ClassNotFoundException ignored) {}
+        }
         callbacks = new HashMap<>();
         callbacksSync = new HashMap<>();
     }
@@ -49,10 +43,13 @@ public class PubSub {
      * @param channel:  pubsub
      * @param callback: callback that processes message
      */
-    public void subscribe(Channel channel, Consumer<Message> callback) {
+    public void subscribe(String channel, Consumer<Message> callback) {
+        channel = channel.toLowerCase();
+        if (!channels.containsKey(channel))
+            return;
+
         if (!callbacks.containsKey(channel))
             callbacks.put(channel, new ArrayList<>());
-
         callbacks.get(channel).add(callback);
     }
 
@@ -62,7 +59,11 @@ public class PubSub {
      * @param channel:  pubsub
      * @param callback: callback that processes message
      */
-    public void subscribeSync(Channel channel, Function<Message, Object> callback) {
+    public void subscribeSync(String channel, Function<Message, Object> callback) {
+        channel = channel.toLowerCase();
+        if (!channels.containsKey(channel))
+            return;
+
         callbacksSync.put(channel, callback);
     }
 
@@ -72,13 +73,17 @@ public class PubSub {
      * @param channel: pubsub
      * @param msg:     message
      */
-    public void publish(Channel channel, Message msg) {
-        if (msg.getClass() != channel.clazz || callbacks == null || callbacks.get(channel) == null)
+    public void publish(String channel, Message msg) {
+        channel = channel.toLowerCase();
+        if (!(channels.containsKey(channel) && channels.get(channel).equals(msg.getClass())
+                && callbacks.containsKey(channel))) {
             return;
+        }
 
         for (Consumer<Message> callback : callbacks.get(channel))
             if (callback != null)
                 callback.accept(msg);
+        System.out.println(msg);
     }
 
     /**
@@ -88,15 +93,24 @@ public class PubSub {
      * @param msg:     message
      * @return result of processing
      */
-    public Object publishSync(Channel channel, Message msg) {
-        if (callbacksSync.containsKey(channel))
-            return callbacksSync.get(channel).apply(msg);
-        return null;
+    public Object publishSync(String channel, Message msg) {
+        channel = channel.toLowerCase();
+        if (!(channels.containsKey(channel) && channels.get(channel).equals(msg.getClass())
+                && callbacks.containsKey(channel)))
+            return null;
+
+        return callbacksSync.get(channel).apply(msg);
     }
 
     public static PubSub getInstance() {
         if (instance == null)
-            instance = new PubSub();
+            try {
+                Properties properties = new Properties();
+                properties.load(PubSub.class.getResourceAsStream("global.properties"));
+                instance = new PubSub(properties);
+            } catch (IOException e) {
+                return null;
+            }
 
         return instance;
     }

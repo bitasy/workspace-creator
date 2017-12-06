@@ -42,20 +42,6 @@ public class PropertiesReader {
                 String fileName = file.getName().substring(0, file.getName().length() - PROPERTIES_SUFFIX.length() - 1);
                 propertyBundles.put(fileName, ResourceBundle.getBundle(fileName));
             }
-//=======
-//        String[] propfiles = new String[0];
-//        try {
-//            propfiles = Loader.validFiles(PROPERTIES_FILES_DIRECTORY, PROPERTIES_SUFFIX);
-//        } catch (FileNotFoundException e) {
-//            ErrorDisplay ed = new ErrorDisplay(NO_PROPERTIES);
-//            ed.addMessage(NO_PROP_MESSAGE);
-//            ed.displayError();
-//            Platform.exit();
-//        }
-//
-//        for(String file : propfiles) {
-//            propertyBundles.put(file, ResourceBundle.getBundle(file));
-//>>>>>>> 9a905311d9677cae69ffb27d6f52cd7465afc0b9
         }
         return propertyBundles;
     }

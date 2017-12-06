@@ -1,6 +1,5 @@
 package authoring;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -41,8 +40,9 @@ public class Positions {
         private Position(String position){
             this.position = position;
             pane = new TabPane();
+            pane.setMinWidth(0);
+            pane.setMinHeight(0);
             pane.getStyleClass().add("dragTab");
-            //pane.setStyle("-fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;");
         }
 
         public void addTab(Tab tab) {

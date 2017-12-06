@@ -40,10 +40,10 @@ public class MenuBarPanel implements Panel {
     private HBox hbar;
     private MenuBar bar;
     private IPanelController controller;
-    private Set<String> panels;
     private Set<String> workspaces;
+    private Set<String> panels;
+    private Set<String> themes;
 
-    private ResourceBundle themes = ResourceBundle.getBundle("themes");
     private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
     private MenuReader reader;
     private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
@@ -53,12 +53,13 @@ public class MenuBarPanel implements Panel {
     private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
     private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
-    public MenuBarPanel(Set<String> workspaces, Set<String> panels) {
+    public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
         hbar = new HBox();
         bar = new MenuBar();
         bar.getStyleClass().add("menuBar");
         this.workspaces = workspaces;
         this.panels = panels;
+        this.themes = createThemeList();
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
@@ -70,6 +71,18 @@ public class MenuBarPanel implements Panel {
         Pane view = getOption("View");
 
         hbar.getChildren().addAll(file, view);
+    }
+
+    /**
+     *
+     * @return
+     * @throws FileNotFoundException
+     */
+    private Set<String> createThemeList() throws FileNotFoundException {
+        String themePath = PropertiesReader.value("workspacedata", "csspath");
+        String[] allThemes = Loader.validFiles(themePath,"css");
+        Set<String> myThemes = new HashSet<String>(Arrays.asList(allThemes));
+        return myThemes;
     }
 
     /**
@@ -86,15 +99,14 @@ public class MenuBarPanel implements Panel {
         return viewMap;
     }
 
-    private MenuItem[] getThemeList() {
-        List<String> keys = Collections.list(themes.getKeys());
-        MenuItem[] themeItems = new MenuItem[keys.size()];
-        for(int i = 0; i < keys.size(); i++){
-            MenuItem item = new MenuItem(keys.get(i));
-            setupTheme(item);
-            themeItems[i] = item;
+    private MenuItem[] getWorkspaceList() {
+        List<MenuItem> workspaceTabs = new ArrayList<>();
+        for(String space : workspaces){
+            MenuItem item = new MenuItem(space);
+            item.setOnAction(e -> handleWorkspace(item));
+            workspaceTabs.add(item);
         }
-        return themeItems;
+        return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
     }
 
     private MenuItem[] getPanelList() {
@@ -107,14 +119,14 @@ public class MenuBarPanel implements Panel {
         return panelTabs.toArray(new MenuItem[panelTabs.size()]);
     }
 
-    private MenuItem[] getWorkspaceList() {
-        List<MenuItem> workspaceTabs = new ArrayList<>();
-        for(String space : workspaces){
-            MenuItem item = new MenuItem(space);
-            item.setOnAction(e -> handleWorkspace(item));
-            workspaceTabs.add(item);
+    private MenuItem[] getThemeList() {
+        List<MenuItem> themeOptions = new ArrayList<>();
+        for(String theme : themes){
+            MenuItem item = new MenuItem(theme);
+            item.setOnAction(e -> handleTheme(item));
+            themeOptions.add(item);
         }
-        return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
+        return themeOptions.toArray(new MenuItem[themeOptions.size()]);
     }
 
     @Override
@@ -159,13 +171,8 @@ public class MenuBarPanel implements Panel {
         if(strategy.equals("Save")) newItem.setOnAction(e -> new SaveAction(controller).execute());
     }
 
-    public void setupTheme(MenuItem item) {
-        item.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                PubSub pubsub = PubSub.getInstance();
-                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(PropertiesReader.value("themes", item.getText())));
-            }});
+    public void handleTheme(MenuItem item) {
+        PubSub.getInstance().publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()+".css"));
     }
 
 

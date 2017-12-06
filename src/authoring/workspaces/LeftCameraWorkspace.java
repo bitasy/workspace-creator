@@ -2,23 +2,21 @@ package authoring.workspaces;
 
 import authoring.AbstractWorkspace;
 import authoring.Positions;
-import authoring.Positions.Position;
-import authoring.TabManager;
-import authoring.Workspace;
 import authoring.panels.PanelManager;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
+/**
+ * Defines a workspace with the Camera panel of the left side of the screen, and two TabPane areas on the right and bottom.
+ * @author Brian Nieves
+ */
 public class LeftCameraWorkspace extends AbstractWorkspace {
 
     private Positions positions;
@@ -30,6 +28,13 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     private double middleDivision = 0.7; //Default value
     private double bodyDivision = 0.7; //Default value
 
+    /**
+     * Creates a LeftCameraWorkspace and initializes it.
+     * @param width the width of the workspace
+     * @param height the height of the workspace
+     * @param manager the manager for the panels to be added to the workspace
+     * @throws IOException if there is a problem loading the panels
+     */
     public LeftCameraWorkspace(double width, double height, PanelManager manager) throws IOException{
         super(width, height, manager);
 
@@ -60,12 +65,14 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         return body;
     }
 
+    @Override
     protected void loadFile() throws IOException {
         super.loadFile();
         middleDivision = getDoubleValue("middledivision");
         bodyDivision = getDoubleValue("bodydivision");
     }
 
+    @Override
     protected void populateScreen(){
         initialize();
         super.populateScreen();
@@ -73,6 +80,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         middle.setDividerPositions(middleDivision);
     }
 
+    @Override
     protected void saveToFile(File file, Properties properties) throws IOException{
         properties.setProperty("middledivision", middleDivision + "");
         properties.setProperty("bodydivision", bodyDivision + "");
@@ -80,13 +88,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         super.saveToFile(file, properties);
     }
 
-    private void initialize() {
-        body = new SplitPane();
-        middle = new SplitPane();
-        bottom = positions.getPosition("bottom").getPane();
-        right = positions.getPosition("right").getPane();
-    }
-
+    @Override
     protected void setupWorkspace(double width, double height) {
         body.setOrientation(Orientation.VERTICAL);
         middle.setOrientation(Orientation.HORIZONTAL);
@@ -100,7 +102,15 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         body.setDividerPosition(0, bodyDivision);
         right.setMinWidth(0);
         middle.setMinWidth(width);
+        middle.setMaxWidth(width);
         middle.setMinHeight(0);
         body.setMinHeight(height);
+    }
+
+    private void initialize() {
+        body = new SplitPane();
+        middle = new SplitPane();
+        bottom = positions.getPosition("bottom").getPane();
+        right = positions.getPosition("right").getPane();
     }
 }

@@ -1,23 +1,13 @@
 package authoring;
 
-import javafx.animation.PauseTransition;
-import javafx.collections.ListChangeListener;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 

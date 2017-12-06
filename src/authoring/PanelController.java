@@ -1,7 +1,7 @@
 package authoring;
 
 import engine.Engine;
-import engine.managers.EntityManager;
+import engine.EntityManager;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import util.math.num.Vector;
@@ -15,29 +15,29 @@ import util.math.num.Vector;
  * @author Estelle He
  */
 public class PanelController implements IPanelController {
-	private Engine myEngine;
+    private Engine myEngine;
 
-	private EntityManager myEntityManager;
+    private EntityManager myEntityManager;
 
-	public PanelController() {
-		myEngine = new Engine(70, 5000, 5000); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
-	    myEntityManager = myEngine.getEntityManager();
-	}
+    public PanelController() {
+        myEngine = new Engine(null, 20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file//TODO: put something other than null as the root. I guess it's supposed to come from database"
+        myEntityManager = myEngine.getEntityManager();
+    }
 
     /**
      * get camera view
      * @return camera view
      */
-	public ScrollPane getCamera(){
-	    return myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
-	}
+    public ScrollPane getCamera(){
+        return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
+    }
 
     /**
      * get entitymanager
      * @return entitymanager
      */
     public EntityManager getManager() {
-	    return myEntityManager;
+        return myEntityManager;
     }
 
     /**
@@ -56,7 +56,7 @@ public class PanelController implements IPanelController {
 
     @Override
     public void save() {
-        //TODO: Integrate
+        myEngine.save("Wtf is name? *documentation plez*");//TODO figure out what to put here
     }
 
     /**
@@ -66,5 +66,5 @@ public class PanelController implements IPanelController {
     public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(75, 75));
     }
-}
 
+}

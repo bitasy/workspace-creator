@@ -9,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import util.ErrorDisplay;
-import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
@@ -74,16 +72,16 @@ public class Screen {
         errorMessage.displayError();
     }
 
-    private void updateTheme() {
-        PubSub.getInstance().subscribe(
-                PubSub.Channel.THEME_MESSAGE,
+    private void updateTheme() {//TODO: Implement new pubsub
+        /*PubSub.getInstance().subscribe(
+                PubSub.THEME_MESSAGE,
                 (message) -> {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
                     }
                     root.getStylesheets().add(((ThemeMessage) message).readMessage());
                 }
-        );
+        );*/
     }
 
     /**

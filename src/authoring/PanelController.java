@@ -59,5 +59,10 @@ public class PanelController implements IPanelController {
     public void pause() {
         myEngine.pause();
     }
- }
+
+    @Override
+    public void save() {
+        //TODO: Integrate
+    }
+}
 

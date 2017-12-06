@@ -4,6 +4,7 @@ import authoring.Panel;
 import authoring.IPanelController;
 import authoring.Workspace;
 import authoring.WorkspaceManager;
+import authoring.menuactions.SaveAction;
 import authoring.panels.PanelManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * The Menu Bar is displayed at the top of the authoring environment and contains the buttons for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
+ * The Menu Bar is displayed at the top of the authoring environment and contains the menuactions for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
  * @author Brian Nieves
  * @author Simran
  * @author Kelly Zhang
@@ -154,8 +155,8 @@ public class MenuBarPanel implements Panel {
         return "Menu";
     }
 
-    public void setupItem(MenuItem newItem, String strategy) {
-        //TODO: Attach onAction to controller actions, style stuff
+    public void setupItem(MenuItem newItem, String strategy) { //TODO: How is styling attached? put string somewhere else
+        if(strategy.equals("Save")) newItem.setOnAction(e -> new SaveAction(controller).execute());
     }
 
     public void setupTheme(MenuItem item) {

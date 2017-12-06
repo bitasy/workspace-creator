@@ -37,7 +37,6 @@ import java.util.*;
  */
 public class MenuBarPanel implements Panel {
 
-    private HBox hbar;
     private MenuBar bar;
     private IPanelController controller;
     private Set<String> workspaces;
@@ -46,12 +45,6 @@ public class MenuBarPanel implements Panel {
 
     private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
     private MenuReader reader;
-    private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
-    private String style = PropertiesReader.value("screenlayout","menubarstyle");
-    private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
-    private double spacing = Double.parseDouble(PropertiesReader.value("screenlayout","menubarspacing"));
-    private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
-    private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
         bar = new MenuBar();
@@ -62,10 +55,6 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-        Pane file = getOption("File"); //TODO: Style the menu bar
-        Pane view = getOption("View");
-
-        hbar.getChildren().addAll(file, view);
     }
 
     /**
@@ -127,29 +116,6 @@ public class MenuBarPanel implements Panel {
     @Override
     public Region getRegion(){
         return bar;
-    }
-
-    /**
-     * Creates an option to be put in the Menu Bar.
-     * @param text the text for the option
-     * @return a Pane that represents the field for the option
-     */
-    private Pane getOption(String text) {
-        StackPane option = new StackPane();
-
-        Text textbutton = new Text(text);
-        textbutton.setFill(textColor);
-
-        Rectangle box = new Rectangle();
-        box.setWidth(textbutton.minWidth(height) + spacing);
-        box.setHeight(height);
-        box.setFill(color);
-
-        option.setOnMouseEntered(event -> box.setFill(onHoverColor));
-        option.setOnMouseExited(event -> box.setFill(color));
-
-        option.getChildren().addAll(box, textbutton);
-        return option;
     }
 
     @Override

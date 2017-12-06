@@ -28,10 +28,10 @@ public class WorkspaceManager {
 
         createWorkspaces(workspaceArea.minWidthProperty().doubleValue(), workspaceArea.minHeightProperty().doubleValue());
 
-        PubSub.getInstance().subscribe(
+        /*PubSub.getInstance().subscribe(//TODO p
                 PubSub.Channel.WORKSPACE_CHANGE,
                 message -> switchWorkspace(((WorkspaceChange)message).readMessage()
-        ));
+        ));*/
     }
 
     /**

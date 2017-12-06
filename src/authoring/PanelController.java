@@ -2,6 +2,7 @@ package authoring;
 
 import engine.Engine;
 import engine.EntityManager;
+import engine.entities.Entity;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import util.math.num.Vector;
@@ -20,7 +21,7 @@ public class PanelController implements IPanelController {
     private EntityManager myEntityManager;
 
     public PanelController() {
-        myEngine = new Engine(null, 20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file//TODO: put something other than null as the root. I guess it's supposed to come from database"
+        myEngine = new Engine(new Entity(), 20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file//
         myEntityManager = myEngine.getEntityManager();
     }
 

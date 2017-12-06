@@ -39,9 +39,9 @@ public class TabManager {
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
-        PubSub.getInstance().subscribe(
+        /*PubSub.getInstance().subscribe(//TODO ps
                 PubSub.Channel.THEME_MESSAGE,
-                (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));*/
         markerStage.setScene(myScene);
     }
 

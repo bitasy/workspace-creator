@@ -56,7 +56,7 @@ public class WorkspaceManager {
     /**
      * Saves all of the loaded workspace settings to their respective files.
      */
-    public void saveWorkspaces(){
+    public void saveWorkspaces() throws IOException {
         for(Workspace workspace : workspaces.values()){
             workspace.save();
         }

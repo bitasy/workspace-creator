@@ -131,8 +131,12 @@ public class Screen {
     }
 
     public void save(){
-        //TODO: allow workspace, engine to save to local/database
-        workspaceManager.saveWorkspaces();
+        try {
+            workspaceManager.saveWorkspaces();
+        } catch (IOException e){
+            errorMessage.addMessage(String.format(PropertiesReader.value("reflect","IOerror"), e.getMessage()));
+            errorMessage.displayError();
+        }
     }
 
     /**

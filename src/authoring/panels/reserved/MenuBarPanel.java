@@ -163,16 +163,16 @@ public class MenuBarPanel implements Panel {
             @Override
             public void handle(ActionEvent event) {
                 PubSub pubsub = PubSub.getInstance();
-                pubsub.publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(PropertiesReader.value("themes", item.getText())));
+                pubsub.publish("THEME_MESSAGE", new ThemeMessage(PropertiesReader.value("themes", item.getText())));
             }});
     }
 
 
     private void handlePanel(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));
     }
 
     private void handleWorkspace(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));
     }
 }

@@ -1,6 +1,7 @@
 package authoring.panels.tabbable;
 
 import authoring.Panel;
+import extensions.ExtensionWebView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,6 +12,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import util.PropertiesReader;
 
 import java.util.*;
 
@@ -20,68 +22,48 @@ import java.util.*;
  */
 public class YoutubePanel implements Panel {
 
-    private Pane myPane;
-    private VBox videoLayout;
-    private ResourceBundle videoLinks;
+    private VBox myArea;
+    private List<String> videoLinks;
     private ChoiceBox<String> videosDropDown;
-    private List<String> videos;
-    private List<String> links;
     private List<WebView> loadedVideos;
     private WebView myVideo;
 
 
     public YoutubePanel() {
-        myPane = new Pane();
-        setStyle();
+        myArea = new VBox();
+        myArea.fillWidthProperty().setValue(true);
+        myArea.getStyleClass().add("panel");
         setupVideoLinkMap();
         createDropDownMenu();
-
-        videoLayout = new VBox();
-        videoLayout.getChildren().add(videosDropDown);
-
-        myPane.getChildren().add(videoLayout);
+        myArea.getChildren().add(videosDropDown);
     }
-
-    private void setStyle() {
-        //TODO: make a static method for each of the styles for our predefined objects
-        myPane.getStyleClass().add("panel");
-    }
-
 
     private void setupVideoLinkMap() {
-        videoLinks = ResourceBundle.getBundle("tutorials");
-        //https://kodejava.org/how-do-i-sort-items-in-a-set/
-        videos = new ArrayList<>();
-        videos.addAll(videoLinks.keySet());
-        videos.removeAll(new ArrayList<String>(Arrays.asList("nodeStyle", "tool tip", "Information")));
-        //https://stackoverflow.com/questions/2108103/can-the-key-in-a-java-property-include-a-blank-character
+        videoLinks = PropertiesReader.keySet("tutorials");
         //TODO: quick fix to get spaces in keys, can make better
 
-        Collections.sort(videos, String.CASE_INSENSITIVE_ORDER);
-        //TODO: should really make nodestyle a global property that can be accessed in any panel
+        Collections.sort(videoLinks, String.CASE_INSENSITIVE_ORDER);
 
-        links = new ArrayList<>();
         loadedVideos = new ArrayList<>();
-        for (int i = 0; i < videos.size(); i++) {
-            links.add(videoLinks.getString(videos.get(i)));
-            loadedVideos.add(loadVideo(links.get(i)));
+        for (int i = 0; i < videoLinks.size(); i++) {
+            loadedVideos.add(loadVideo(PropertiesReader.value("tutorials", videoLinks.get(i))));
         }
     }
 
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
-        videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videos));
+        videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
         videosDropDown.getStyleClass().add("choice-box");
-        videosDropDown.setTooltip(new Tooltip(videoLinks.getString("tool tip")));
+        videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (videoLayout.getChildren().contains(myVideo)) {
-                    videoLayout.getChildren().remove(myVideo);
+                if (myArea.getChildren().contains(myVideo)) {
+                    myArea.getChildren().remove(myVideo);
                 }
                 myVideo = loadedVideos.get(newValue.intValue());
-                videoLayout.getChildren().add(myVideo);
+                myArea.getChildren().add(myVideo);
             }
         });
     }
@@ -97,7 +79,7 @@ public class YoutubePanel implements Panel {
 
     @Override
     public Region getRegion() {
-        return myPane;
+        return myArea;
     }
 
     @Override

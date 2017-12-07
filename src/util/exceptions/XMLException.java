@@ -5,7 +5,8 @@ package util.exceptions;
  * @author Brian Nieves
  */
 public class XMLException extends RuntimeException {
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         return "Could not load menu bar. Check the XML file.";
     }
 }

@@ -9,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import util.ErrorDisplay;
-import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
@@ -43,7 +41,6 @@ public class Screen {
      * @param stage the stage to add the Screen to
      */
     public Screen(Stage stage){
-        stage.setOnCloseRequest(e -> save());
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -67,13 +64,24 @@ public class Screen {
         }
 
         Scene scene = new Scene(root, width, height);
-        PubSub.getInstance().subscribe(
-                "THEMES",
-                (message) -> scene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+        updateTheme();
+
         stage.setScene(scene);
         stage.show();
 
         errorMessage.displayError();
+    }
+
+    private void updateTheme() {
+        PubSub.getInstance().subscribe(
+                "THEME_MESSAGE",
+                (message) -> {
+                    if (root.getStylesheets().size() >= 1) {
+                        root.getStylesheets().remove(0);
+                    }
+                    root.getStylesheets().add(((ThemeMessage) message).readMessage());
+                }
+        );
     }
 
     /**

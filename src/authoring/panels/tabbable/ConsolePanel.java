@@ -5,7 +5,6 @@ import authoring.Panel;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import util.Console;
 
 /**
  *

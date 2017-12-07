@@ -1,6 +1,5 @@
 package util.pubsub;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import util.pubsub.messages.Message;
 
 import java.io.IOException;
@@ -50,6 +49,7 @@ public class PubSub {
 
         if (!callbacks.containsKey(channel))
             callbacks.put(channel, new ArrayList<>());
+
         callbacks.get(channel).add(callback);
     }
 
@@ -76,9 +76,8 @@ public class PubSub {
     public void publish(String channel, Message msg) {
         channel = channel.toLowerCase();
         if (!(channels.containsKey(channel) && channels.get(channel).equals(msg.getClass())
-                && callbacks.containsKey(channel))) {
+                && callbacks.containsKey(channel)))
             return;
-        }
 
         for (Consumer<Message> callback : callbacks.get(channel))
             if (callback != null)

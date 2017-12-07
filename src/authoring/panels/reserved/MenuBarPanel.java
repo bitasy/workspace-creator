@@ -1,23 +1,11 @@
 package authoring.panels.reserved;
 
 import authoring.Panel;
-import authoring.IPanelController;
-import authoring.Workspace;
-import authoring.WorkspaceManager;
+import authoring.PanelController;
 import authoring.menuactions.SaveAction;
-import authoring.panels.PanelManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import util.Loader;
 import util.MenuReader;
 import util.pubsub.PubSub;
@@ -38,7 +26,7 @@ import java.util.*;
 public class MenuBarPanel implements Panel {
 
     private MenuBar bar;
-    private IPanelController controller;
+    private PanelController controller;
     private Set<String> workspaces;
     private Set<String> panels;
     private Set<String> themes;
@@ -119,7 +107,7 @@ public class MenuBarPanel implements Panel {
     }
 
     @Override
-    public void setController(IPanelController controller) {
+    public void setController(PanelController controller) {
         this.controller = controller;
     }
 

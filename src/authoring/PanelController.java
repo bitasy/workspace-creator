@@ -16,14 +16,12 @@ import util.math.num.Vector;
 
 
 /**
- *
- * Currently impelementation is just for testing
- *
+ * PanelController delegates access to the engine to each panel that needs it.
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController implements IPanelController {
-	private Engine myEngine;
+public class PanelController {
+    private Engine myEngine;
 
 	private EntityManager myEntityManager;
 
@@ -62,7 +60,6 @@ public class PanelController implements IPanelController {
         myEngine.pause();
     }
 
-    @Override
     public void save(String name) {
         myEngine.save(name);
     }

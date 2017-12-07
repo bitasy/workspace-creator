@@ -1,36 +1,25 @@
 package authoring.workspaces;
 
+import authoring.AbstractWorkspace;
 import authoring.Positions;
-import authoring.Positions.Position;
-import authoring.TabManager;
-import authoring.Workspace;
 import authoring.panels.PanelManager;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
-public class LeftCameraWorkspace implements Workspace {
+/**
+ * Defines a workspace with the Camera panel of the left side of the screen, and two TabPane areas on the right and bottom.
+ * @author Brian Nieves
+ */
+public class LeftCameraWorkspace extends AbstractWorkspace {
 
-    private final Positions positions = new Positions("right", "bottom");
-
-    private final Properties properties = new Properties();
-    private final ResourceBundle data = ResourceBundle.getBundle("workspacedata");
-
-    private final Position DEFAULT_POSITION = positions.getPosition("right");
-    private final String DEFAULT_VISIBILITY = data.getString("defaultvisibility");
-
-    private PanelManager manager;
-    private TabManager tabManager;
-    private Map<String, Position> panelPositions;
+    private Positions positions;
 
     private SplitPane body;
     private SplitPane middle;
@@ -39,12 +28,27 @@ public class LeftCameraWorkspace implements Workspace {
     private double middleDivision = 0.7; //Default value
     private double bodyDivision = 0.7; //Default value
 
+    /**
+     * Creates a LeftCameraWorkspace and initializes it.
+     * @param width the width of the workspace
+     * @param height the height of the workspace
+     * @param manager the manager for the panels to be added to the workspace
+     * @throws IOException if there is a problem loading the panels
+     */
     public LeftCameraWorkspace(double width, double height, PanelManager manager) throws IOException{
-        this.manager = manager;
-        initialize();
-        loadFile();
-        setupWorkspace(width, height);
-        populateScreen();
+        super(width, height, manager);
+
+    }
+
+    @Override
+    protected Positions positionList() {
+        positions = new Positions("right", "bottom");
+        return positions;
+    }
+
+    @Override
+    protected String defaultPosition() {
+        return "right";
     }
 
     @Override
@@ -56,22 +60,36 @@ public class LeftCameraWorkspace implements Workspace {
         middle.setDividerPositions(middleDivision);
     }
 
-
     @Override
     public Region getWorkspace() {
         return body;
     }
 
-    private void initialize() {
-        panelPositions = new HashMap<>();
-        body = new SplitPane();
-        middle = new SplitPane();
-        bottom = positions.getPosition("bottom").getPane();
-        right = positions.getPosition("right").getPane();
-        tabManager = new TabManager(positions);
+    @Override
+    protected void loadFile() throws IOException {
+        super.loadFile();
+        middleDivision = getDoubleValue("middledivision");
+        bodyDivision = getDoubleValue("bodydivision");
     }
 
-    private void setupWorkspace(double width, double height) {
+    @Override
+    protected void populateScreen(){
+        initialize();
+        super.populateScreen();
+        body.setDividerPositions(bodyDivision);
+        middle.setDividerPositions(middleDivision);
+    }
+
+    @Override
+    protected void saveToFile(File file, Properties properties) throws IOException{
+        properties.setProperty("middledivision", middleDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
+
+        super.saveToFile(file, properties);
+    }
+
+    @Override
+    protected void setupWorkspace(double width, double height) {
         body.setOrientation(Orientation.VERTICAL);
         middle.setOrientation(Orientation.HORIZONTAL);
 
@@ -89,65 +107,10 @@ public class LeftCameraWorkspace implements Workspace {
         body.setMinHeight(height);
     }
 
-    private void loadFile() throws IOException {
-        File file = new File(String.format(data.getString("filepath"), this.getClass().getSimpleName()));
-        if(file.exists()){
-            FileInputStream input = new FileInputStream(file);
-            properties.load(input);
-            for(String panel : manager.getPanels()){
-                Position position = positions.getPosition(properties.getProperty(panel));
-                if(position != null){
-                    panelPositions.put(panel, position);
-                } else {
-                    properties.setProperty(panel, DEFAULT_POSITION.toString());
-                    panelPositions.put(panel, DEFAULT_POSITION);
-                }
-            }
-            middleDivision = getDoubleValue("middledivision");
-            bodyDivision = getDoubleValue("bodydivision");
-        } else {
-            createFile(file);
-            loadFile();
-        }
-    }
-
-    private void populateScreen(){
-        for(String panel : panelPositions.keySet()){
-            panelPositions.get(panel).addTab(newTab(panel));
-        }
-        body.setDividerPositions(bodyDivision);
-        middle.setDividerPositions(middleDivision);
-    }
-
-    private Tab newTab(String panel) {
-        Tab tab = tabManager.newTab(panel);
-        tab.setContent(manager.getPanelDisplay(panel));
-        tab.setOnCloseRequest(event -> {
-            if(tab.getTabPane().getTabs().size() == 1){
-                event.consume();
-            }
-        });
-        return tab;
-    }
-
-    private void createFile(File location) throws IOException{
-        for(String panel : manager.getPanels()){
-            properties.setProperty(panel, DEFAULT_POSITION.toString());
-            properties.setProperty(String.format(data.getString("visibilitytag"), panel), DEFAULT_VISIBILITY);
-        }
-        saveToFile(location, properties);
-    }
-
-    private void saveToFile(File file, Properties properties) throws IOException{
-        properties.setProperty("middledivision", middleDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
-
-        OutputStream output = new FileOutputStream(file);
-        properties.store(output, String.format(data.getString("dataheader"), getClass().getSimpleName()));
-        output.close();
-    }
-
-    private double getDoubleValue(String key) {
-        return Double.parseDouble(properties.getProperty(key));
+    private void initialize() {
+        body = new SplitPane();
+        middle = new SplitPane();
+        bottom = positions.getPosition("bottom").getPane();
+        right = positions.getPosition("right").getPane();
     }
 }

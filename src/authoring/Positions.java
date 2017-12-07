@@ -42,6 +42,7 @@ public class Positions {
             pane = new TabPane();
             pane.setMinWidth(0);
             pane.setMinHeight(0);
+            pane.getStyleClass().add("dragTab");
         }
 
         public void addTab(Tab tab) {

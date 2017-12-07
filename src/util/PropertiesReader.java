@@ -82,7 +82,6 @@ public class PropertiesReader {
      * @return {@code String} representing an ArrayList of all the keys in the properties file
      */
     public static Map<String, String> map(String propertiesFile) {
-        System.out.println(propertiesFile);
         try {
             Map<String, String> propertyMap = new HashMap<>();
             for(String key: propertyBundles.get(propertiesFile).keySet()) {

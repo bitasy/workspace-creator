@@ -83,7 +83,6 @@ public class PubSub {
         for (Consumer<Message> callback : callbacks.get(channel))
             if (callback != null)
                 callback.accept(msg);
-        System.out.println(msg);
     }
 
     /**

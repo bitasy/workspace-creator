@@ -61,7 +61,7 @@ public abstract class AbstractWorkspace implements Workspace{
         }
 
         saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
-    }//TODO CURRENTLY: check if this exception gets handled, save divider positions in subclasses, update visibility on xing out, implement view reloading panels
+    }//TODO CURRENTLY: save divider positions in subclasses, update visibility on xing out, implement view reloading panels
 
     /**
      * Provides the list of positions to the AbstractWorkspace for management.

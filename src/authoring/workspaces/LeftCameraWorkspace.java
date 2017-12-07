@@ -66,6 +66,13 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     }
 
     @Override
+    public void save() throws IOException{
+        properties.setProperty("middledivision", middleDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
+        super.save();
+    }
+
+    @Override
     protected void loadFile() throws IOException {
         super.loadFile();
         middleDivision = getDoubleValue("middledivision");

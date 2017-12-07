@@ -67,6 +67,14 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     }
 
     @Override
+    public void save() throws IOException{
+        properties.setProperty("middledivision", leftDivision + "");
+        properties.setProperty("middledivision", leftDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
+        super.save();
+    }
+
+    @Override
     protected void setupWorkspace(double width, double height) {
         body.setOrientation(Orientation.VERTICAL);
         middle.setOrientation(Orientation.HORIZONTAL);

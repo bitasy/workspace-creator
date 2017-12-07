@@ -1,22 +1,11 @@
 package authoring.panels.reserved;
 
 import authoring.Panel;
-import authoring.IPanelController;
-import authoring.Workspace;
-import authoring.WorkspaceManager;
-import authoring.panels.PanelManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Menu;
+import authoring.PanelController;
+import authoring.menuactions.SaveAction;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import util.Loader;
 import util.MenuReader;
 import util.pubsub.PubSub;
@@ -28,7 +17,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * The Menu Bar is displayed at the top of the authoring environment and contains the buttons for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
+ * The Menu Bar is displayed at the top of the authoring environment and contains the menuactions for options related to the environment. This includes saving and loading workspaces, as well as opening panels for viewing within the workspace.
  * @author Brian Nieves
  * @author Simran
  * @author Kelly Zhang
@@ -36,24 +25,16 @@ import java.util.*;
  */
 public class MenuBarPanel implements Panel {
 
-    private HBox hbar;
     private MenuBar bar;
-    private IPanelController controller;
+    private PanelController controller;
     private Set<String> workspaces;
     private Set<String> panels;
     private Set<String> themes;
 
     private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
     private MenuReader reader;
-    private double height = Double.parseDouble(PropertiesReader.value("screenlayout","menubarheight"));
-    private String style = PropertiesReader.value("screenlayout","menubarstyle");
-    private Color textColor = Color.web(PropertiesReader.value("screenlayout","menubartextcolor"));
-    private double spacing = Double.parseDouble(PropertiesReader.value("screenlayout","menubarspacing"));
-    private Color color = Color.web(PropertiesReader.value("screenlayout","menubarcolor"));
-    private Color onHoverColor = Color.web(PropertiesReader.value("screenlayout","menubaronhovercolor"));
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
-        hbar = new HBox();
         bar = new MenuBar();
         bar.getStyleClass().add("menuBar");
         this.workspaces = workspaces;
@@ -62,14 +43,6 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-
-        hbar.setPrefHeight(this.height);
-        hbar.setStyle(style);
-
-        Pane file = getOption("File"); //TODO: Style the menu bar and remove hbar
-        Pane view = getOption("View");
-
-        hbar.getChildren().addAll(file, view);
     }
 
     /**
@@ -133,31 +106,8 @@ public class MenuBarPanel implements Panel {
         return bar;
     }
 
-    /**
-     * Creates an option to be put in the Menu Bar.
-     * @param text the text for the option
-     * @return a Pane that represents the field for the option
-     */
-    private Pane getOption(String text) {
-        StackPane option = new StackPane();
-
-        Text textbutton = new Text(text);
-        textbutton.setFill(textColor);
-
-        Rectangle box = new Rectangle();
-        box.setWidth(textbutton.minWidth(height) + spacing);
-        box.setHeight(height);
-        box.setFill(color);
-
-        option.setOnMouseEntered(event -> box.setFill(onHoverColor));
-        option.setOnMouseExited(event -> box.setFill(color));
-
-        option.getChildren().addAll(box, textbutton);
-        return option;
-    }
-
     @Override
-    public void setController(IPanelController controller) {
+    public void setController(PanelController controller) {
         this.controller = controller;
     }
 
@@ -166,20 +116,20 @@ public class MenuBarPanel implements Panel {
         return "Menu";
     }
 
-    public void setupItem(MenuItem newItem, String strategy) {
-        //TODO: Attach onAction to controller actions, style stuff
+    public void setupItem(MenuItem newItem, String strategy) { //TODO: How is styling attached? put string somewhere else
+        if(strategy.equals("Save")) newItem.setOnAction(e -> new SaveAction(controller).execute());
     }
 
     public void handleTheme(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.THEME_MESSAGE, new ThemeMessage(item.getText()+".css"));
+        PubSub.getInstance().publish("THEME_MESSAGE", new ThemeMessage(item.getText()+".css"));
     }
 
 
     private void handlePanel(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.PANEL_TOGGLE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));
     }
 
     private void handleWorkspace(MenuItem item) {
-        PubSub.getInstance().publish(PubSub.Channel.WORKSPACE_CHANGE, new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("WORKSPACE_CHANGE", new WorkspaceChange(item.getText()));
     }
 }

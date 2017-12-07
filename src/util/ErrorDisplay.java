@@ -19,6 +19,15 @@ public class ErrorDisplay {
     }
 
     /**
+     * Creates a new ErrorDisplay and sets its title.
+     * @param title the title of the ErrorDisplay
+     */
+    public ErrorDisplay(String title, String message){
+        this.title = title;
+        addMessage(message);
+    }
+
+    /**
      * Adds a message to be displayed.
      * @param message the error message
      */
@@ -42,7 +51,7 @@ public class ErrorDisplay {
     }
 
     /**
-     * Displays the current error message only if it is not empty.
+     * Displays the current error message only if it is not empty. Clears this ErrorDisplay's messages after running.
      */
     public void displayError() {
         if(errorMessage.length() > 0) {
@@ -51,5 +60,6 @@ public class ErrorDisplay {
             errors.setContentText(errorMessage.toString());
             errors.showAndWait();
         }
+        clear();
     }
 }

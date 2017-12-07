@@ -24,3 +24,7 @@
     -fx-background-radius: 20 20 0 0;
     /* top-left, top-right, bottom-right, bottom-left corners */
 }
+
+.textField {
+    -fx-control-inner-background: #bdbdbd;
+}

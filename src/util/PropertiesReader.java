@@ -1,10 +1,7 @@
 package util;
 
-import javafx.application.Platform;
-
 import java.io.File;
 import java.util.*;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -19,9 +16,9 @@ import java.util.ResourceBundle;
 public class PropertiesReader {
 
     /* Final Variables */
+    public static final String PROPERTIES_SUFFIX = "properties";
     private static final String PROPERTIES_FILES_DIRECTORY = "./resources/properties/";
     private static final Map<String, ResourceBundle> propertyBundles = readInPropertyFiles(PROPERTIES_FILES_DIRECTORY);
-    private static final String PROPERTIES_SUFFIX = "properties";
     private static final String PATH_PROPERTIES = "filepaths";
     private static final String NO_PROPERTIES = "No Properties Directory";
     private static final String NO_PROP_MESSAGE = String.format("Could not find the directory %s. Settings could not be loaded.", PROPERTIES_FILES_DIRECTORY);
@@ -76,16 +73,21 @@ public class PropertiesReader {
     }
 
     /**
-     * Retrieves the set of keys
+     * Retrieves a Mapping of String to String corresponding to key to value
      * @param propertiesFile is a {@code String} representing the properties file (without the
      *                       extension) to look for the key inside of
      * @return {@code String} representing an ArrayList of all the keys in the properties file
      */
-    public static ArrayList<String> keySet(String propertiesFile) {
+    public static Map<String, String> map(String propertiesFile) {
         try {
-            return new ArrayList(propertyBundles.get(propertiesFile).keySet());
+            Map<String, String> propertyMap = new HashMap<>();
+            for(String key: propertyBundles.get(propertiesFile).keySet()) {
+                String value = propertyBundles.get(propertiesFile).getString(key);
+                propertyMap.put(key, value);
+            }
+            return propertyMap;
         } catch (Exception e) {
-            return new ArrayList<String>(Arrays.asList("hi"));
+            throw new IllegalStateException(NO_PROP_FOUND);
         }
     }
 

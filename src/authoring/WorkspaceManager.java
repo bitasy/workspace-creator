@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * WorkspaceManager loads and handles the workspaces available for use.
+ * @author Brian Nieves
+ */
 public class WorkspaceManager {
 
     private Pane currentWorkspaceArea;
@@ -20,7 +24,14 @@ public class WorkspaceManager {
     private PanelManager panelManager;
     private CameraPanel cameraPanel;
 
-
+    /**
+     * Creates a new workspace manager and initializes the workspaces.
+     * @author Brian Nieves
+     * @param workspaceArea the area of the screen to display the current workspace in
+     * @param panelManager the manager of the panels to display in the workspace
+     * @param cameraPanel the camera panel to add to the workspaces manually
+     * @throws IOException if the workspace directory cannot be found
+     */
     public WorkspaceManager(Pane workspaceArea, PanelManager panelManager, CameraPanel cameraPanel) throws IOException {
         currentWorkspaceArea = workspaceArea;
         this.panelManager = panelManager;
@@ -29,7 +40,7 @@ public class WorkspaceManager {
         createWorkspaces(workspaceArea.minWidthProperty().doubleValue(), workspaceArea.minHeightProperty().doubleValue());
 
         PubSub.getInstance().subscribe(
-                PubSub.Channel.WORKSPACE_CHANGE,
+                "WORKSPACE_CHANGE",
                 message -> switchWorkspace(((WorkspaceChange)message).readMessage()
         ));
     }
@@ -40,6 +51,15 @@ public class WorkspaceManager {
      */
     public Set<String> getWorkspaces(){
         return workspaces.keySet();
+    }
+
+    /**
+     * Saves all of the loaded workspace settings to their respective files.
+     */
+    public void saveWorkspaces() throws IOException {
+        for(Workspace workspace : workspaces.values()){
+            workspace.save();
+        }
     }
 
     /**
@@ -59,6 +79,10 @@ public class WorkspaceManager {
         switchWorkspace(PropertiesReader.value("screenlayout", "currentworkspace"));
     }
 
+    /**
+     * Changes the workspace currently being viewed on the screen.
+     * @param newWorkspace the name of the new workspace
+     */
     private void switchWorkspace(String newWorkspace){
         Workspace workspace = workspaces.get(newWorkspace);
         workspace.addCameraPanel(cameraPanel.getRegion());

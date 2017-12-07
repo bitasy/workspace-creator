@@ -9,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import util.ErrorDisplay;
-import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
@@ -30,11 +28,10 @@ import java.util.Map;
 public class Screen {
 
     private VBox root;
-    private Pane currentWorkspace;
-    private Map<String, Workspace> workspaces = new HashMap<>();
 
     private PanelController controller;
     private PanelManager panelManager;
+    private WorkspaceManager workspaceManager;
 
     private ErrorDisplay errorMessage;
 
@@ -76,7 +73,7 @@ public class Screen {
 
     private void updateTheme() {
         PubSub.getInstance().subscribe(
-                PubSub.Channel.THEME_MESSAGE,
+                "THEME_MESSAGE",
                 (message) -> {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
@@ -111,7 +108,7 @@ public class Screen {
         workspaceArea.setMinHeight(height);
 
 
-        WorkspaceManager workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
+        workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
         MenuBarPanel bar = new MenuBarPanel(workspaceManager.getWorkspaces(), panelManager.getPanels());
         bar.setController(controller);
 
@@ -134,7 +131,12 @@ public class Screen {
     }
 
     public void save(){
-        //TODO: allow workspace, engine to save to local/database
+        try {
+            workspaceManager.saveWorkspaces();
+        } catch (IOException e){
+            errorMessage.addMessage(String.format(PropertiesReader.value("reflect","IOerror"), e.getMessage()));
+            errorMessage.displayError();
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ public class PanelManager {
      * @param errorMessage the screen's current ErrorDisplay object
      * @throws FileNotFoundException if the package specified by tabpath in reflect does not exist
      */
-    public PanelManager(PanelController controller, ErrorDisplay errorMessage) throws FileNotFoundException{
+    public PanelManager(PanelController controller, ErrorDisplay errorMessage) throws FileNotFoundException {
         this.errorMessage = errorMessage;
         panels = new HashMap<>();
         this.controller = controller;
@@ -64,9 +64,8 @@ public class PanelManager {
      * Loads all of the tabbable panels found in the tabbable directory.
      * @throws FileNotFoundException if the directory for tabbable panels does not exist.
      */
-    private void loadPanels() throws FileNotFoundException{
-        Map<String, Object> panels = Loader.loadObjects(
-                PropertiesReader.value("reflect", "tabpath"));
+    private void loadPanels() throws FileNotFoundException {
+        Map<String, Object> panels = Loader.loadObjects(PropertiesReader.value("reflect", "tabpath"));
         for(String name : panels.keySet()){
             Panel panel = (Panel) panels.get(name);
             panel.setController(controller);

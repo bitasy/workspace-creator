@@ -1,44 +1,49 @@
 package authoring;
 
 import engine.Engine;
-import engine.EntityManager;
 import engine.entities.Entity;
+import javafx.scene.SubScene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
+import engine.EntityManager;
+import javafx.scene.control.ScrollPane;
 import util.math.num.Vector;
 
 
 /**
- *
- * Currently impelementation is just for testing
- *
+ * PanelController delegates access to the engine to each panel that needs it.
  * @author Brian Nieves
  * @author Estelle He
  */
 public class PanelController {
     private Engine myEngine;
 
-    private EntityManager myEntityManager;
+	private EntityManager myEntityManager;
 
-    public PanelController() {
-        myEngine = new Engine(new Entity(), 20); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file//
-        myEntityManager = myEngine.getEntityManager();
-    }
+	public PanelController() {
+		myEngine = new Engine(new Entity(), 70); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+	    myEntityManager = myEngine.getEntityManager();
+	}
 
     /**
      * get camera view
      * @return camera view
      */
-    public ScrollPane getCamera(){
-        return myEngine.getCameraView(new Vector(1600, 1750), new Vector(800, 500));
-    }
+	public ScrollPane getCamera(){
+	    return myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
+	}
 
     /**
      * get entitymanager
      * @return entitymanager
      */
     public EntityManager getManager() {
-        return myEntityManager;
+	    return myEntityManager;
     }
 
     /**
@@ -55,8 +60,8 @@ public class PanelController {
         myEngine.pause();
     }
 
-    public void save() {
-        myEngine.save("Wtf is name? *documentation plez*");//TODO figure out what to put here
+    public void save(String name) {
+        myEngine.save(name);
     }
 
     /**
@@ -67,4 +72,5 @@ public class PanelController {
         return myEngine.getMiniMap(new Vector(75, 75));
     }
 
-}
+ }
+

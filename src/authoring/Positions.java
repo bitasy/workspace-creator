@@ -15,7 +15,7 @@ public class Positions {
         for(String name : names){
             set.add(new Position(name));
         }
-        positions = (Position[]) set.toArray(new Position[set.size()]);
+        positions = set.toArray(new Position[set.size()]);
     }
 
     public Position getPosition(String name){

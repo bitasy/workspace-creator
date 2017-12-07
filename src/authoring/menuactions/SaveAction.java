@@ -19,6 +19,6 @@ public class SaveAction implements MenuAction{
 
     @Override
     public void execute(){
-        panelController.save();
+        panelController.save("needs ot be changed");
     }
 }

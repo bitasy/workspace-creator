@@ -1,7 +1,7 @@
 package authoring.panels.tabbable;
 
-import authoring.IPanelController;
 import authoring.Panel;
+import authoring.PanelController;
 import extensions.ExtensionWebView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -54,7 +54,7 @@ public class SocialMediaPanel implements Panel {
     }
 
     @Override
-    public void setController(IPanelController controller) {
+    public void setController(PanelController controller) {
         //TODO: Create controller
     }
 

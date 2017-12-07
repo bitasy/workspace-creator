@@ -2,6 +2,7 @@ package authoring;
 
 import authoring.Positions.Position;
 import authoring.panels.PanelManager;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import util.PropertiesReader;
 
@@ -18,7 +19,7 @@ import java.util.Properties;
 public abstract class AbstractWorkspace implements Workspace{
     
     private static final String DATA = "workspacedata";
-    private String defaultVisibility = PropertiesReader.value(DATA, "defaultvisibility");
+    private boolean defaultVisibility = Boolean.parseBoolean(PropertiesReader.value(DATA, "defaultvisibility"));
     protected final Properties properties = new Properties();
     
     private Position defaultPosition;
@@ -26,6 +27,7 @@ public abstract class AbstractWorkspace implements Workspace{
     private TabManager tabManager;
     private Positions positions;
     private Map<String, Position> panelPositions;
+    private Map<String, Boolean> visibilities;
 
     /**
      * Constructs an initializes a Workspace object.
@@ -38,12 +40,28 @@ public abstract class AbstractWorkspace implements Workspace{
         this.manager = manager;
         positions = positionList();
         panelPositions = new HashMap<>();
+        visibilities = new HashMap<>();
         defaultPosition = positions.getPosition(defaultPosition());
         tabManager = new TabManager(positions);
         loadFile();
         populateScreen();
         setupWorkspace(width, height);
     }
+
+    @Override
+    public void save() throws IOException {
+        for(String position : positions.allPositions()){
+            for(Tab tab: positions.getPosition(position).getPane().getTabs()){
+                String panel = ((Label)tab.getGraphic()).getText();
+                properties.setProperty(panel, position);
+                properties.setProperty(
+                        String.format(PropertiesReader.value(DATA, "visibilitytag"), panel),
+                        Boolean.toString(visibilities.get(panel)));
+            }
+        }
+
+        saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
+    }//TODO CURRENTLY: check if this exception gets handled, save divider positions in subclasses, update visibility on xing out, implement view reloading panels
 
     /**
      * Provides the list of positions to the AbstractWorkspace for management.
@@ -70,9 +88,13 @@ public abstract class AbstractWorkspace implements Workspace{
                 Position position = positions.getPosition(properties.getProperty(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
+                    visibilities.put(panel, Boolean.parseBoolean(
+                            properties.getProperty(
+                                    String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
                 } else {
                     properties.setProperty(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
+                    visibilities.put(panel, defaultVisibility);
                 }
             }
         } else {
@@ -132,7 +154,7 @@ public abstract class AbstractWorkspace implements Workspace{
     private void createFile(File location) throws IOException{
         for(String panel : manager.getPanels()){
             properties.setProperty(panel, defaultPosition.toString());
-            properties.setProperty(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), defaultVisibility);
+            properties.setProperty(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), Boolean.toString(defaultVisibility));
         }
         saveToFile(location, properties);
     }

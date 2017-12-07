@@ -51,7 +51,7 @@ public class ErrorDisplay {
     }
 
     /**
-     * Displays the current error message only if it is not empty.
+     * Displays the current error message only if it is not empty. Clears this ErrorDisplay's messages after running.
      */
     public void displayError() {
         if(errorMessage.length() > 0) {
@@ -60,5 +60,6 @@ public class ErrorDisplay {
             errors.setContentText(errorMessage.toString());
             errors.showAndWait();
         }
+        clear();
     }
 }

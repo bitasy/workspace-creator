@@ -18,7 +18,6 @@ import java.util.Set;
  */
 public class PanelManager {
     private Map<String, Panel> panels;
-    //private ResourceBundle reflect = ResourceBundle.getBundle("reflect");
     private ErrorDisplay errorMessage;
     private PanelController controller;
 
@@ -71,7 +70,7 @@ public class PanelManager {
         for(String name : panels.keySet()){
             Panel panel = (Panel) panels.get(name);
             panel.setController(controller);
-            this.panels.put(name, panel);
+            this.panels.put(panel.title(), panel);
         }
     }
 }

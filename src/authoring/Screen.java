@@ -28,11 +28,10 @@ import java.util.Map;
 public class Screen {
 
     private VBox root;
-    private Pane currentWorkspace;
-    private Map<String, Workspace> workspaces = new HashMap<>();
 
     private PanelController controller;
     private PanelManager panelManager;
+    private WorkspaceManager workspaceManager;
 
     private ErrorDisplay errorMessage;
 
@@ -109,7 +108,7 @@ public class Screen {
         workspaceArea.setMinHeight(height);
 
 
-        WorkspaceManager workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
+        workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
         MenuBarPanel bar = new MenuBarPanel(workspaceManager.getWorkspaces(), panelManager.getPanels());
         bar.setController(controller);
 
@@ -133,6 +132,7 @@ public class Screen {
 
     public void save(){
         //TODO: allow workspace, engine to save to local/database
+        workspaceManager.saveWorkspaces();
     }
 
     /**

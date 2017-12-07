@@ -2,6 +2,8 @@ package authoring;
 
 import javafx.scene.layout.Region;
 
+import java.io.IOException;
+
 /**
  * A Workspace defines the layout of all tabbable Panels as well as the CameraPanel on the screen. This includes the location and management of the various areas that contain Panel Regions. Every full implementation workspace has a properties file with keys of the panels and values of where in the workspace they are. This is managed by the Workspace, but can be directly edited if the user desired. If the file does not exist, it should be created with defaults specified by the Workspace. The Workspace uses a PanelManager to get a list of all existing Panels and to display each one correctly.
  * @author Brian Nieves
@@ -18,4 +20,9 @@ public interface Workspace {
      * @param cameraPanel the cameraPanel's region
      */
     void addCameraPanel(Region cameraPanel);
+
+    /**
+     * Saves the workspace settings to a file.
+     */
+    void save() throws IOException;
 }

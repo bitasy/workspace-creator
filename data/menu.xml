@@ -5,7 +5,7 @@
         <item>
             <name>Save</name>
             <type>button</type>
-            <strategy>Save</strategy>
+            <strategy>save</strategy>
         </item>
     </menu>
     <menu>

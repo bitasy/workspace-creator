@@ -36,6 +36,7 @@ public class Loader{
                 names.add(file.getName().substring(0, file.getName().length() - extension.length() - 1));
         }
         return names.toArray(new String[names.size()]);
+
     }
 
     /**

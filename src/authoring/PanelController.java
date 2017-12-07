@@ -62,11 +62,6 @@ public class PanelController implements IPanelController {
         myEngine.pause();
     }
 
-    @Override
-    public void save(String name) {
-        myEngine.save(name);
-    }
-
     /**
      * get minimap
      * @return

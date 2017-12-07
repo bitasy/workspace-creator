@@ -43,6 +43,7 @@ public class Screen {
      * @param stage the stage to add the Screen to
      */
     public Screen(Stage stage){
+        stage.setOnCloseRequest(e -> save());
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -64,8 +65,6 @@ public class Screen {
             errorMessage.addMessage(String.format(PropertiesReader.value("reflect","IOerror"), e.getMessage()));
             quitOnError();
         }
-
-
 
         Scene scene = new Scene(root, width, height);
         PubSub.getInstance().subscribe(

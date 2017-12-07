@@ -15,7 +15,7 @@ import util.math.num.Vector;
  * @author Brian Nieves
  * @author Estelle He
  */
-public class PanelController implements IPanelController {
+public class PanelController {
     private Engine myEngine;
 
     private EntityManager myEntityManager;
@@ -55,7 +55,6 @@ public class PanelController implements IPanelController {
         myEngine.pause();
     }
 
-    @Override
     public void save() {
         myEngine.save("Wtf is name? *documentation plez*");//TODO figure out what to put here
     }

@@ -1,19 +1,19 @@
 package authoring.menuactions;
 
-import authoring.IPanelController;
 import authoring.MenuAction;
+import authoring.PanelController;
 
 /**
  * Defines the MenuAction that saves the game currently being worked on in the authoring environment.
  */
 public class SaveAction implements MenuAction{
-    private final IPanelController panelController;
+    private final PanelController panelController;
 
     /**
      * Creates a new SaveAction executor.
      * @param panelController the controller to communicate with
      */
-    public SaveAction(IPanelController panelController){
+    public SaveAction(PanelController panelController){
         this.panelController = panelController;
     }
 

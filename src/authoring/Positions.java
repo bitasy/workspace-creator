@@ -1,6 +1,5 @@
 package authoring;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -16,7 +15,7 @@ public class Positions {
         for(String name : names){
             set.add(new Position(name));
         }
-        positions = (Position[]) set.toArray(new Position[set.size()]);
+        positions = set.toArray(new Position[set.size()]);
     }
 
     public Position getPosition(String name){
@@ -43,6 +42,7 @@ public class Positions {
             pane = new TabPane();
             pane.setMinWidth(0);
             pane.setMinHeight(0);
+            pane.getStyleClass().add("dragTab");
         }
 
         public void addTab(Tab tab) {

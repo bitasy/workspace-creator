@@ -18,3 +18,7 @@
     -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
     -fx-background-color: #bdbdbd; -fx-focus-color: #ffffff; -fx-faint-focus-color: #f0f0f0;
 }
+
+.textField {
+    -fx-control-inner-background: #bdbdbd;
+}

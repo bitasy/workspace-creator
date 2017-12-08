@@ -38,11 +38,11 @@ public class Login {
     public Login(Stage stage) {
         myStage = stage;
         myArea = createVBoxLayout();
-        myScene = new Scene(myArea, 350,400);
+        myScene = new Scene(myArea, 350,125);
 
         myStage.setScene(myScene);
         myStage.setResizable(false);
-        myStage.setTitle("main.VoogaPeaches: Login");
+        myStage.setTitle("Login to Your Account");
 
         updateTheme();
     }

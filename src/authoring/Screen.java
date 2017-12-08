@@ -31,7 +31,6 @@ public class Screen {
     private PanelController controller;
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
-
     private ErrorDisplay errorMessage;
 
     /**
@@ -81,6 +80,7 @@ public class Screen {
                     root.getStylesheets().add(((ThemeMessage) message).readMessage());
                 }
         );
+        //myUser.setTheme();
         //TODO: on screen close update the database with the theme file name string
     }
 

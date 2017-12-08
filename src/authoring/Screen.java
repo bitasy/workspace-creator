@@ -105,7 +105,9 @@ public class Screen {
 
         Pane workspaceArea = new Pane();
         workspaceArea.setMinWidth(width);
+        workspaceArea.setMaxWidth(width);
         workspaceArea.setMinHeight(height);
+        workspaceArea.setMaxHeight(height);
 
 
         workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);

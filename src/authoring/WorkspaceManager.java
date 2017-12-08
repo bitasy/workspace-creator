@@ -3,6 +3,7 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
@@ -87,6 +88,8 @@ public class WorkspaceManager {
         Workspace workspace = workspaces.get(newWorkspace);
         workspace.addCameraPanel(cameraPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
-        currentWorkspaceArea.getChildren().add(workspace.getWorkspace());
+        Region workRegion = workspace.getWorkspace();
+        workRegion.setMaxHeight(currentWorkspaceArea.getMaxHeight());
+        currentWorkspaceArea.getChildren().add(workRegion);
     }
 }

@@ -3,6 +3,8 @@ package authoring.workspaces;
 import authoring.AbstractWorkspace;
 import authoring.Positions;
 import authoring.panels.PanelManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
@@ -57,6 +59,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         cameraPanel.setMinWidth(0);
         cameraPanel.setMinHeight(0);
         ((SplitPane)body.getItems().get(0)).getItems().set(1, cameraPanel);
+        setDividerFields();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
     }
@@ -68,9 +71,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
 
     @Override
     public void save() throws IOException{
-        properties.setProperty("middledivision", leftDivision + "");
-        properties.setProperty("middledivision", leftDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
+        setDividerFields();
         super.save();
     }
 
@@ -109,20 +110,20 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         middle.setDividerPositions(leftDivision, rightDivision);
     }
 
-    @Override
-    protected void saveToFile(File file, Properties properties) throws IOException{
-        properties.setProperty("leftdivision", leftDivision + "");
-        properties.setProperty("rightdivision", rightDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
-
-        super.saveToFile(file, properties);
-    }
-
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
         left = positions.getPosition("left").getPane();
         bottom = positions.getPosition("bottom").getPane();
         right = positions.getPosition("right").getPane();
+    }
+
+    private void setDividerFields() {
+        bodyDivision = body.getDividerPositions()[0];
+        leftDivision = middle.getDividerPositions()[0];
+        rightDivision = middle.getDividerPositions()[1];
+        properties.setProperty("leftdivision", leftDivision + "");
+        properties.setProperty("rightdivision", leftDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
     }
 }

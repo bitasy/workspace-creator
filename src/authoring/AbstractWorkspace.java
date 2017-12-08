@@ -143,11 +143,6 @@ public abstract class AbstractWorkspace implements Workspace{
     private Tab newTab(String panel) {
         Tab tab = tabManager.newTab(panel);
         tab.setContent(manager.getPanelDisplay(panel));
-        tab.setOnCloseRequest(event -> {
-            if(tab.getTabPane().getTabs().size() == 1){
-                event.consume();
-            }
-        });
         return tab;
     }
 

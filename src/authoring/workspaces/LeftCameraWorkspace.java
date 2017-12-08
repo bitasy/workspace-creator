@@ -56,6 +56,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         cameraPanel.setMinWidth(0);
         cameraPanel.setMinHeight(0);
         ((SplitPane)body.getItems().get(0)).getItems().set(0, cameraPanel);
+        setDividerFields();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
     }
@@ -67,8 +68,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
 
     @Override
     public void save() throws IOException{
-        properties.setProperty("middledivision", middleDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
+        setDividerFields();
         super.save();
     }
 
@@ -85,14 +85,6 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         super.populateScreen();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
-    }
-
-    @Override
-    protected void saveToFile(File file, Properties properties) throws IOException{
-        properties.setProperty("middledivision", middleDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
-
-        super.saveToFile(file, properties);
     }
 
     @Override
@@ -119,5 +111,12 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         middle = new SplitPane();
         bottom = positions.getPosition("bottom").getPane();
         right = positions.getPosition("right").getPane();
+    }
+
+    private void setDividerFields() {
+        middleDivision = middle.getDividerPositions()[0];
+        bodyDivision = body.getDividerPositions()[0];
+        properties.setProperty("middledivision", middleDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
     }
 }

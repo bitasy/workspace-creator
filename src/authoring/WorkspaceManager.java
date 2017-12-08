@@ -2,6 +2,7 @@ package authoring;
 
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
+import database.CurrentUser;
 import javafx.scene.layout.Pane;
 import util.Loader;
 import util.PropertiesReader;
@@ -76,7 +77,8 @@ public class WorkspaceManager {
             Workspace workspace = (Workspace) workspaces.get(space);
             this.workspaces.put(space, workspace);
         }
-        switchWorkspace(PropertiesReader.value("screenlayout", "currentworkspace"));
+        System.out.println(CurrentUser.currentUser.getWorkspaceName());
+        switchWorkspace(CurrentUser.currentUser.getWorkspaceName());
     }
 
     /**

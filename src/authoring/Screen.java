@@ -3,7 +3,6 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
-import database.CurrentUser;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -11,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.VoogaPeaches;
 import util.ErrorDisplay;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Screen contains the display of the VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
+ * Screen contains the display of the main.VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
  * @author Brian Nieves
  * @author Kelly Zhang
  */
@@ -70,7 +70,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add(CurrentUser.currentUser.getThemeName()); //update from database
+        root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

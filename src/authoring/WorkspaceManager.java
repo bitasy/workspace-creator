@@ -2,8 +2,8 @@ package authoring;
 
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
-import database.CurrentUser;
 import javafx.scene.layout.Pane;
+import main.VoogaPeaches;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
@@ -77,7 +77,7 @@ public class WorkspaceManager {
             Workspace workspace = (Workspace) workspaces.get(space);
             this.workspaces.put(space, workspace);
         }
-        switchWorkspace(CurrentUser.currentUser.getWorkspaceName());
+        switchWorkspace(VoogaPeaches.getUser().getWorkspaceName());
     }
 
     /**

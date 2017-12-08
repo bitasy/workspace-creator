@@ -22,6 +22,16 @@
     -fx-background-color: #05386B;
 }
 
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: #05386B;
+}
+
 .menu-item {
     -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+}
+
+.menu-item:focused {
+    -fx-background-color: #05386B;
 }

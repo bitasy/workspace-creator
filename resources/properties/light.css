@@ -1,25 +1,75 @@
-.button {
-    -fx-base: #d9d9d9; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+* { //variables
+-my-blue:#84CEEB99;
+-my-faint-blue:#84CEEB22;
+-my-not-so-faint-blue:#84CEEB99;
+-my-light-green:#5AB9EA22;
+-my-dark-green:#5680E9;
+-my-off-white:#C1C8E4;
 }
 
-.choice-box {
-    -fx-background-color: #d9d9d9;
-}
-
+//PANEL LAYOUT
 .panel {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: -my-light-green;
+}
+.split-pane:horizontal >.split-pane-divider,
+.split-pane:vertical >.split-pane-divider {
+    -fx-background-color: -my-blue;
+}
+.tool-bar {
+    -fx-background-color: -my-off-white;
+}
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -my-blue;
+}
+.tab {
+    -fx-background-color: -my-off-white;
 }
 
-.camera {
-    -fx-background: #ffffff;
+//PANEL ITEMS
+.button {
+    -fx-base: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
+}
+.choice-box {
+    -fx-background-color: -my-dark-green;
+}
+.scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
+    -fx-background-color: transparent;
+}
+.scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
+    -fx-background-color: -my-not-so-faint-blue;
+}
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: -my-off-white;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -my-blue;
+}
+.scroll-pane > .corner {
+    -fx-background-color: -my-off-white;
+}
+.text-field {
+    -fx-control-inner-background: -my-dark-green;
 }
 
-.menuBar {
-    -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
-    -fx-background-color: #ffffff; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+//MENU
+.menu-bar {
+    -fx-border-color: -my-off-white;
+    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
 }
-
-.dragTab {
-    -fx-open-tab-animation: NONE;
-    -fx-close-tab-animation: NONE;
+.menu:hover {
+    -fx-background-color: -my-blue;
+}
+//https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: -my-blue;
+}
+.menu-item {
+    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
+}
+.menu-item:focused {
+    -fx-background-color: -my-blue;
 }

@@ -1,7 +1,7 @@
-package main;//import authoring.Screen;
-import authoring.Login;
-import authoring.Screen;
+package main;
+
 import database.User;
+import authoring.menu.Login;
 import database.firebase.FirebaseConnector;
 import javafx.application.Application;
 import javafx.stage.Stage;

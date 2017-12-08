@@ -19,7 +19,6 @@ public class SocialMediaPanel implements Panel {
         myArea.fillWidthProperty().setValue(true);
         myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());
-        myArea.getStyleClass().add("panel");
         createHistoryButtons();
     }
 

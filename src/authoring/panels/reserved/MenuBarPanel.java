@@ -25,6 +25,7 @@ import java.util.*;
  */
 public class MenuBarPanel implements Panel {
 
+    //TODO: Do you care about the lines within the menubar sections?
     private MenuBar bar;
     private PanelController controller;
     private Set<String> workspaces;
@@ -36,7 +37,7 @@ public class MenuBarPanel implements Panel {
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
         bar = new MenuBar();
-        bar.getStyleClass().add("menuBar");
+        bar.getStyleClass().add("menu-bar");
         this.workspaces = workspaces;
         this.panels = panels;
         this.themes = createThemeList();
@@ -76,6 +77,7 @@ public class MenuBarPanel implements Panel {
         for(String space : workspaces){
             MenuItem item = new MenuItem(space);
             item.setOnAction(e -> handleWorkspace(item));
+            item.getStyleClass().add("menu-item");
             workspaceTabs.add(item);
         }
         return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
@@ -85,6 +87,7 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> panelTabs = new ArrayList<>();
         for(String space : panels){
             MenuItem item = new MenuItem(space);
+            item.getStyleClass().add("menu-item");
             item.setOnAction(e -> handlePanel(item));
             panelTabs.add(item);
         }
@@ -95,6 +98,7 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> themeOptions = new ArrayList<>();
         for(String theme : themes){
             MenuItem item = new MenuItem(theme);
+            item.getStyleClass().add("menu-item");
             item.setOnAction(e -> handleTheme(item));
             themeOptions.add(item);
         }
@@ -123,7 +127,6 @@ public class MenuBarPanel implements Panel {
     public void handleTheme(MenuItem item) {
         PubSub.getInstance().publish("THEME_MESSAGE", new ThemeMessage(item.getText()+".css"));
     }
-
 
     private void handlePanel(MenuItem item) {
         PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));

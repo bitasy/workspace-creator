@@ -3,7 +3,7 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
-import database.User;
+import database.CurrentUser;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -18,8 +18,6 @@ import util.pubsub.messages.ThemeMessage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Screen contains the display of the VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
@@ -33,16 +31,13 @@ public class Screen {
     private PanelController controller;
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
-    private User myUser;
-
     private ErrorDisplay errorMessage;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage, User user){
-        myUser = user;
+    public Screen(Stage stage){
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -75,7 +70,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add("dark.css"); //update from database initially
+        root.getStylesheets().add(CurrentUser.currentUser.getThemeName()); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

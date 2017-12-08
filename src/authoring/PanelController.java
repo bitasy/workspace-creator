@@ -1,6 +1,6 @@
 package authoring;
 
-import authoring.panels.tabbable.AttributesPanel;
+import authoring.panels.tabbable.PropertiesPanel;
 import engine.Engine;
 import engine.entities.Entity;
 import javafx.collections.FXCollections;
@@ -77,7 +77,5 @@ public class PanelController {
     public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(75, 75));
     }
-
-
 }
 

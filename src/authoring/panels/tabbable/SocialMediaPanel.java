@@ -19,7 +19,6 @@ public class SocialMediaPanel implements Panel {
         myArea.fillWidthProperty().setValue(true);
         myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());
-        myArea.getStyleClass().add("panel");
         createHistoryButtons();
     }
 
@@ -45,6 +44,7 @@ public class SocialMediaPanel implements Panel {
         bar.getItems().add(backwards);
         bar.getItems().add(forwards);
         bar.getItems().add(history);
+        bar.getStyleClass().add("bar");
         myArea.getChildren().add(bar);
     }
 

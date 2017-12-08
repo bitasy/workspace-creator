@@ -30,7 +30,10 @@ public class TabManager {
      */
     public TabManager(Positions positions) {
         for(String position : positions.allPositions()){
-            tabPanes.add(positions.getPosition(position).getPane());
+            TabPane myPane = positions.getPosition(position).getPane();
+            myPane.getStyleClass().add("panel");
+            tabPanes.add(myPane);
+
         }
         markerStage = new Stage();
         markerStage.setAlwaysOnTop(true);

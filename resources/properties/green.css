@@ -1,37 +1,59 @@
-.button {
-    -fx-base: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
-}
-
-.choice-box {
-    -fx-background-color: #379683;
-}
-
+//PANEL LAYOUT
 .panel {
     -fx-background-color: #5CDB95;
 }
-
-.camera {
-    -fx-background-color: #05386B22;
+.split-pane:horizontal >.split-pane-divider,
+.split-pane:vertical >.split-pane-divider {
+    -fx-background-color: #379683;
+}
+.bar {
+    -fx-background-color: #EDF5E1;
 }
 
+//PANEL ITEMS
+.button {
+    -fx-base: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+}
+.choice-box {
+    -fx-background-color: #379683;
+}
+.scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
+    -fx-background-color: transparent;
+}
+.scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
+    -fx-background-color: #05386B99;
+}
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: #EDF5E1;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #05386B;
+}
+.scroll-pane > .corner {
+    -fx-background-color: #EDF5E1;
+}
+.text-field {
+    -fx-control-inner-background: #379683;
+}
+
+//MENU
 .menu-bar {
     -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
 }
-
 .menu:hover {
     -fx-background-color: #05386B;
 }
-
+//https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
 .menu-bar > .container > .menu-button:hover,
 .menu-bar > .container > .menu-button:focused,
 .menu-bar > .container > .menu-button:showing {
     -fx-background-color: #05386B;
 }
-
 .menu-item {
     -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
 }
-
 .menu-item:focused {
     -fx-background-color: #05386B;
 }

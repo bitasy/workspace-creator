@@ -1,59 +1,75 @@
+* { //variables
+-my-blue:#05386B;
+-my-faint-blue:#05386B22;
+-my-not-so-faint-blue:#05386B99;
+-my-light-green:#5CDB95;
+-my-dark-green:#379683;
+-my-off-white:#EDF5E1;
+}
+
 //PANEL LAYOUT
 .panel {
-    -fx-background-color: #5CDB95;
+    -fx-background-color: -my-light-green;
 }
 .split-pane:horizontal >.split-pane-divider,
 .split-pane:vertical >.split-pane-divider {
-    -fx-background-color: #379683;
+    -fx-background-color: -my-blue;
 }
-.bar {
-    -fx-background-color: #EDF5E1;
+.tool-bar {
+    -fx-background-color: -my-off-white;
+}
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -my-blue;
+}
+.tab {
+    -fx-background-color: -my-off-white;
 }
 
 //PANEL ITEMS
 .button {
-    -fx-base: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+    -fx-base: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
 }
 .choice-box {
-    -fx-background-color: #379683;
+    -fx-background-color: -my-dark-green;
 }
 .scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
     -fx-background-color: transparent;
 }
 .scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
-    -fx-background-color: #05386B99;
+    -fx-background-color: -my-not-so-faint-blue;
 }
 .scroll-bar:horizontal,
 .scroll-bar:vertical {
-    -fx-background-color: #EDF5E1;
+    -fx-background-color: -my-off-white;
 }
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #05386B;
+    -fx-background-color: -my-blue;
 }
 .scroll-pane > .corner {
-    -fx-background-color: #EDF5E1;
+    -fx-background-color: -my-off-white;
 }
 .text-field {
-    -fx-control-inner-background: #379683;
+    -fx-control-inner-background: -my-dark-green;
 }
 
 //MENU
 .menu-bar {
-    -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+    -fx-border-color: -my-off-white;
+    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
 }
 .menu:hover {
-    -fx-background-color: #05386B;
+    -fx-background-color: -my-blue;
 }
 //https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
 .menu-bar > .container > .menu-button:hover,
 .menu-bar > .container > .menu-button:focused,
 .menu-bar > .container > .menu-button:showing {
-    -fx-background-color: #05386B;
+    -fx-background-color: -my-blue;
 }
 .menu-item {
-    -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
 }
 .menu-item:focused {
-    -fx-background-color: #05386B;
+    -fx-background-color: -my-blue;
 }

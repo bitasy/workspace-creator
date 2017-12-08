@@ -44,7 +44,6 @@ public class SocialMediaPanel implements Panel {
         bar.getItems().add(backwards);
         bar.getItems().add(forwards);
         bar.getItems().add(history);
-        bar.getStyleClass().add("bar");
         myArea.getChildren().add(bar);
     }
 

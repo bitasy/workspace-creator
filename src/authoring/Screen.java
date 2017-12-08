@@ -72,7 +72,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add("dark.css"); //update from database
+        root.getStylesheets().add("green.css"); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

@@ -1,75 +1,75 @@
 * { //variables
--my-blue:#d9d9d9;
--my-faint-blue:#737373;
--my-not-so-faint-blue:#252525;
--my-light-green:#525252;
--my-dark-green:#969696;
--my-off-white:#bdbdbd;
+-white:#d9d9d9;
+-grey:#737373;
+-darkest-black:#252525;
+-darker-grey:#525252;
+-light-grey:#969696;
+-lighter-grey:#bdbdbd;
 }
 
 //PANEL LAYOUT
 .panel {
-    -fx-background-color: -my-light-green;
+    -fx-background-color: -darker-grey;
 }
 .split-pane:horizontal >.split-pane-divider,
 .split-pane:vertical >.split-pane-divider {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }
 .tool-bar {
-    -fx-background-color: -my-off-white;
+    -fx-background-color: -lighter-grey;
 }
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }
 .tab {
-    -fx-background-color: -my-off-white;
+    -fx-background-color: -lighter-grey;
 }
 
 //PANEL ITEMS
 .button {
-    -fx-base: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
+    -fx-base: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
 }
 .choice-box {
-    -fx-background-color: -my-dark-green;
+    -fx-background-color: -light-grey;
 }
 .scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
     -fx-background-color: transparent;
 }
 .scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
-    -fx-background-color: -my-not-so-faint-blue;
+    -fx-background-color: -darkest-black;
 }
 .scroll-bar:horizontal,
 .scroll-bar:vertical {
-    -fx-background-color: -my-off-white;
+    -fx-background-color: -lighter-grey;
 }
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }
 .scroll-pane > .corner {
-    -fx-background-color: -my-off-white;
+    -fx-background-color: -lighter-grey;
 }
 .text-field {
-    -fx-control-inner-background: -my-dark-green;
+    -fx-control-inner-background: -light-grey;
 }
 
 //MENU
 .menu-bar {
-    -fx-border-color: -my-off-white;
-    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
+    -fx-border-color: -lighter-grey;
+    -fx-background-color: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
 }
 .menu:hover {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }
 //https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
 .menu-bar > .container > .menu-button:hover,
 .menu-bar > .container > .menu-button:focused,
 .menu-bar > .container > .menu-button:showing {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }
 .menu-item {
-    -fx-background-color: -my-dark-green; -fx-focus-color: -my-blue; -fx-faint-focus-color: -my-faint-blue;
+    -fx-background-color: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
 }
 .menu-item:focused {
-    -fx-background-color: -my-blue;
+    -fx-background-color: -white;
 }

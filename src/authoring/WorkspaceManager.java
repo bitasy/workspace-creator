@@ -77,7 +77,6 @@ public class WorkspaceManager {
             Workspace workspace = (Workspace) workspaces.get(space);
             this.workspaces.put(space, workspace);
         }
-        System.out.println(CurrentUser.currentUser.getWorkspaceName());
         switchWorkspace(CurrentUser.currentUser.getWorkspaceName());
     }
 

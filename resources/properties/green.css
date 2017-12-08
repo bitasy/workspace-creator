@@ -1,20 +1,27 @@
 .button {
-    -fx-base: rgba(153,255,153,1); -fx-focus-color: rgba(0,77,0,1); -fx-faint-focus-color: #f0f0f0;
+    -fx-base: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
 }
 
 .choice-box {
-    -fx-background-color: rgba(153,255,153,1);
+    -fx-background-color: #379683;
 }
 
 .panel {
-    -fx-background-color: rgba(0,128,0,1);
+    -fx-background-color: #5CDB95;
 }
 
 .camera {
-    -fx-background-color: rgba(0,128,0,0.5);
+    -fx-background-color: #05386B22;
 }
 
-.menuBar {
-    -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
-    -fx-background-color: #bdbdbd; -fx-focus-color: #ffffff; -fx-faint-focus-color: #f0f0f0;
+.menu-bar {
+    -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
+}
+
+.menu:hover {
+    -fx-background-color: #05386B;
+}
+
+.menu-item {
+    -fx-background-color: #379683; -fx-focus-color: #05386B; -fx-faint-focus-color: #05386B22;
 }

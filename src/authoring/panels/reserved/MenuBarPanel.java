@@ -36,7 +36,7 @@ public class MenuBarPanel implements Panel {
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
         bar = new MenuBar();
-        bar.getStyleClass().add("menuBar");
+        bar.getStyleClass().add("menu-bBar");
         this.workspaces = workspaces;
         this.panels = panels;
         this.themes = createThemeList();
@@ -123,7 +123,6 @@ public class MenuBarPanel implements Panel {
     public void handleTheme(MenuItem item) {
         PubSub.getInstance().publish("THEME_MESSAGE", new ThemeMessage(item.getText()+".css"));
     }
-
 
     private void handlePanel(MenuItem item) {
         PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));

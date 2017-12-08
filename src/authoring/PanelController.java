@@ -1,18 +1,24 @@
 package authoring;
 
+import authoring.panels.tabbable.PropertiesPanel;
 import engine.Engine;
 import engine.entities.Entity;
-import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
 import engine.EntityManager;
 import javafx.scene.control.ScrollPane;
+import util.PropertiesReader;
+import util.exceptions.GroovyInstantiationException;
 import util.math.num.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -71,6 +77,5 @@ public class PanelController {
     public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(75, 75));
     }
-
- }
+}
 

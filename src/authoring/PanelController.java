@@ -1,6 +1,5 @@
 package authoring;
 
-import authoring.panels.tabbable.AttributesPanel;
 import authoring.panels.tabbable.PropertiesPanel;
 import engine.Engine;
 import engine.entities.Entity;
@@ -82,7 +81,7 @@ public class PanelController {
     public static class ScriptButton {
         private final String ADD = "Add";
         private Map<String, List<String>> myMap;
-        private AttributesPanel myPanel;
+        private PropertiesPanel myPanel;
         private ComboBox comboBox;
         private HBox hbox;
 

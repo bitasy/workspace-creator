@@ -72,6 +72,7 @@ public class Screen {
     }
 
     private void updateTheme() {
+        root.getStylesheets().add("dark.css"); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -81,6 +82,7 @@ public class Screen {
                     root.getStylesheets().add(((ThemeMessage) message).readMessage());
                 }
         );
+        //TODO: on screen close update the database with the theme file name string
     }
 
     /**

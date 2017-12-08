@@ -1,6 +1,7 @@
 package authoring;
 
 import authoring.panels.tabbable.AttributesPanel;
+import authoring.panels.tabbable.PropertiesPanel;
 import engine.Engine;
 import engine.entities.Entity;
 import javafx.collections.FXCollections;
@@ -85,7 +86,7 @@ public class PanelController {
         private ComboBox comboBox;
         private HBox hbox;
 
-        public ScriptButton(Map<String, List<String>> map, AttributesPanel panel){
+        public ScriptButton(Map<String, List<String>> map, PropertiesPanel panel){
             myMap = map;
             myPanel = panel;
             hbox = new HBox();

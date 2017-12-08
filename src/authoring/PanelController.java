@@ -1,18 +1,23 @@
 package authoring;
 
+import authoring.panels.tabbable.AttributesPanel;
 import engine.Engine;
 import engine.entities.Entity;
-import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
 import engine.EntityManager;
 import javafx.scene.control.ScrollPane;
+import util.PropertiesReader;
+import util.exceptions.GroovyInstantiationException;
 import util.math.num.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -72,5 +77,47 @@ public class PanelController {
         return myEngine.getMiniMap(new Vector(75, 75));
     }
 
- }
+    public static class ScriptButton {
+        private final String ADD = "Add";
+        private Map<String, List<String>> myMap;
+        private AttributesPanel myPanel;
+        private ComboBox comboBox;
+        private HBox hbox;
+
+        public ScriptButton(Map<String, List<String>> map, AttributesPanel panel){
+            myMap = map;
+            myPanel = panel;
+            hbox = new HBox();
+            makeVisual();
+        }
+
+        private void makeVisual() {
+            List<String> events= PropertiesReader.keySet("events");
+            ObservableList<String> options = FXCollections.observableArrayList(events);
+            comboBox = new ComboBox(options);
+
+            Button button = makeButton();
+            hbox.getChildren().add(comboBox);
+            hbox.getChildren().add(button);
+        }
+
+        private Button makeButton() {
+            Button button = new Button(ADD);
+            button.setOnAction(e-> add());
+            return button;
+            }
+
+        private void add() {
+            String type = comboBox.getSelectionModel().getSelectedItem().toString();
+            myMap.put(type, new ArrayList<String>());
+            try {
+                myPanel.updateView();
+            } catch (GroovyInstantiationException e) {}
+        }
+
+        public Node getNode(){
+            return hbox;
+        }
+    }
+}
 

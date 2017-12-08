@@ -3,6 +3,7 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
+import database.User;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -32,6 +33,7 @@ public class Screen {
     private PanelController controller;
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
+    private User myUser;
 
     private ErrorDisplay errorMessage;
 
@@ -39,7 +41,8 @@ public class Screen {
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage){
+    public Screen(Stage stage, User user){
+        myUser = user;
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -72,7 +75,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add("dark.css"); //update from database
+        root.getStylesheets().add("dark.css"); //update from database initially
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -82,6 +85,7 @@ public class Screen {
                     root.getStylesheets().add(((ThemeMessage) message).readMessage());
                 }
         );
+        //myUser.setTheme();
         //TODO: on screen close update the database with the theme file name string
     }
 

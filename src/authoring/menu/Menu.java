@@ -3,8 +3,11 @@ package authoring.menu;
 import authoring.Screen;
 import database.User;
 import database.firebase.DatabaseConnector;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -46,8 +49,12 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
+<<<<<<< HEAD
     private String currentTheme;
     private Stage authoringStage = new Stage();
+=======
+    private ListView<String> list;
+>>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
 
     public Menu(Stage stage) {
         myStage = stage;
@@ -61,16 +68,39 @@ public class Menu {
         myStage.setResizable(false);
         myStage.setTitle("main.VoogaPeaches: Menu");
         myStage.show();
-
+        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         formatButtons();
+        setupGames();
         updateTheme();
 
         VoogaPeaches.createMenu(this);
     }
 
+    public Stage getStage() {
+        return myStage;
+    }
+
+    public void setupScene() {
+        addButtons();
+        addTitle();
+    }
+
+    private void setupGames() {
+        double width = 200;
+        double height = 150;
+        double botMargin = 50;
+        list = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Single", "Double", "Suite", "Family App", "Single", "Double",
+                "Suite", "Family App", "Single", "Double", "Suite", "Family App");
+        list.setItems(items);
+        list.setLayoutX(WIDTH/2-width/2);
+        list.setLayoutY(HEIGHT-height-botMargin);
+        list.setPrefSize(width, height);
+        myRoot.getChildren().add(list);
+    }
+
     private void updateTheme() {
-        myRoot.getStylesheets().add(currentTheme);
-        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -84,23 +114,19 @@ public class Menu {
         myRoot.getStyleClass().add("panel");
     }
 
-
-    public void setupScene() {
-        addButtons();
-        addTitle();
-    }
-
-    private void ifPressed() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
-        for (int i = 0; i < buttons.size(); i ++) {
-            Button button = buttons.get(i);
-            button.setOnAction(e -> onPressed(button));
-
-        }
+    private void onAuthoringPressed() {
+        System.out.println(list.getSelectionModel().getSelectedItem());
+        Stage authoringStage = new Stage();
+        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+        authoringStage.setMaximized(true);
+        authoringStage.setResizable(false);
+        authoring = new Screen(authoringStage);
     }
 
     private Stage onPressed(Button buttonPressed) {
         String button = buttonPressed.getAccessibleText();
         if (button.equals("AUTHORING")) {
+<<<<<<< HEAD
             if (!authoringStage.isShowing()) {
                 authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
                 authoringStage.setMaximized(true);
@@ -120,6 +146,22 @@ public class Menu {
                 //do nothing, only can have one authoring environment open at once
             }
             //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
+=======
+            Stage authoringStage = new Stage();
+            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+            authoringStage.setMaximized(true);
+            authoringStage.setResizable(false);
+            authoring = new Screen(authoringStage);
+            authoringStage.setOnCloseRequest(event -> {
+                authoring.save();
+                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
+                try {
+                    connector.addToDatabase(VoogaPeaches.getUser());
+                } catch (ObjectIdNotFoundException e) {
+                    // Do  Nothing
+                }
+            });
+>>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
         }
         return null;
     }
@@ -128,21 +170,25 @@ public class Menu {
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
         Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
-        Button settingsButton = createMenuButton(SETTINGSPIC, SETTINGS);
 
-        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton, settingsButton));
+        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton));
         myRoot.getChildren().addAll(buttons);
-        ifPressed();
+        buttons.get(0).setOnAction((e) -> onAuthoringPressed());
+        buttons.get(1).setOnAction((e) -> onPlayingPressed());
+    }
+
+    private void onPlayingPressed() {
+        System.out.println("Implement Playing lol");
     }
 
     private void formatButtons() {
         int numButtons = buttons.size();
 
-        double buttonXOffset = WIDTH/(numButtons+1);
+        double buttonXOffset = WIDTH/(numButtons+2);
         double buttonYOffset = HEIGHT*2/3;
 
         for (int i = 0; i < numButtons; i++) {
-            setMenuButtonLayout(buttons.get(i), buttonXOffset*(i+1) - buttons.get(i).getBoundsInLocal().getWidth()/2, buttonYOffset);
+            setMenuButtonLayout(buttons.get(i), buttonXOffset*(i*2+1) - buttons.get(i).getBoundsInLocal().getWidth()/2, buttonYOffset);
         }
     }
 
@@ -175,6 +221,7 @@ public class Menu {
         ImageView myImageView = new ImageView(myFile.toURI().toString());
         return myImageView;
     }
+<<<<<<< HEAD
 
     public Stage getStage() {
         return myStage;
@@ -183,4 +230,6 @@ public class Menu {
     public String getCurrentTheme() {
         return currentTheme;
     }
+=======
+>>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
 }

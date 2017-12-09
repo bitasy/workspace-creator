@@ -1,24 +1,11 @@
 package authoring;
 
-import authoring.panels.tabbable.PropertiesPanel;
 import engine.Engine;
-import engine.entities.Entity;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import engine.EntityManager;
+import engine.entities.Entity;
 import javafx.scene.control.ScrollPane;
-import util.PropertiesReader;
-import util.exceptions.GroovyInstantiationException;
+import javafx.scene.layout.Pane;
 import util.math.num.Vector;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**

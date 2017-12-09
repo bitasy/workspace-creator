@@ -14,13 +14,13 @@ import main.VoogaPeaches;
 import util.ErrorDisplay;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
-import util.pubsub.messages.ThemeMessage;
+import util.pubsub.messages.StringMessage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Screen contains the display of the main.VoogaPeaches authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
+ * Screen contains the display of the authoring environment. It has a Menu Bar and a Workspace. The workspace is highly customizable, and many different workspaces can be created to suit the user's preference in the display of the various Panels on the screen. The Screen also handles any errors that arise from loading the panels and workspaces. Most errors are non-fatal and result in failure to load a single Panel or Workspace, but if the Screen cannot find the location of any Panels or Workspaces, the program will exit.
  * @author Brian Nieves
  * @author Kelly Zhang
  */
@@ -77,7 +77,7 @@ public class Screen {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
                     }
-                    root.getStylesheets().add(((ThemeMessage) message).readMessage());
+                    root.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
         //myUser.setTheme();
@@ -106,7 +106,9 @@ public class Screen {
 
         Pane workspaceArea = new Pane();
         workspaceArea.setMinWidth(width);
+        workspaceArea.setMaxWidth(width);
         workspaceArea.setMinHeight(height);
+        workspaceArea.setMaxHeight(height);
 
 
         workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);

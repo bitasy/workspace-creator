@@ -54,9 +54,7 @@ public class SocialMediaPanel implements Panel {
     }
 
     @Override
-    public void setController(PanelController controller) {
-        //TODO: Create controller
-    }
+    public void setController(PanelController controller) {}
 
     @Override
     public String title(){

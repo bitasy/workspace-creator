@@ -4,6 +4,7 @@ import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import util.ErrorDisplay;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
@@ -24,6 +25,7 @@ public class WorkspaceManager {
     private Map<String, Workspace> workspaces = new HashMap<>();
     private PanelManager panelManager;
     private CameraPanel cameraPanel;
+    private Workspace currentWorkspace;
 
     /**
      * Creates a new workspace manager and initializes the workspaces.
@@ -42,8 +44,14 @@ public class WorkspaceManager {
 
         PubSub.getInstance().subscribe(
                 "WORKSPACE_CHANGE",
-                message -> switchWorkspace(((StringMessage)message).readMessage()
-        ));
+                message -> {
+                    try {
+                        switchWorkspace(((StringMessage)message).readMessage()
+                );
+                    } catch (IOException e) {
+                        new ErrorDisplay("IO Error", "Couldn't switch workspace");//TODO: put this in a properties file
+                    }
+                });
     }
 
     /**
@@ -59,7 +67,7 @@ public class WorkspaceManager {
      */
     public void saveWorkspaces() throws IOException {
         for(Workspace workspace : workspaces.values()){
-            workspace.save();
+            workspace.deactivate();
         }
     }
 
@@ -84,8 +92,13 @@ public class WorkspaceManager {
      * Changes the workspace currently being viewed on the screen.
      * @param newWorkspace the name of the new workspace
      */
-    private void switchWorkspace(String newWorkspace){
+    private void switchWorkspace(String newWorkspace) throws IOException {
         Workspace workspace = workspaces.get(newWorkspace);
+        if(currentWorkspace != null){
+            currentWorkspace.deactivate();
+        }
+        currentWorkspace = workspace;
+        workspace.activate();
         workspace.addCameraPanel(cameraPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
         Region workRegion = workspace.getWorkspace();

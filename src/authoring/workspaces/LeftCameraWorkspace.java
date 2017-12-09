@@ -9,9 +9,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 /**
  * Defines a workspace with the Camera panel of the left side of the screen, and two TabPane areas on the right and bottom.
@@ -43,6 +41,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     @Override
     protected Positions positionList() {
         positions = new Positions("right", "bottom");
+        initialize();
         return positions;
     }
 
@@ -67,9 +66,9 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     }
 
     @Override
-    public void save() throws IOException{
+    public void deactivate() throws IOException{
         setDividerFields();
-        super.save();
+        super.deactivate();
     }
 
     @Override
@@ -77,7 +76,6 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         super.loadFile();
         middleDivision = getDoubleValue("middledivision");
         bodyDivision = getDoubleValue("bodydivision");
-        initialize();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
     }

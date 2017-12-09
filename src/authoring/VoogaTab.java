@@ -1,5 +1,7 @@
 package authoring;
 
+import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
+import com.sun.javafx.scene.control.skin.TabPaneSkin;
 import javafx.animation.PauseTransition;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -25,6 +27,7 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.MoveTabMessage;
 import util.pubsub.messages.StringMessage;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -118,8 +121,13 @@ public class VoogaTab extends Tab{
             tabPanes.add(pane);
             newStage.setOnHiding(t1 -> {
                 tabPanes.remove(pane);
-                for(Tab tab : pane.getTabs()){
-                    PubSub.getInstance().publishSync("LOAD_TAB", new StringMessage(((VoogaTab)tab).getPanelName()));
+                for (Iterator i = pane.getTabs().iterator(); i.hasNext();) {
+                    VoogaTab tab = (VoogaTab)i.next();
+                    TabPaneBehavior behavior = ((TabPaneSkin) getTabPane().getSkin()).getBehavior();
+                    if (behavior.canCloseTab(tab)) {
+                        i.remove();
+                        behavior.closeTab(tab);
+                    }
                 }
             });
             getTabPane().getTabs().remove(VoogaTab.this);
@@ -185,7 +193,6 @@ public class VoogaTab extends Tab{
         if(addIndex > insertData.getInsertPane().getTabs().size()) {
             addIndex = insertData.getInsertPane().getTabs().size();
         }
-        //TODO: ADD change listener to tabpane through either tabmanager or positions and see if it can replace pubsub here. Also make closed tabs change vis to false.
         PubSub.getInstance().publish("PUT_TAB", new MoveTabMessage(nameLabel.getText(), insertData.getInsertPane()));
 
         PauseTransition p = new PauseTransition(Duration.millis(150 + 20));

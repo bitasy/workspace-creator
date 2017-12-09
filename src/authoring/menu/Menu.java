@@ -3,11 +3,8 @@ package authoring.menu;
 import authoring.Screen;
 import database.User;
 import database.firebase.DatabaseConnector;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -16,7 +13,7 @@ import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
-import util.pubsub.messages.ThemeMessage;
+import util.pubsub.messages.StringMessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +46,6 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
-    private ListView<String> list;
 
     public Menu(Stage stage) {
         myStage = stage;
@@ -62,56 +58,37 @@ public class Menu {
         myStage.setResizable(false);
         myStage.setTitle("main.VoogaPeaches: Menu");
         myStage.show();
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
+
         formatButtons();
-        setupGames();
         updateTheme();
     }
 
-    public Stage getStage() {
-        return myStage;
-    }
-
-    public void setupScene() {
-        addButtons();
-        addTitle();
-    }
-
-    private void setupGames() {
-        double width = 200;
-        double height = 150;
-        double botMargin = 50;
-        list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App", "Single", "Double",
-                "Suite", "Family App", "Single", "Double", "Suite", "Family App");
-        list.setItems(items);
-        list.setLayoutX(WIDTH/2-width/2);
-        list.setLayoutY(HEIGHT-height-botMargin);
-        list.setPrefSize(width, height);
-        myRoot.getChildren().add(list);
-    }
-
     private void updateTheme() {
+        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
                     if (myRoot.getStylesheets().size() >= 1) {
                         myRoot.getStylesheets().remove(0);
                     }
-                    myRoot.getStylesheets().add(((ThemeMessage) message).readMessage());
+                    myRoot.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
         myRoot.getStyleClass().add("panel");
     }
 
-    private void onAuthoringPressed() {
-        System.out.println(list.getSelectionModel().getSelectedItem());
-        Stage authoringStage = new Stage();
-        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-        authoringStage.setMaximized(true);
-        authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
+
+    public void setupScene() {
+        addButtons();
+        addTitle();
+    }
+
+    private void ifPressed() { //http://www.java2s.com/Code/Java/JavaFX/AddClickactionlistenertoButton.htm
+        for (int i = 0; i < buttons.size(); i ++) {
+            Button button = buttons.get(i);
+            button.setOnAction(e -> onPressed(button));
+
+        }
     }
 
     private Stage onPressed(Button buttonPressed) {
@@ -124,13 +101,14 @@ public class Menu {
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
+                DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try {
                     connector.addToDatabase(VoogaPeaches.getUser());
                 } catch (ObjectIdNotFoundException e) {
-                    // Do  Nothing
+                    //TODO: is this possible? If so what do?
                 }
             });
+            myStage.close();
         }
         return null;
     }
@@ -139,25 +117,21 @@ public class Menu {
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
         Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
+        Button settingsButton = createMenuButton(SETTINGSPIC, SETTINGS);
 
-        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton));
+        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton, settingsButton));
         myRoot.getChildren().addAll(buttons);
-        buttons.get(0).setOnAction((e) -> onAuthoringPressed());
-        buttons.get(1).setOnAction((e) -> onPlayingPressed());
-    }
-
-    private void onPlayingPressed() {
-        System.out.println("Implement Playing lol");
+        ifPressed();
     }
 
     private void formatButtons() {
         int numButtons = buttons.size();
 
-        double buttonXOffset = WIDTH/(numButtons+2);
+        double buttonXOffset = WIDTH/(numButtons+1);
         double buttonYOffset = HEIGHT*2/3;
 
         for (int i = 0; i < numButtons; i++) {
-            setMenuButtonLayout(buttons.get(i), buttonXOffset*(i*2+1) - buttons.get(i).getBoundsInLocal().getWidth()/2, buttonYOffset);
+            setMenuButtonLayout(buttons.get(i), buttonXOffset*(i+1) - buttons.get(i).getBoundsInLocal().getWidth()/2, buttonYOffset);
         }
     }
 
@@ -189,5 +163,9 @@ public class Menu {
         File myFile = new File(picLocation);
         ImageView myImageView = new ImageView(myFile.toURI().toString());
         return myImageView;
+    }
+
+    public Stage getStage() {
+        return myStage;
     }
 }

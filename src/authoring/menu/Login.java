@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -38,6 +39,9 @@ public class Login {
         myStage = stage;
         myArea = createVBoxLayout();
         myScene = new Scene(myArea, 350,125);
+        myScene.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER) loginPressed();
+        });
 
         myStage.setScene(myScene);
         myStage.setResizable(false);
@@ -79,12 +83,13 @@ public class Login {
                 db.addToDatabase(newUser);
                 // Have to force a sleep to wait for data to finish sending, but
                 // with actual project this shouldn't be a problem
-                Thread.sleep(1000);
+                Thread.sleep(1000);//TODO replace with PauseTransition if possible
             } catch (ObjectIdNotFoundException | InterruptedException e) {
                 System.out.println(e.getMessage());
             }
             Stage menuStage = new Stage();
             Menu myMenu = new Menu(menuStage);
+            myStage.close();
         }
     }
 
@@ -104,6 +109,7 @@ public class Login {
             VoogaPeaches.changeUser(user);
             Stage menuStage = new Stage();
             Menu myMenu = new Menu(menuStage);
+            myStage.close();
         }
     }
 

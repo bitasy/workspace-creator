@@ -22,9 +22,8 @@ public class VoogaPeaches extends Application {
 
     @Override
     public void stop() throws Exception{
-        //TODO: save the authoring environment when that stage is closed
-        super.stop();
         FirebaseConnector.closeFirebaseApp();
+        super.stop();
     }
 
     public static void changeUser(User newUser) {currentUser = newUser;}

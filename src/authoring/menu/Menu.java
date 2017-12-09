@@ -69,8 +69,6 @@ public class Menu {
         formatButtons();
         setupGames();
         updateTheme();
-
-        VoogaPeaches.createMenu(this);
     }
 
     public void setupScene() {
@@ -104,6 +102,7 @@ public class Menu {
                     }
                     currentTheme = ((StringMessage) message).readMessage();
                     myRoot.getStylesheets().add(currentTheme);
+                    VoogaPeaches.getUser().setTheme(currentTheme);
                 }
         );
         myRoot.getStyleClass().add("panel");
@@ -184,12 +183,5 @@ public class Menu {
         File myFile = new File(picLocation);
         ImageView myImageView = new ImageView(myFile.toURI().toString());
         return myImageView;
-    }
-    public Stage getStage() {
-        return myStage;
-    }
-
-    public String getCurrentTheme() {
-        return currentTheme;
     }
 }

@@ -125,7 +125,7 @@ public class VoogaTab extends Tab{
                 }
             });
             Scene newScene = new Scene(pane);
-            newScene.getStylesheets().add(VoogaPeaches.getMenu().getCurrentTheme());
+            newScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
             PubSub.getInstance().subscribe(
                     "THEME_MESSAGE",
                     (message) -> {

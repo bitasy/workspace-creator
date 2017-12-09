@@ -57,7 +57,7 @@ public class ErrorDisplay {
     public void displayError() {
         if(errorMessage.length() > 0) {
             Alert errors = new Alert(Alert.AlertType.ERROR);
-            errors.getDialogPane().getStylesheets().add(VoogaPeaches.getMenu().getCurrentTheme());
+            errors.getDialogPane().getStylesheets().add(VoogaPeaches.getUser().getThemeName());
             errors.getDialogPane().getStyleClass().add("panel");
             errors.setTitle(title);
             errors.setContentText(errorMessage.toString());

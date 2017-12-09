@@ -1,6 +1,7 @@
 package util;
 
 import javafx.scene.control.Alert;
+import main.VoogaPeaches;
 
 /**
  * Class for managing the collection and display of error messages to the user. Messages are accumulated and displayed on command in a separate stage.
@@ -56,6 +57,8 @@ public class ErrorDisplay {
     public void displayError() {
         if(errorMessage.length() > 0) {
             Alert errors = new Alert(Alert.AlertType.ERROR);
+            errors.getDialogPane().getStylesheets().add(VoogaPeaches.getMenu().getCurrentTheme());
+            errors.getDialogPane().getStyleClass().add("panel");
             errors.setTitle(title);
             errors.setContentText(errorMessage.toString());
             errors.showAndWait();

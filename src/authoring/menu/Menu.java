@@ -63,7 +63,7 @@ public class Menu {
     }
 
     private void updateTheme() {
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
+        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

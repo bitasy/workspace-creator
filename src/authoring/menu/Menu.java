@@ -46,10 +46,12 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
+    private String currentTheme;
 
     public Menu(Stage stage) {
         myStage = stage;
         myRoot = new Pane();
+        currentTheme = VoogaPeaches.getUser().getThemeName();
 
         myScene = new Scene(myRoot, WIDTH, HEIGHT);
         setupScene();
@@ -61,17 +63,21 @@ public class Menu {
 
         formatButtons();
         updateTheme();
+
+        VoogaPeaches.createMenu(this);
     }
 
     private void updateTheme() {
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
+        myRoot.getStylesheets().add(currentTheme);
+        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
                     if (myRoot.getStylesheets().size() >= 1) {
                         myRoot.getStylesheets().remove(0);
                     }
-                    myRoot.getStylesheets().add(((StringMessage) message).readMessage());
+                    currentTheme = ((StringMessage) message).readMessage();
+                    myRoot.getStylesheets().add(currentTheme);
                 }
         );
         myRoot.getStyleClass().add("panel");
@@ -98,7 +104,7 @@ public class Menu {
             authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
+            authoring = new Screen(authoringStage, currentTheme);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
@@ -167,5 +173,9 @@ public class Menu {
 
     public Stage getStage() {
         return myStage;
+    }
+
+    public String getCurrentTheme() {
+        return currentTheme;
     }
 }

@@ -47,6 +47,7 @@ public class Menu {
     private Pane myRoot;
     private Screen authoring;
     private String currentTheme;
+    private Stage authoringStage = new Stage();
 
     public Menu(Stage stage) {
         myStage = stage;
@@ -100,21 +101,25 @@ public class Menu {
     private Stage onPressed(Button buttonPressed) {
         String button = buttonPressed.getAccessibleText();
         if (button.equals("AUTHORING")) {
-            Stage authoringStage = new Stage();
-            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-            authoringStage.setMaximized(true);
-            authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage, currentTheme);
-            authoringStage.setOnCloseRequest(event -> {
-                authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-                try {
-                    connector.addToDatabase(VoogaPeaches.getUser());
-                } catch (ObjectIdNotFoundException e) {
-                    //TODO: is this possible? If so what do?
-                }
-            });
-            myStage.close();
+            if (!authoringStage.isShowing()) {
+                authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+                authoringStage.setMaximized(true);
+                authoringStage.setResizable(false);
+                authoring = new Screen(authoringStage, currentTheme);
+                authoringStage.setOnCloseRequest(event -> {
+                    authoring.save();
+                    DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
+                    try {
+                        connector.addToDatabase(VoogaPeaches.getUser());
+                    } catch (ObjectIdNotFoundException e) {
+                        //TODO: is this possible? If so what do?
+                    }
+                });
+            }
+            else {
+                //do nothing, only can have one authoring environment open at once
+            }
+            //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
         }
         return null;
     }

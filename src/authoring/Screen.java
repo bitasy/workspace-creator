@@ -32,16 +32,17 @@ public class Screen {
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
     private ErrorDisplay errorMessage;
+    private String myTheme;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage){
+    public Screen(Stage stage, String theme){
+        this.myTheme = theme;
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
-
 
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
@@ -70,7 +71,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
+        root.getStylesheets().add(myTheme); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -80,7 +81,6 @@ public class Screen {
                     root.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
-        //myUser.setTheme();
         //TODO: on screen close update the database with the theme file name string
     }
 
@@ -150,5 +150,4 @@ public class Screen {
     private double getDoubleValue(String key) {
         return Double.parseDouble(PropertiesReader.value("screenlayout", key));
     }
-
 }

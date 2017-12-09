@@ -44,17 +44,7 @@ public class TabManager {
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
-        myScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
-        PubSub.getInstance().subscribe(
-                "THEME_MESSAGE",
-                (message) -> {
-                    if (myScene.getStylesheets().size() >= 1) {
-                        myScene.getStylesheets().remove(0);
-                    }
-                    myScene.getStylesheets().add(((StringMessage) message).readMessage());
-                });
         markerStage.setScene(myScene);
-
     }
 
     /**

@@ -32,14 +32,12 @@ public class Screen {
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
     private ErrorDisplay errorMessage;
-    private String myTheme;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage, String theme){
-        this.myTheme = theme;
+    public Screen(Stage stage){
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -71,7 +69,7 @@ public class Screen {
     }
 
     private void updateTheme() {
-        root.getStylesheets().add(myTheme); //update from database
+        root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

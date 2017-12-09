@@ -113,7 +113,7 @@ public class Menu {
             authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage, currentTheme);
+            authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);

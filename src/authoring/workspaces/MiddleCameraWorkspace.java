@@ -9,9 +9,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 /**
  * Defines a workspace with the Camera panel in the middle of the screen, and two TabPane areas on either side of the Camera with one more below it.
@@ -44,6 +42,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     @Override
     protected Positions positionList() {
         positions = new Positions("bottom", "left", "right");
+        initialize();
         return positions;
     }
 
@@ -57,6 +56,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         cameraPanel.setMinWidth(0);
         cameraPanel.setMinHeight(0);
         ((SplitPane)body.getItems().get(0)).getItems().set(1, cameraPanel);
+        setDividerFields();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
     }
@@ -64,6 +64,12 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     @Override
     public Region getWorkspace() {
         return body;
+    }
+
+    @Override
+    public void deactivate() throws IOException{
+        setDividerFields();
+        super.deactivate();
     }
 
     @Override
@@ -91,23 +97,8 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         leftDivision = getDoubleValue("leftdivision");
         rightDivision = getDoubleValue("rightdivision");
         bodyDivision = getDoubleValue("bodydivision");
-    }
-
-    @Override
-    protected void populateScreen(){
-        initialize();
-        super.populateScreen();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
-    }
-
-    @Override
-    protected void saveToFile(File file, Properties properties) throws IOException{
-        properties.setProperty("leftdivision", leftDivision + "");
-        properties.setProperty("rightdivision", rightDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
-
-        super.saveToFile(file, properties);
     }
 
     private void initialize() {
@@ -116,5 +107,14 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         left = positions.getPosition("left").getPane();
         bottom = positions.getPosition("bottom").getPane();
         right = positions.getPosition("right").getPane();
+    }
+
+    private void setDividerFields() {
+        bodyDivision = body.getDividerPositions()[0];
+        leftDivision = middle.getDividerPositions()[0];
+        rightDivision = middle.getDividerPositions()[1];
+        properties.setProperty("leftdivision", leftDivision + "");
+        properties.setProperty("rightdivision", rightDivision + "");
+        properties.setProperty("bodydivision", bodyDivision + "");
     }
 }

@@ -19,7 +19,7 @@ public class PanelController {
 	private EntityManager myEntityManager;
 
 	public PanelController() {
-		myEngine = new Engine(new Entity(), 70); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(new Entity(), 50); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 

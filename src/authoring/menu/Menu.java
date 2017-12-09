@@ -1,6 +1,8 @@
 package authoring.menu;
 
 import authoring.Screen;
+import database.User;
+import database.firebase.DatabaseConnector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -12,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
+import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 
@@ -109,6 +112,27 @@ public class Menu {
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
         authoring = new Screen(authoringStage);
+    }
+
+    private Stage onPressed(Button buttonPressed) {
+        String button = buttonPressed.getAccessibleText();
+        if (button.equals("AUTHORING")) {
+            Stage authoringStage = new Stage();
+            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+            authoringStage.setMaximized(true);
+            authoringStage.setResizable(false);
+            authoring = new Screen(authoringStage);
+            authoringStage.setOnCloseRequest(event -> {
+                authoring.save();
+                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
+                try {
+                    connector.addToDatabase(VoogaPeaches.getUser());
+                } catch (ObjectIdNotFoundException e) {
+                    // Do  Nothing
+                }
+            });
+        }
+        return null;
     }
 
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox

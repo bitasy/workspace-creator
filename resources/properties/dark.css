@@ -11,6 +11,9 @@
 .panel {
     -fx-background-color: -darker-grey;
 }
+.v-box {
+    -fx-background-color: -darker-grey;
+}
 .split-pane:horizontal >.split-pane-divider,
 .split-pane:vertical >.split-pane-divider {
     -fx-background-color: -white;

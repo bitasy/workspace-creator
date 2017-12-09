@@ -16,6 +16,7 @@ public class SocialMediaPanel implements Panel {
 
     public SocialMediaPanel() {
         myArea = new VBox();
+        getRegion().getStyleClass().add("panel");
         myArea.fillWidthProperty().setValue(true);
         myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());

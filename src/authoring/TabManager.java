@@ -24,6 +24,7 @@ public class TabManager {
 
     private final List<TabPane> tabPanes = new ArrayList<>();
     private final Stage markerStage;
+    private String myTheme;
 
     /**
      * Creates a new TabManager, adds the panes for every position in the workspace, and initializes the indicator for moving DraggableTabs.
@@ -51,6 +52,8 @@ public class TabManager {
                         myScene.getStylesheets().remove(0);
                     }
                     myScene.getStylesheets().add(((ThemeMessage) message).readMessage());
+//                    System.out.println("new theme");
+//                    myTheme = ((ThemeMessage) message).readMessage();
                 });
         markerStage.setScene(myScene);
     }
@@ -61,7 +64,7 @@ public class TabManager {
      * @return the new tab
      */
     public Tab newTab(String title){
-        return new DraggableTab(title, markerStage, tabPanes);
+        return new DraggableTab(title, markerStage, tabPanes/*, myTheme*/);
     }
 
     public void setOnWindowClose(){

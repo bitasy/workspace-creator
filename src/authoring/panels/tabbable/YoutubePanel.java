@@ -31,6 +31,7 @@ public class YoutubePanel implements Panel {
 
     public YoutubePanel() {
         myArea = new VBox();
+        getRegion().getStyleClass().add("panel");
         myArea.fillWidthProperty().setValue(true);
         setupVideoLinkMap();
         createDropDownMenu();

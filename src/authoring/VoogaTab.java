@@ -125,8 +125,15 @@ public class VoogaTab extends Tab{
             Scene newScene = new Scene(pane);
             PubSub.getInstance().subscribe(
                     "THEME_MESSAGE",
-                    (message) -> newScene.getStylesheets().add(((StringMessage) message).readMessage()));
-            newScene.getStylesheets().add("panel");//TODO: Figure out how to get this from throwing a warning about resource panel
+                    (message) -> {
+                        if (newScene.getStylesheets().size() >= 1) {
+                            newScene.getStylesheets().remove(0);
+                        }
+                        newScene.getStylesheets().add(((StringMessage) message).readMessage());//TODO: figure out how to get this from throwing a warning
+                    }
+            );
+            //newScene.getStylesheets().add(myTheme);
+            newScene.getStylesheets().add("panel");
             newStage.setScene(newScene);
             //newStage.initStyle(StageStyle.UTILITY);
             newStage.setX(t.getScreenX());

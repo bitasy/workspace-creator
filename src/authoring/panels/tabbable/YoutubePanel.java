@@ -32,7 +32,6 @@ public class YoutubePanel implements Panel {
     public YoutubePanel() {
         myArea = new VBox();
         myArea.fillWidthProperty().setValue(true);
-        myArea.getStyleClass().add("panel");
         setupVideoLinkMap();
         createDropDownMenu();
         myArea.getChildren().add(videosDropDown);
@@ -53,7 +52,6 @@ public class YoutubePanel implements Panel {
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
-        videosDropDown.getStyleClass().add("choice-box");
         videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {

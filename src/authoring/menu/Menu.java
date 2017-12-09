@@ -49,12 +49,9 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
-<<<<<<< HEAD
     private String currentTheme;
     private Stage authoringStage = new Stage();
-=======
     private ListView<String> list;
->>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
 
     public Menu(Stage stage) {
         myStage = stage;
@@ -74,10 +71,6 @@ public class Menu {
         updateTheme();
 
         VoogaPeaches.createMenu(this);
-    }
-
-    public Stage getStage() {
-        return myStage;
     }
 
     public void setupScene() {
@@ -101,6 +94,8 @@ public class Menu {
     }
 
     private void updateTheme() {
+        myRoot.getStylesheets().add(currentTheme);
+        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -115,55 +110,25 @@ public class Menu {
     }
 
     private void onAuthoringPressed() {
-        System.out.println(list.getSelectionModel().getSelectedItem());
-        Stage authoringStage = new Stage();
-        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-        authoringStage.setMaximized(true);
-        authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
-    }
-
-    private Stage onPressed(Button buttonPressed) {
-        String button = buttonPressed.getAccessibleText();
-        if (button.equals("AUTHORING")) {
-<<<<<<< HEAD
-            if (!authoringStage.isShowing()) {
-                authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-                authoringStage.setMaximized(true);
-                authoringStage.setResizable(false);
-                authoring = new Screen(authoringStage, currentTheme);
-                authoringStage.setOnCloseRequest(event -> {
-                    authoring.save();
-                    DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-                    try {
-                        connector.addToDatabase(VoogaPeaches.getUser());
-                    } catch (ObjectIdNotFoundException e) {
-                        //TODO: is this possible? If so what do?
-                    }
-                });
-            }
-            else {
-                //do nothing, only can have one authoring environment open at once
-            }
-            //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
-=======
-            Stage authoringStage = new Stage();
+        if (!authoringStage.isShowing()) {
             authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
+            authoring = new Screen(authoringStage, currentTheme);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
+                DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try {
                     connector.addToDatabase(VoogaPeaches.getUser());
                 } catch (ObjectIdNotFoundException e) {
-                    // Do  Nothing
+                    //TODO: is this possible? If so what do?
                 }
             });
->>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
         }
-        return null;
+        else {
+            //do nothing, only can have one authoring environment open at once
+        }
+        //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
     }
 
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
@@ -202,7 +167,6 @@ public class Menu {
         myButton.setGraphic(createImageView(imageName));
 
         myButton.setTooltip(new Tooltip(buttonText));
-        myButton.setAccessibleText(buttonText);
 
         return myButton;
     }
@@ -221,8 +185,6 @@ public class Menu {
         ImageView myImageView = new ImageView(myFile.toURI().toString());
         return myImageView;
     }
-<<<<<<< HEAD
-
     public Stage getStage() {
         return myStage;
     }
@@ -230,6 +192,4 @@ public class Menu {
     public String getCurrentTheme() {
         return currentTheme;
     }
-=======
->>>>>>> acbd9867fd3fe93357f15ac936d6b24318e58249
 }

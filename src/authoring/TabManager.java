@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.VoogaPeaches;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 
@@ -39,9 +40,15 @@ public class TabManager {
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
+        myScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
-                (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                (message) -> {
+                    if (myScene.getStylesheets().size() >= 1) {
+                        myScene.getStylesheets().remove(0);
+                    }
+                    myScene.getStylesheets().add(((ThemeMessage) message).readMessage());
+                });
         markerStage.setScene(myScene);
     }
 

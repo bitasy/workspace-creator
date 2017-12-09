@@ -1,6 +1,5 @@
 package authoring;
 
-import database.CurrentUser;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -9,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.VoogaPeaches;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 
@@ -43,7 +43,7 @@ public class TabManager {
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
-        myScene.getStylesheets().add(CurrentUser.currentUser.getThemeName());
+        myScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {

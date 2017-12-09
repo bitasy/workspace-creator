@@ -114,41 +114,15 @@ public class Menu {
      * Handles switching to the Authoring screen with the pencil image is clicked
      */
     private void onAuthoringPressed() {
-<<<<<<< HEAD
         System.out.println(list.getSelectionModel().getSelectedItem());
         Stage authoringStage = new Stage();
         authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
+//        #TODO I DON"T KNOW WHAT I"M SUPPOSED TO ADD HERE!!! 
+        authoring = new Screen(authoringStage, "PLZ FIX THIS");
     }
 
-    /**
-     * Create and adds the correct action and picture onto the buttons
-     */
-=======
-        if (!authoringStage.isShowing()) {
-            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-            authoringStage.setMaximized(true);
-            authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage, currentTheme);
-            authoringStage.setOnCloseRequest(event -> {
-                authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-                try {
-                    connector.addToDatabase(VoogaPeaches.getUser());
-                } catch (ObjectIdNotFoundException e) {
-                    //TODO: is this possible? If so what do?
-                }
-            });
-        }
-        else {
-            //do nothing, only can have one authoring environment open at once
-        }
-        //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
-    }
-
->>>>>>> e6737c183fe6ff453c4f1d7bc3b0bea0dfb7c749
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);

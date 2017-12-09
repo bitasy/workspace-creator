@@ -198,7 +198,7 @@ public class VoogaTab extends Tab{
     }
 
     /**
-     * Set whether it's possible to detach the tab from its pane and move it to
+     * Set whether it's possible to detach the tab from its pane and scripts.scripts.base.animate.move it to
      * another pane or another window. Defaults to true.
      * <p>
      * @param detachable true if the tab should be detachable, false otherwise.

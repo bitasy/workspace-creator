@@ -53,6 +53,16 @@ public class PubSub {
         callbacks.get(channel).add(callback);
     }
 
+    public void unsubscribe(String channel, Consumer<Message> callback) {
+        if (callbacks != null && callbacks.containsKey(channel))
+            callbacks.get(channel).remove(callback);
+    }
+
+    public void unsubscribeSync(String channel) {
+        if (callbacksSync != null && callbacksSync.containsKey(channel))
+            callbacks.put(channel, null);
+    }
+
     /**
      * Subscribe to a synchronous pubsub
      *

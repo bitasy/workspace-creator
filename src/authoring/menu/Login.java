@@ -74,13 +74,9 @@ public class Login {
             JSONDataManager manager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
             manager.writeJSONFile(userTextField.getText().trim(), JSONHelper.JSONForObject(newUser));
             VoogaPeaches.changeUser(newUser);
-
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
             try {
                 db.addToDatabase(newUser);
-
-                //manager.writeJSONFile("postOne", JSONHelper.JSONForObject(posts));
-
                 // Have to force a sleep to wait for data to finish sending, but
                 // with actual project this shouldn't be a problem
                 Thread.sleep(1000);

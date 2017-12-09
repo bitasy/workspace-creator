@@ -56,7 +56,6 @@ public class Menu {
     public Menu(Stage stage) {
         myStage = stage;
         myRoot = new Pane();
-        currentTheme = VoogaPeaches.getUser().getThemeName();
 
         myScene = new Scene(myRoot, WIDTH, HEIGHT);
         setupScene();
@@ -92,7 +91,7 @@ public class Menu {
     }
 
     private void updateTheme() {
-        myRoot.getStylesheets().add(currentTheme);
+        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
@@ -100,9 +99,7 @@ public class Menu {
                     if (myRoot.getStylesheets().size() >= 1) {
                         myRoot.getStylesheets().remove(0);
                     }
-                    currentTheme = ((StringMessage) message).readMessage();
-                    myRoot.getStylesheets().add(currentTheme);
-                    VoogaPeaches.getUser().setTheme(currentTheme);
+                    myRoot.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
         myRoot.getStyleClass().add("panel");
@@ -116,6 +113,10 @@ public class Menu {
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
+                System.out.println("saving new authoring display defaults =====");
+                System.out.println(VoogaPeaches.getUser().getUserName());
+                System.out.println(VoogaPeaches.getUser().getThemeName());
+                System.out.println(VoogaPeaches.getUser().getWorkspaceName());
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try {
                     connector.addToDatabase(VoogaPeaches.getUser());

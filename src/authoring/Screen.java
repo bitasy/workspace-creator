@@ -76,7 +76,9 @@ public class Screen {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
                     }
-                    root.getStylesheets().add(((StringMessage) message).readMessage());
+                    String newTheme = ((StringMessage) message).readMessage();
+                    root.getStylesheets().add(newTheme);
+                    VoogaPeaches.getUser().setTheme(newTheme);
                 }
         );
         //TODO: on screen close update the database with the theme file name string

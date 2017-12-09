@@ -109,6 +109,14 @@ public class Login {
             VoogaPeaches.changeUser(user);
             Stage menuStage = new Stage();
             Menu myMenu = new Menu(menuStage);
+            menuStage.setOnCloseRequest(event -> {
+                //TODO: SIMRAN HALP
+                try {
+                    connector.addToDatabase(VoogaPeaches.getUser());
+                } catch (ObjectIdNotFoundException e) {
+                    // do nothing
+                }
+            });
             myStage.close();
         }
     }

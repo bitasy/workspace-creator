@@ -3,11 +3,6 @@ package authoring;
 import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
 import com.sun.javafx.scene.control.skin.TabPaneSkin;
 import javafx.animation.PauseTransition;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -77,16 +72,6 @@ public class VoogaTab extends Tab{
         nameLabel.setOnMouseReleased(t -> {
             finishSwitch(markerStage, t);
         });
-    }
-
-    /**
-     * Set whether it's possible to detach the tab from its pane and move it to
-     * another pane or another window. Defaults to true.
-     * <p>
-     * @param detachable true if the tab should be detachable, false otherwise.
-     */
-    public void setDetachable(boolean detachable) {
-        this.detachable = detachable;
     }
 
     /**
@@ -202,11 +187,34 @@ public class VoogaTab extends Tab{
             insertData.getInsertPane().selectionModelProperty().get().select(index);
         });
         p.play();
+
+    }
+
+    /**
+     * Set whether it's possible to detach the tab from its pane and move it to
+     * another pane or another window. Defaults to true.
+     * <p>
+     * @param detachable true if the tab should be detachable, false otherwise.
+     */
+    public void setDetachable(boolean detachable) {
+        this.detachable = detachable;
+    }
+
+    /**
+     * Set the label text on this draggable tab. This must be used instead of
+     * setText() to set the label, otherwise weird side effects will result!
+     * <p>
+     * @param text the label text for this tab.
+     */
+    public void setLabelText(String text) {
+        nameLabel.setText(text);
+        dragText.setText(text);
     }
 
     private InsertData getInsertData(Point2D screenPoint) {
         for(TabPane tabPane : tabPanes) {
             Rectangle2D tabAbsolute = getAbsoluteRect(tabPane);
+            tabPane.getStyleClass().add("tabPane");
             if(tabAbsolute.contains(screenPoint)) {
                 int tabInsertIndex = 0;
                 if(!tabPane.getTabs().isEmpty()) {
@@ -264,25 +272,6 @@ public class VoogaTab extends Tab{
         return xPoint >= lowerBound && xPoint <= upperBound;
     }
 
-    private static class InsertData {
-
-        private final int index;
-        private final TabPane insertPane;
-
-        InsertData(int index, TabPane insertPane) {
-            this.index = index;
-            this.insertPane = insertPane;
-        }
-
-        int getIndex() {
-            return index;
-        }
-
-        TabPane getInsertPane() {
-            return insertPane;
-        }
-
-    }
 
 }
 

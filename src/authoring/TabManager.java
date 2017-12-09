@@ -1,13 +1,7 @@
 package authoring;
 
-import authoring.panels.PanelManager;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
@@ -15,19 +9,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import util.PropertiesReader;
+import main.VoogaPeaches;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 
 /**
@@ -53,9 +41,15 @@ public class TabManager {
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);
+        myScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
-                (message) -> myScene.getStylesheets().add(((StringMessage) message).readMessage()));
+                (message) -> {
+                    if (myScene.getStylesheets().size() >= 1) {
+                        myScene.getStylesheets().remove(0);
+                    }
+                    myScene.getStylesheets().add(((StringMessage) message).readMessage());
+                });
         markerStage.setScene(myScene);
 
     }

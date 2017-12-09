@@ -1,6 +1,8 @@
 package authoring.menu;
 
 import authoring.Screen;
+import database.User;
+import database.firebase.DatabaseConnector;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -9,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
+import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.ThemeMessage;
 import java.io.File;
@@ -95,6 +98,15 @@ public class Menu {
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
+            authoringStage.setOnCloseRequest(event -> {
+                authoring.save();
+                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
+                try {
+                    connector.addToDatabase(VoogaPeaches.getUser());
+                } catch (ObjectIdNotFoundException e) {
+                    // Do  Nothing
+                }
+            });
         }
         return null;
     }

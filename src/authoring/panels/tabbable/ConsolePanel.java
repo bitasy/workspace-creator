@@ -15,6 +15,7 @@ public class ConsolePanel implements Panel{
 
     public ConsolePanel() {
         myPane = new Pane();
+        myPane.getStyleClass().add("panel");
     }
 
     private TextArea consoleField = new TextArea();

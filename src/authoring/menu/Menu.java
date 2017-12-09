@@ -1,8 +1,6 @@
 package authoring.menu;
 
 import authoring.Screen;
-import database.User;
-import database.firebase.DatabaseConnector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -14,7 +12,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
-import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
@@ -29,6 +26,7 @@ import java.util.List;
  * All user interactions are determined and executed in here
  *
  * @author Kelly Zhang
+ * @author Simran
  *
  */
 public class Menu {
@@ -56,8 +54,8 @@ public class Menu {
         myRoot = new Pane();
 
         myScene = new Scene(myRoot, WIDTH, HEIGHT);
-        setupScene();
-
+        addButtons();
+        addTitle();
         myStage.setScene(myScene);
         myStage.setResizable(false);
         myStage.setTitle("main.VoogaPeaches: Menu");
@@ -72,16 +70,16 @@ public class Menu {
         return myStage;
     }
 
-    public void setupScene() {
-        addButtons();
-        addTitle();
-    }
 
+    /**
+     * Adds the game selector in the middle of the screen.
+     */
     private void setupGames() {
         double width = 200;
         double height = 150;
         double botMargin = 50;
         list = new ListView<String>();
+//        TODO: Get the actual list of games
         ObservableList<String> items = FXCollections.observableArrayList (
                 "Single", "Double", "Suite", "Family App", "Single", "Double",
                 "Suite", "Family App", "Single", "Double", "Suite", "Family App");
@@ -92,6 +90,9 @@ public class Menu {
         myRoot.getChildren().add(list);
     }
 
+    /**
+     * Used to subscribe to PubSub and get new themes as they are published
+     */
     private void updateTheme() {
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
@@ -105,6 +106,9 @@ public class Menu {
         myRoot.getStyleClass().add("panel");
     }
 
+    /**
+     * Handles switching to the Authoring screen with the pencil image is clicked
+     */
     private void onAuthoringPressed() {
         System.out.println(list.getSelectionModel().getSelectedItem());
         Stage authoringStage = new Stage();
@@ -114,27 +118,9 @@ public class Menu {
         authoring = new Screen(authoringStage);
     }
 
-    private Stage onPressed(Button buttonPressed) {
-        String button = buttonPressed.getAccessibleText();
-        if (button.equals("AUTHORING")) {
-            Stage authoringStage = new Stage();
-            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
-            authoringStage.setMaximized(true);
-            authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
-            authoringStage.setOnCloseRequest(event -> {
-                authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<User>(User.class);
-                try {
-                    connector.addToDatabase(VoogaPeaches.getUser());
-                } catch (ObjectIdNotFoundException e) {
-                    // Do  Nothing
-                }
-            });
-        }
-        return null;
-    }
-
+    /**
+     * Create and adds the correct action and picture onto the buttons
+     */
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
@@ -146,10 +132,16 @@ public class Menu {
         buttons.get(1).setOnAction((e) -> onPlayingPressed());
     }
 
+    /**
+     * Will switch to the playing environment
+     */
     private void onPlayingPressed() {
         System.out.println("Implement Playing lol");
     }
 
+    /**
+     * Used to set the positioning of the buttons
+     */
     private void formatButtons() {
         int numButtons = buttons.size();
 
@@ -161,11 +153,25 @@ public class Menu {
         }
     }
 
+    /**
+     * Helper method to set the position of a button to the given x and y
+     *
+     * @param button
+     * @param x
+     * @param y
+     */
     private void setMenuButtonLayout(Button button, double x, double y) {
         button.setLayoutX(x);
         button.setLayoutY(y);
     }
 
+    /**
+     * Creates a new button specific to the menu
+     *
+     * @param imageName
+     * @param buttonText
+     * @return
+     */
     private Button createMenuButton(String imageName, String buttonText) {
         Button myButton = new Button();
         myButton.setGraphic(createImageView(imageName));
@@ -176,6 +182,9 @@ public class Menu {
         return myButton;
     }
 
+    /**
+     * Adds the Vooga Peaches text to the menu
+     */
     private void addTitle() {
         ImageView title = createImageView("resources/menuImages/VoogaTransparent.png");
         title.setScaleX(0.75);
@@ -185,6 +194,12 @@ public class Menu {
         myRoot.getChildren().add(title);
     }
 
+    /**
+     * Helper method to create the imageview for the buttons
+     *
+     * @param picLocation
+     * @return
+     */
     private ImageView createImageView(String picLocation) {
         File myFile = new File(picLocation);
         ImageView myImageView = new ImageView(myFile.toURI().toString());

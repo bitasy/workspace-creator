@@ -1,0 +1,75 @@
+* { //variables
+-blue:#84CEEB99;
+-faint-blue:#84CEEB22;
+-notsofaint-blue:#84CEEB99;
+-carolina-blue-light:#5AB9EA22;
+-dark-blue:#5680E9;
+-light-purple:#C1C8E4;
+}
+
+//PANEL LAYOUT
+.panel {
+    -fx-background-color: -carolina-blue-light;
+}
+.split-pane:horizontal >.split-pane-divider,
+.split-pane:vertical >.split-pane-divider {
+    -fx-background-color: -blue;
+}
+.tool-bar {
+    -fx-background-color: -light-purple;
+}
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -blue;
+}
+.tab {
+    -fx-background-color: -light-purple;
+}
+
+//PANEL ITEMS
+.button {
+    -fx-base: -dark-blue; -fx-focus-color: -blue; -fx-faint-focus-color: -faint-blue;
+}
+.choice-box {
+    -fx-background-color: -dark-blue;
+}
+.scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
+    -fx-background-color: transparent;
+}
+.scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
+    -fx-background-color: -notsofaint-blue;
+}
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: -light-purple;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -blue;
+}
+.scroll-pane > .corner {
+    -fx-background-color: -light-purple;
+}
+.text-field {
+    -fx-control-inner-background: -dark-blue;
+}
+
+//MENU
+.menu-bar {
+    -fx-border-color: -light-purple;
+    -fx-background-color: -dark-blue; -fx-focus-color: -blue; -fx-faint-focus-color: -faint-blue;
+}
+.menu:hover {
+    -fx-background-color: -blue;
+}
+//https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: -blue;
+}
+.menu-item {
+    -fx-background-color: -dark-blue; -fx-focus-color: -blue; -fx-faint-focus-color: -faint-blue;
+}
+.menu-item:focused {
+    -fx-background-color: -blue;
+}

@@ -1,7 +1,7 @@
-package main;//import authoring.Screen;
-import authoring.Login;
-import authoring.Screen;
+package main;
+
 import database.User;
+import authoring.menu.Login;
 import database.firebase.FirebaseConnector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,9 +22,8 @@ public class VoogaPeaches extends Application {
 
     @Override
     public void stop() throws Exception{
-        //TODO: save the authoring environment when that stage is closed
-        super.stop();
         FirebaseConnector.closeFirebaseApp();
+        super.stop();
     }
 
     public static void changeUser(User newUser) {currentUser = newUser;}

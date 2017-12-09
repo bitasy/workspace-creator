@@ -16,10 +16,10 @@ public class SocialMediaPanel implements Panel {
 
     public SocialMediaPanel() {
         myArea = new VBox();
+        getRegion().getStyleClass().add("panel");
         myArea.fillWidthProperty().setValue(true);
         myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());
-        myArea.getStyleClass().add("panel");
         createHistoryButtons();
     }
 
@@ -54,9 +54,7 @@ public class SocialMediaPanel implements Panel {
     }
 
     @Override
-    public void setController(PanelController controller) {
-        //TODO: Create controller
-    }
+    public void setController(PanelController controller) {}
 
     @Override
     public String title(){

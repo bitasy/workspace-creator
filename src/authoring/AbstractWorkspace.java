@@ -2,14 +2,22 @@ package authoring;
 
 import authoring.Positions.Position;
 import authoring.panels.PanelManager;
+import javafx.event.Event;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import util.PropertiesReader;
+import util.pubsub.PubSub;
+import util.pubsub.messages.Message;
+import util.pubsub.messages.MoveTabMessage;
+import util.pubsub.messages.StringMessage;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A partial implementation of a Workspace that handles all of the position, tab, data, and panel management. Concrete classes must implement the visual implementation, and can add to the data saved to the file by overriding the protected methods.
@@ -29,6 +37,10 @@ public abstract class AbstractWorkspace implements Workspace{
     private Map<String, Position> panelPositions;
     private Map<String, Boolean> visibilities;
 
+    private Consumer<Message> panelToggle = message -> toggle(((StringMessage)message).readMessage());
+    private Function<Message, Object> loadTab = message -> loadPanel(((StringMessage)message).readMessage());
+    private Consumer<Message> putTab = message -> movePanel(((MoveTabMessage)message).tab(), ((MoveTabMessage)message).pane());
+
     /**
      * Constructs an initializes a Workspace object.
      * @param width the width of the workspace
@@ -43,37 +55,28 @@ public abstract class AbstractWorkspace implements Workspace{
         visibilities = new HashMap<>();
         defaultPosition = positions.getPosition(defaultPosition());
         tabManager = new TabManager(positions);
-        loadFile();
-        populateScreen();
+        tabManager.setOnTabClose(e -> visibilities.put(((VoogaTab)e.getTarget()).getPanelName(), false));
         setupWorkspace(width, height);
     }
 
     @Override
-    public void save() throws IOException {
-        for(String position : positions.allPositions()){
-            for(Tab tab: positions.getPosition(position).getPane().getTabs()){
-                String panel = ((Label)tab.getGraphic()).getText();
-                properties.setProperty(panel, position);
-                properties.setProperty(
-                        String.format(PropertiesReader.value(DATA, "visibilitytag"), panel),
-                        Boolean.toString(visibilities.get(panel)));
-            }
-        }
+    public void activate() throws IOException{
+        loadFile();
+        subscribeToChannels();
+    }
+
+    @Override
+    public void deactivate() throws IOException {
+        disconnect();
+
+        panelPositions.forEach((name, pos) -> properties.setProperty(name, pos.toString()));
+        visibilities.forEach((name, bool) -> properties.setProperty(
+                String.format(PropertiesReader.value(DATA, "visibilitytag"), name),
+                Boolean.toString(bool))
+        );
 
         saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
-    }//TODO CURRENTLY: check if this exception gets handled, save divider positions in subclasses, update visibility on xing out, implement view reloading panels
-
-    /**
-     * Provides the list of positions to the AbstractWorkspace for management.
-     * @return the workspace's positions
-     */
-    protected abstract Positions positionList();
-
-    /**
-     * Returns the name of the default position for panels on the screen, if not specified
-     * @return the default position
-     */
-    protected abstract String defaultPosition();
+    }
 
     /**
      * Loads the workspace settings from a file, creating it if it does not exist.
@@ -88,14 +91,16 @@ public abstract class AbstractWorkspace implements Workspace{
                 Position position = positions.getPosition(properties.getProperty(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
-                    visibilities.put(panel, Boolean.parseBoolean(
-                            properties.getProperty(
-                                    String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
+                    visibilities.put(panel,
+                            Boolean.parseBoolean(
+                                    properties.getProperty(
+                                            String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
                 } else {
                     properties.setProperty(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
                     visibilities.put(panel, defaultVisibility);
                 }
+                loadPanel(panel);
             }
         } else {
             createFile(file);
@@ -104,13 +109,16 @@ public abstract class AbstractWorkspace implements Workspace{
     }
 
     /**
-     * Adds panels to the correct positions in the workspace.
+     * Provides the list of positions to the AbstractWorkspace for management.
+     * @return the workspace's positions
      */
-    protected void populateScreen(){
-        for(String panel : panelPositions.keySet()){
-            panelPositions.get(panel).addTab(newTab(panel));
-        }
-    }
+    protected abstract Positions positionList();
+
+    /**
+     * Returns the name of the default position for panels on the screen, if not specified
+     * @return the default position
+     */
+    protected abstract String defaultPosition();
 
     /**
      * Prepares the workspace for display, given the width and height.
@@ -118,18 +126,6 @@ public abstract class AbstractWorkspace implements Workspace{
      * @param height height of the workspace
      */
     protected abstract void setupWorkspace(double width, double height);
-
-    /**
-     * Saves the gvien workspace state to the settings file for the workspace. Used to save the current workspace data.
-     * @param file the workspace file
-     * @param properties the state of the workspace to save
-     * @throws IOException if the file cannot be written to
-     */
-    protected void saveToFile(File file, Properties properties) throws IOException{
-        OutputStream output = new FileOutputStream(file);
-        properties.store(output, String.format(PropertiesReader.value(DATA, "dataheader"), getClass().getSimpleName()));
-        output.close();
-    }
 
     /**
      * Finds a property's value and converts it to a double.
@@ -140,14 +136,21 @@ public abstract class AbstractWorkspace implements Workspace{
         return Double.parseDouble(properties.getProperty(key));
     }
 
+    /**
+     * Saves the gvien workspace state to the settings file for the workspace. Used to save the current workspace data.
+     * @param file the workspace file
+     * @param properties the state of the workspace to save
+     * @throws IOException if the file cannot be written to
+     */
+    private void saveToFile(File file, Properties properties) throws IOException{
+        OutputStream output = new FileOutputStream(file);
+        properties.store(output, String.format(PropertiesReader.value(DATA, "dataheader"), getClass().getSimpleName()));
+        output.close();
+    }
+
     private Tab newTab(String panel) {
         Tab tab = tabManager.newTab(panel);
         tab.setContent(manager.getPanelDisplay(panel));
-        tab.setOnCloseRequest(event -> {
-            if(tab.getTabPane().getTabs().size() == 1){
-                event.consume();
-            }
-        });
         return tab;
     }
 
@@ -157,5 +160,42 @@ public abstract class AbstractWorkspace implements Workspace{
             properties.setProperty(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), Boolean.toString(defaultVisibility));
         }
         saveToFile(location, properties);
+    }
+
+    private void toggle(String panel){
+        visibilities.put(panel, !visibilities.get(panel));
+        if(!visibilities.get(panel)) tabManager.remove(panel);
+        else {
+            loadPanel(panel);
+        }
+    }
+
+    private boolean loadPanel(String panel) {
+        Position position = panelPositions.get(panel);
+        if(position != null){
+            if(visibilities.get(panel)) putPanel(panel);
+        } else return false;
+        return true;
+    }
+
+    private void putPanel(String panel){
+        panelPositions.get(panel).addTab(newTab(panel));
+    }
+
+    private void movePanel(String panel, TabPane newPane){
+        Position to = positions.getPosition(newPane);
+        panelPositions.put(panel, to);
+    }
+
+    private void subscribeToChannels() {
+        PubSub.getInstance().subscribe("PANEL_TOGGLE", panelToggle);
+        PubSub.getInstance().subscribeSync("LOAD_TAB", loadTab);
+        PubSub.getInstance().subscribe("PUT_TAB", putTab);
+    }
+
+    private void disconnect() {
+        PubSub.getInstance().unsubscribe("PANEL_TOGGLE", panelToggle);
+        PubSub.getInstance().unsubscribeSync("LOAD_TAB");
+        PubSub.getInstance().unsubscribe("PUT_TAB", putTab);
     }
 }

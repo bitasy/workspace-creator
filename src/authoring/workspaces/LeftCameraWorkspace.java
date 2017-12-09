@@ -77,12 +77,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         super.loadFile();
         middleDivision = getDoubleValue("middledivision");
         bodyDivision = getDoubleValue("bodydivision");
-    }
-
-    @Override
-    protected void populateScreen(){
         initialize();
-        super.populateScreen();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
     }

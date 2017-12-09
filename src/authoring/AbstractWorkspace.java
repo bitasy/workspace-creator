@@ -4,7 +4,11 @@ import authoring.Positions.Position;
 import authoring.panels.PanelManager;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import util.PropertiesReader;
+import util.pubsub.PubSub;
+import util.pubsub.messages.MoveTabMessage;
+import util.pubsub.messages.StringMessage;
 
 import java.io.*;
 import java.util.HashMap;
@@ -44,36 +48,9 @@ public abstract class AbstractWorkspace implements Workspace{
         defaultPosition = positions.getPosition(defaultPosition());
         tabManager = new TabManager(positions);
         loadFile();
-        populateScreen();
         setupWorkspace(width, height);
+        subscribeToChannels();
     }
-
-    @Override
-    public void save() throws IOException {
-        for(String position : positions.allPositions()){
-            for(Tab tab: positions.getPosition(position).getPane().getTabs()){
-                String panel = ((Label)tab.getGraphic()).getText();
-                properties.setProperty(panel, position);
-                properties.setProperty(
-                        String.format(PropertiesReader.value(DATA, "visibilitytag"), panel),
-                        Boolean.toString(visibilities.get(panel)));
-            }
-        }
-
-        saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
-    }//TODO CURRENTLY: save divider positions in subclasses, update visibility on xing out, implement view reloading panels
-
-    /**
-     * Provides the list of positions to the AbstractWorkspace for management.
-     * @return the workspace's positions
-     */
-    protected abstract Positions positionList();
-
-    /**
-     * Returns the name of the default position for panels on the screen, if not specified
-     * @return the default position
-     */
-    protected abstract String defaultPosition();
 
     /**
      * Loads the workspace settings from a file, creating it if it does not exist.
@@ -88,14 +65,15 @@ public abstract class AbstractWorkspace implements Workspace{
                 Position position = positions.getPosition(properties.getProperty(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
-                    visibilities.put(panel, Boolean.parseBoolean(
-                            properties.getProperty(
-                                    String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
+                    visibilities.put(panel,
+                            Boolean.parseBoolean(
+                                    String.format(PropertiesReader.value(DATA, "visibilitytag"), panel)));
                 } else {
                     properties.setProperty(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
                     visibilities.put(panel, defaultVisibility);
                 }
+                loadPanel(panel);
             }
         } else {
             createFile(file);
@@ -103,14 +81,28 @@ public abstract class AbstractWorkspace implements Workspace{
         }
     }
 
+    @Override
+    public void save() throws IOException {
+        panelPositions.forEach((name, pos) -> properties.setProperty(name, pos.toString()));
+        visibilities.forEach((name, bool) -> properties.setProperty(
+                String.format(PropertiesReader.value(DATA, "visibilitytag"), name),
+                Boolean.toString(bool))
+        );
+
+        saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
+    }//TODO CURRENTLY: update visibility on xing out, implement view reloading panels, load panels in same positions as before in each pane, save panel position on popout, reload it there
+
     /**
-     * Adds panels to the correct positions in the workspace.
+     * Provides the list of positions to the AbstractWorkspace for management.
+     * @return the workspace's positions
      */
-    protected void populateScreen(){
-        for(String panel : panelPositions.keySet()){
-            panelPositions.get(panel).addTab(newTab(panel));
-        }
-    }
+    protected abstract Positions positionList();
+
+    /**
+     * Returns the name of the default position for panels on the screen, if not specified
+     * @return the default position
+     */
+    protected abstract String defaultPosition();
 
     /**
      * Prepares the workspace for display, given the width and height.
@@ -152,5 +144,40 @@ public abstract class AbstractWorkspace implements Workspace{
             properties.setProperty(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), Boolean.toString(defaultVisibility));
         }
         saveToFile(location, properties);
+    }
+
+    private void toggle(String panel){
+        visibilities.put(panel, !visibilities.get(panel));
+        if(!visibilities.get(panel)) tabManager.remove(panel);
+        else {
+            loadPanel(panel);
+        }
+    }
+
+    private boolean loadPanel(String panel) {
+        Position position = positions.getPosition(properties.getProperty(panel));
+        if(position != null){
+            panelPositions.put(panel, position);
+            if(visibilities.get(panel)) putPanel(panel);
+        } else return false;
+        return true;
+    }
+
+    private void putPanel(String panel){
+        panelPositions.get(panel).addTab(newTab(panel));
+    }
+
+    private void movePanel(String panel, TabPane newPane){
+        Position to = positions.getPosition(newPane);
+        panelPositions.put(panel, to);
+    }
+
+    private void subscribeToChannels() {
+        PubSub.getInstance().subscribe("PANEL_TOGGLE",
+                message -> toggle(((StringMessage)message).readMessage()));
+        PubSub.getInstance().subscribeSync("LOAD_TAB",
+                message -> loadPanel(((StringMessage)message).readMessage()));
+        PubSub.getInstance().subscribe("PUT_TAB",
+                message -> movePanel(((MoveTabMessage)message).tab(), ((MoveTabMessage)message).pane()));
     }
 }

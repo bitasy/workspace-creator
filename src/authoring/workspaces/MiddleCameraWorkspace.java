@@ -100,12 +100,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         leftDivision = getDoubleValue("leftdivision");
         rightDivision = getDoubleValue("rightdivision");
         bodyDivision = getDoubleValue("bodydivision");
-    }
-
-    @Override
-    protected void populateScreen(){
         initialize();
-        super.populateScreen();
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
     }

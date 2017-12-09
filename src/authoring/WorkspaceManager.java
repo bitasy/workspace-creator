@@ -7,7 +7,7 @@ import javafx.scene.layout.Region;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
-import util.pubsub.messages.WorkspaceChange;
+import util.pubsub.messages.StringMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class WorkspaceManager {
 
         PubSub.getInstance().subscribe(
                 "WORKSPACE_CHANGE",
-                message -> switchWorkspace(((WorkspaceChange)message).readMessage()
+                message -> switchWorkspace(((StringMessage)message).readMessage()
         ));
     }
 

@@ -9,9 +9,8 @@ import javafx.scene.layout.Region;
 import util.Loader;
 import util.MenuReader;
 import util.pubsub.PubSub;
-import util.pubsub.messages.ThemeMessage;
+import util.pubsub.messages.StringMessage;
 import util.PropertiesReader;
-import util.pubsub.messages.WorkspaceChange;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -121,15 +120,15 @@ public class MenuBarPanel implements Panel {
     }
 
     public void handleTheme(MenuItem item) {
-        PubSub.getInstance().publish("THEME_MESSAGE", new ThemeMessage(item.getText()+".css"));
+        PubSub.getInstance().publish("THEME_MESSAGE", new StringMessage(item.getText()+".css"));
     }
 
 
     private void handlePanel(MenuItem item) {
-        PubSub.getInstance().publish("PANEL_TOGGLE", new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("PANEL_TOGGLE", new StringMessage(item.getText()));
     }
 
     private void handleWorkspace(MenuItem item) {
-        PubSub.getInstance().publish("WORKSPACE_CHANGE", new WorkspaceChange(item.getText()));
+        PubSub.getInstance().publish("WORKSPACE_CHANGE", new StringMessage(item.getText()));
     }
 }

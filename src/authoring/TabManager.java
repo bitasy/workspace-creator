@@ -1,6 +1,11 @@
 package authoring;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
@@ -9,14 +14,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import util.pubsub.PubSub;
-import util.pubsub.messages.ThemeMessage;
+import util.pubsub.messages.StringMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * TabManager handles the tabs and their location in the various TabPanes on the screen for a workspace. It uses and conforms with the requirements of the inner DraggableTab class, and allows for workspace customization.
+ * TabManager handles the tabs and their location in the various TabPanes on the screen for a workspace. It uses and conforms with the requirements of the inner VoogaTab class, and allows for workspace customization.
  * @author Brian Nieves
  */
 public class TabManager {
@@ -41,8 +46,25 @@ public class TabManager {
         Scene myScene = new Scene(markerStack);
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
-                (message) -> myScene.getStylesheets().add(((ThemeMessage) message).readMessage()));
+                (message) -> myScene.getStylesheets().add(((StringMessage) message).readMessage()));
         markerStage.setScene(myScene);
+
+    }
+
+    /**
+     * Removes the specified panel from its tabPane, if it exists.
+     * @param panel the name of the panel to be removed
+     */
+    public void remove(String panel){
+        for(TabPane tabs : tabPanes){
+            for(Tab tab : tabs.getTabs()){
+                String tabpanel = ((VoogaTab)tab).getPanelName();
+                if(tabpanel.equals(panel)){
+                    tabs.getTabs().remove(tab);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -51,10 +73,8 @@ public class TabManager {
      * @return the new tab
      */
     public Tab newTab(String title){
-        return new DraggableTab(title, markerStage, tabPanes);
-    }
-
-    public void setOnWindowClose(){
-
+        VoogaTab tab = new VoogaTab(title, markerStage, tabPanes);
+        tab.setOnCloseRequest(e -> System.out.println(e.getTarget()));
+        return new VoogaTab(title, markerStage, tabPanes);
     }
 }

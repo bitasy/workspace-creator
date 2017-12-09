@@ -18,3 +18,13 @@
     -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
     -fx-background-color: #bdbdbd; -fx-focus-color: #ffffff; -fx-faint-focus-color: #f0f0f0;
 }
+
+.tabPane {
+    -fx-border-radius: 20 20 0 0;
+    -fx-background-radius: 20 20 0 0;
+    /* top-left, top-right, bottom-right, bottom-left corners */
+}
+
+.textField {
+    -fx-control-inner-background: #bdbdbd;
+}

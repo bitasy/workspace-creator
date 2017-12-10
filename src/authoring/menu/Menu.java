@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -159,11 +160,20 @@ public class Menu {
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
         Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
         Button newGame = new Button("New Game");
-        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton, newGame));
-        myRoot.getChildren().addAll(buttons);
-        buttons.get(0).setOnAction((e) -> onAuthoringPressed());
-        buttons.get(1).setOnAction((e) -> onPlayingPressed());
-        buttons.get(2).setOnAction((e) -> onCreateNewGame());
+        buttons = new ArrayList<>();
+        buttons.add(authoringButton);
+        buttons.add(playerButton);
+        buttons.add(newGame);
+        GridPane grid = new GridPane();
+        grid.setLayoutX(WIDTH * 0.05);
+        grid.setLayoutY(HEIGHT * 0.8);
+        grid.add(newGame, 0,0);
+        grid.add(authoringButton,1,0);
+        grid.add(playerButton,2,0);
+        myRoot.getChildren().addAll(grid);
+        authoringButton.setOnAction((e) -> onAuthoringPressed());
+        playerButton.setOnAction((e) -> onPlayingPressed());
+        newGame.setOnAction((e) -> onCreateNewGame());
     }
 
     private void onCreateNewGame(){

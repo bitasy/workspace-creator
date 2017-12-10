@@ -1,5 +1,7 @@
 package main;
 
+import authoring.Screen;
+import authoring.menu.Menu;
 import database.User;
 import authoring.menu.Login;
 import database.firebase.FirebaseConnector;
@@ -9,6 +11,7 @@ import javafx.stage.Stage;
 /**
  * Launches the program.
  * @author Brian Nieves
+ * @author Kelly Zhang
  */
 public class VoogaPeaches extends Application {
 
@@ -17,7 +20,7 @@ public class VoogaPeaches extends Application {
     @Override
 	public void start(Stage stage) {
         Login myLogin = new Login(stage);
-        myLogin.getStage().show();
+        stage.show();
     }
 
     @Override

@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import main.VoogaPeaches;
 import util.pubsub.PubSub;
 import util.pubsub.messages.MoveTabMessage;
 import util.pubsub.messages.StringMessage;
@@ -33,6 +34,7 @@ import java.util.List;
  * <p>
  * @author Michael Berry
  * @author Brian Nieves
+ * @author Kelly Zhang
  * @see <a href = "http://berry120.blogspot.co.uk/2014/01/draggable-and-detachable-tabs-in-javafx.html">Draggable and detachable tabs in JavaFX 2</a>
  */
 public class VoogaTab extends Tab{
@@ -42,6 +44,7 @@ public class VoogaTab extends Tab{
     private Stage dragStage;
     private boolean detachable;
     private Stage markerStage;
+    private String currentTheme;
     private final List<TabPane> tabPanes;
 
     /**
@@ -123,6 +126,7 @@ public class VoogaTab extends Tab{
                 }
             });
             Scene newScene = new Scene(pane);
+            newScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
             PubSub.getInstance().subscribe(
                     "THEME_MESSAGE",
                     (message) -> {
@@ -132,8 +136,7 @@ public class VoogaTab extends Tab{
                         newScene.getStylesheets().add(((StringMessage) message).readMessage());//TODO: figure out how to get this from throwing a warning
                     }
             );
-            //newScene.getStylesheets().add(myTheme);
-            newScene.getStylesheets().add("panel");
+            pane.getStyleClass().add("panel");
             newStage.setScene(newScene);
             //newStage.initStyle(StageStyle.UTILITY);
             newStage.setX(t.getScreenX());

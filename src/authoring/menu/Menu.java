@@ -37,6 +37,25 @@ public class Menu {
     private static final String NEW_GAME_IMAGE = "resources/menuImages/new_game_button.png";
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value("menulayout", "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value("menulayout", "height"));
+    private static final String TITLE = "main.VoogaPeaches: Menu";
+    private static final double SELECTION_HEIGHT_RATIO = 0.28;
+    private static final int SELECTION_LIST_WIDTH = 200;
+    private static final int SELECTION_LIST_HEIGHT = 150;
+    private static final String THEME_MESSAGE = "THEME_MESSAGE";
+    private static final String PANEL = "panel";
+    private static final String AUTHORING_TITLE = "main.VoogaPeaches: A Programmers for Peaches Production";
+    private static final int HGAP = 50;
+    private static final double GRID_WIDTH_RATIO = 0.28;
+    private static final double GRID_HEIGHT_RATIO = 0.7;
+    private static final int SELECTION_LIST_XOFFSET = 100;
+    private static final double SELECTION_WIDTH_RATIO = 0.5;
+    private static final String TITLE_IMAGE_PATH = "resources/menuImages/VoogaTransparent.png";
+    private static final double TITLE_SCALEX = 0.75;
+    private static final double TITLE_SCALEY = 0.75;
+    private static final double TITLE_WIDTH_RATIO = 0.5;
+    private static final double TITLE_HEIGHT_RATIO = 0.2;
+    private static final int TITLE_WIDTH_CENTER = 2;
+    private static final int TITLE_HEIGHT_CENTER = 2;
 
     private Pane myRoot;
     private Screen authoring;
@@ -57,7 +76,7 @@ public class Menu {
         Scene s = new Scene(myRoot, WIDTH, HEIGHT);
         stage.setScene(s);
         stage.setResizable(false);
-        stage.setTitle("main.VoogaPeaches: Menu");
+        stage.setTitle(TITLE);
         stage.show();
     }
 
@@ -65,9 +84,9 @@ public class Menu {
      * Adds the game selector in the middle of the screen.
      */
     private void setupGames() {
-        list = new GameSelectionList(200, 150);
-        list.setLayoutX(WIDTH/2-100);
-        list.setLayoutY(HEIGHT * 0.28);
+        list = new GameSelectionList(SELECTION_LIST_WIDTH, SELECTION_LIST_HEIGHT);
+        list.setLayoutX(WIDTH * SELECTION_WIDTH_RATIO - SELECTION_LIST_XOFFSET);
+        list.setLayoutY(HEIGHT * SELECTION_HEIGHT_RATIO);
         myRoot.getChildren().add(list);
     }
 
@@ -77,9 +96,9 @@ public class Menu {
     private void updateTheme() {
         String initialTheme = VoogaPeaches.getUser().getThemeName();
         myRoot.getStylesheets().add(initialTheme);
-        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(initialTheme));
+        PubSub.getInstance().publish(THEME_MESSAGE,new StringMessage(initialTheme));
         PubSub.getInstance().subscribe(
-                "THEME_MESSAGE",
+                THEME_MESSAGE,
                 (message) -> {
                     if (myRoot.getStylesheets().size() >= 1) {
                         myRoot.getStylesheets().remove(0);
@@ -87,7 +106,7 @@ public class Menu {
                     myRoot.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
-        myRoot.getStyleClass().add("panel");
+        myRoot.getStyleClass().add(PANEL);
     }
 
     /**
@@ -97,7 +116,7 @@ public class Menu {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
             GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
-            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+            authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
@@ -112,7 +131,7 @@ public class Menu {
     private void playPressed(){ }
 
     private void newGamePressed(){
-        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+        authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
         authoring = new Screen(authoringStage);
@@ -134,9 +153,9 @@ public class Menu {
         grid.add(newGame, 0,0);
         grid.add(authoringButton,1,0);
         grid.add(playButton,2,0);
-        grid.setHgap(50);
-        grid.setLayoutX(WIDTH * 0.28);
-        grid.setLayoutY(HEIGHT * 0.7);
+        grid.setHgap(HGAP);
+        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO);
+        grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
         myRoot.getChildren().addAll(grid);
     }
 
@@ -144,11 +163,11 @@ public class Menu {
      * Adds the Vooga Peaches text to the menu
      */
     private void addTitle() {
-        ImageView title = new ImageView(new File("resources/menuImages/VoogaTransparent.png").toURI().toString());
-        title.setScaleX(0.75);
-        title.setScaleY(0.75);
-        title.setLayoutX(WIDTH / 2 - title.getBoundsInLocal().getWidth() / 2);
-        title.setLayoutY(HEIGHT * 0.2 - title.getBoundsInLocal().getHeight() / 2);
+        ImageView title = new ImageView(new File(TITLE_IMAGE_PATH).toURI().toString());
+        title.setScaleX(TITLE_SCALEX);
+        title.setScaleY(TITLE_SCALEY)
+        title.setLayoutX(WIDTH * TITLE_WIDTH_RATIO - title.getBoundsInLocal().getWidth() / TITLE_WIDTH_CENTER);
+        title.setLayoutY(HEIGHT * TITLE_HEIGHT_RATIO - title.getBoundsInLocal().getHeight() / TITLE_HEIGHT_CENTER);
         myRoot.getChildren().add(title);
     }
 }

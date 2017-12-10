@@ -59,8 +59,6 @@ public class PanelController {
     }
 
     public void save(String name) {
-        System.out.println("Printing name");
-        System.out.println(name);
         myEngine.save(name);
     }
 

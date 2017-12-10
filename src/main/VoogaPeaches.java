@@ -11,16 +11,16 @@ import javafx.stage.Stage;
 /**
  * Launches the program.
  * @author Brian Nieves
+ * @author Kelly Zhang
  */
 public class VoogaPeaches extends Application {
 
     static public User currentUser;
-    static public Menu menuScreen;
 
     @Override
 	public void start(Stage stage) {
         Login myLogin = new Login(stage);
-        myLogin.getStage().show();
+        stage.show();
     }
 
     @Override
@@ -32,10 +32,6 @@ public class VoogaPeaches extends Application {
     public static void changeUser(User newUser) {currentUser = newUser;}
 
     public static User getUser() {return currentUser; }
-
-    public static Menu getMenu() { return menuScreen; }
-
-    public static void createMenu(Menu myMenu) {menuScreen = myMenu;}
 
     public static void main(String[] args){
         launch();

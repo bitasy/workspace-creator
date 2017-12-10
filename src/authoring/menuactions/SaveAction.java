@@ -1,6 +1,7 @@
 package authoring.menuactions;
 
 import authoring.MenuAction;
+import authoring.menu.GameSaver;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -27,6 +28,7 @@ public class SaveAction implements MenuAction{
 
     @Override
     public void execute(){
-        panelController.save("needs ot be changed");
+        GameSaver save = new GameSaver();
+        panelController.save(save.getName());
     }
 }

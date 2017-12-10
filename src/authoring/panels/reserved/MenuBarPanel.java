@@ -36,18 +36,19 @@ public class MenuBarPanel implements Panel {
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
         bar = new MenuBar();
-        bar.getStyleClass().add("menu-bar");
         this.workspaces = workspaces;
         this.panels = panels;
         this.themes = createThemeList();
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
+
+        bar.getStyleClass().add("menu-bar");
     }
 
     /**
-     *
-     * @return
+     * Programatically searches for the css files within the resources to find those that contain the stylings for the themes
+     * @return Set<String> that are the default themes provided
      * @throws FileNotFoundException
      */
     private Set<String> createThemeList() throws FileNotFoundException {
@@ -93,6 +94,10 @@ public class MenuBarPanel implements Panel {
         return panelTabs.toArray(new MenuItem[panelTabs.size()]);
     }
 
+    /**
+     * Uses the set of themes to create the submenu of the menubar where the user can pick their theme
+     * @return MenuItem[] the list of themes converted into menuitems
+     */
     private MenuItem[] getThemeList() {
         List<MenuItem> themeOptions = new ArrayList<>();
         for(String theme : themes){
@@ -123,14 +128,26 @@ public class MenuBarPanel implements Panel {
         if(strategy.equals("Save")) newItem.setOnAction(e -> new SaveAction(controller).execute());
     }
 
+    /**
+     * Uses the menuitem selected to create the string associated with the css file with the stylings and publishes that to pubsub
+     * @param item the menuitem that is selected
+     */
     public void handleTheme(MenuItem item) {
         PubSub.getInstance().publish("THEME_MESSAGE", new StringMessage(item.getText()+".css"));
     }
 
+    /**
+     * Uses the menuitem selected to communicate with pubsub about the panel activity
+     * @param item the menuitem that is selected
+     */
     private void handlePanel(MenuItem item) {
         PubSub.getInstance().publish("PANEL_TOGGLE", new StringMessage(item.getText()));
     }
 
+    /**
+     * Uses the menuitem selected to communicate with pubsub about the workspace active
+     * @param item the menuitem that is selected
+     */
     private void handleWorkspace(MenuItem item) {
         PubSub.getInstance().publish("WORKSPACE_CHANGE", new StringMessage(item.getText()));
     }

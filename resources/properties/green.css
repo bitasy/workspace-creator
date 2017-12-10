@@ -66,8 +66,6 @@
 .menu-bar {
     -fx-border-color: transparent;
     -fx-base: -my-dark-green; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
-    -fx-text-fill: black;
 }
-.menu:hover {
-
-}
+//IDK HOW TO MAKE THIS ONE NOT BE WHITE... maybe something with this?
+//https://stackoverflow.com/questions/21912946/how-can-i-style-a-javafx-menu-and-its-items-in-css

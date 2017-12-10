@@ -42,8 +42,6 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-
-        bar.getStyleClass().add("menu-bar");
     }
 
     /**

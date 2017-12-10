@@ -9,9 +9,10 @@ public class MenuButton extends CustomButton {
 
     private static final double BUTTON_SIZE = 100.0;
     private static final double IMAGE_SIZE = BUTTON_SIZE * 0.8;
+    private static final String EMPTY_TITLE = "";
 
     public MenuButton(IButtonStrategy strategy, String image) {
-        super(strategy,"");
+        super(strategy, EMPTY_TITLE);
         ImageView pic = getImageView(image);
         this.getButton().setGraphic(pic);
         applyStyling();
@@ -29,6 +30,4 @@ public class MenuButton extends CustomButton {
         view.setFitHeight(IMAGE_SIZE);
         return view;
     }
-
-
 }

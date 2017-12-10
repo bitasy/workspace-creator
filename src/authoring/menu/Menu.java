@@ -31,14 +31,15 @@ import java.io.File;
  */
 public class Menu {
 
-    public static final String MENU_LAYOUT = "menulayout";
+    private static final String MENU_LAYOUT = "menulayout";
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "height"));
-    public static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production";
+    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production";
     private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
     private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
     private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newgamepic");
     private static final String TITLE = PropertiesReader.value(MENU_LAYOUT,"title");
+    private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
     private static final double SELECTION_HEIGHT_RATIO = 0.28;
     private static final int SELECTION_LIST_WIDTH = 200;
     private static final int SELECTION_LIST_HEIGHT = 150;
@@ -49,14 +50,13 @@ public class Menu {
     private static final double GRID_HEIGHT_RATIO = 0.7;
     private static final int SELECTION_LIST_XOFFSET = 100;
     private static final double SELECTION_WIDTH_RATIO = 0.5;
-    private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
     private static final double TITLE_SCALEX = 0.75;
     private static final double TITLE_SCALEY = 0.75;
     private static final double TITLE_WIDTH_RATIO = 0.5;
     private static final double TITLE_HEIGHT_RATIO = 0.2;
     private static final int TITLE_WIDTH_CENTER = 2;
     private static final int TITLE_HEIGHT_CENTER = 2;
-    public static final String AUTHORING_TOOLTIP = "authoring";
+    private static final String AUTHORING_TOOLTIP = "authoring";
     private static final String PLAYING_TOOLTIP = "playing";
     private static final String NEWGAME_TOOLTIP = "newgame";
 

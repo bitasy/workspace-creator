@@ -39,6 +39,11 @@ import java.util.List;
  */
 public class VoogaTab extends Tab{
 
+    private static final String BACKGROUND_COLOR = "-fx-background-color:#DDDDDD;";
+    private static final String THEME_MESSAGE = "THEME_MESSAGE";
+    private static final String PANEL = "panel";
+    private static final String PUT_TAB = "PUT_TAB";
+    private static final String TAB_PANE = "tabPane";
     private Label nameLabel;
     private Text dragText;
     private Stage dragStage;
@@ -64,7 +69,7 @@ public class VoogaTab extends Tab{
         dragStage.setAlwaysOnTop(true);
         dragStage.initStyle(StageStyle.UNDECORATED);
         StackPane dragStagePane = new StackPane();
-        dragStagePane.setStyle("-fx-background-color:#DDDDDD;");
+        dragStagePane.setStyle(BACKGROUND_COLOR);
         dragText = new Text(text);
         StackPane.setAlignment(dragText, Pos.CENTER);
         dragStagePane.getChildren().add(dragText);
@@ -128,7 +133,7 @@ public class VoogaTab extends Tab{
             Scene newScene = new Scene(pane);
             newScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
             PubSub.getInstance().subscribe(
-                    "THEME_MESSAGE",
+                    THEME_MESSAGE,
                     (message) -> {
                         if (newScene.getStylesheets().size() >= 1) {
                             newScene.getStylesheets().remove(0);
@@ -136,7 +141,7 @@ public class VoogaTab extends Tab{
                         newScene.getStylesheets().add(((StringMessage) message).readMessage());//TODO: figure out how to get this from throwing a warning
                     }
             );
-            pane.getStyleClass().add("panel");
+            pane.getStyleClass().add(PANEL);
             newStage.setScene(newScene);
             //newStage.initStyle(StageStyle.UTILITY);
             newStage.setX(t.getScreenX());
@@ -188,7 +193,7 @@ public class VoogaTab extends Tab{
         if(addIndex > insertData.getInsertPane().getTabs().size()) {
             addIndex = insertData.getInsertPane().getTabs().size();
         }
-        PubSub.getInstance().publish("PUT_TAB", new MoveTabMessage(nameLabel.getText(), insertData.getInsertPane()));
+        PubSub.getInstance().publish(PUT_TAB, new MoveTabMessage(nameLabel.getText(), insertData.getInsertPane()));
 
         PauseTransition p = new PauseTransition(Duration.millis(150 + 20));
         final int index = addIndex;
@@ -224,7 +229,7 @@ public class VoogaTab extends Tab{
     private InsertData getInsertData(Point2D screenPoint) {
         for(TabPane tabPane : tabPanes) {
             Rectangle2D tabAbsolute = getAbsoluteRect(tabPane);
-            tabPane.getStyleClass().add("tabPane");
+            tabPane.getStyleClass().add(TAB_PANE);
             if(tabAbsolute.contains(screenPoint)) {
                 int tabInsertIndex = 0;
                 if(!tabPane.getTabs().isEmpty()) {
@@ -281,7 +286,4 @@ public class VoogaTab extends Tab{
         double upperBound = r2.getMaxX() - r2.getWidth() / 2;
         return xPoint >= lowerBound && xPoint <= upperBound;
     }
-
-
 }
-

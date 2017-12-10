@@ -68,4 +68,7 @@
     -fx-base: -dark-blue; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
     -fx-text-fill: black;
 }
+.menu .label {
+    -fx-text-fill: black;
+}
 //https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items

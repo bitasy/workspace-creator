@@ -68,3 +68,6 @@
     -fx-base: -my-dark-green; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
     -fx-text-fill: black;
 }
+.menu:hover {
+
+}

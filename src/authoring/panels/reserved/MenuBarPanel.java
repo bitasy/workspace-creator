@@ -24,7 +24,6 @@ import java.util.*;
  */
 public class MenuBarPanel implements Panel {
 
-    //TODO: Do you care about the lines within the menubar sections?
     private MenuBar bar;
     private PanelController controller;
     private Set<String> workspaces;

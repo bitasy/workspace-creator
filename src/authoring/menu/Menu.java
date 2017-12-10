@@ -1,10 +1,23 @@
 package authoring.menu;
 
+import authoring.PanelController;
 import authoring.Screen;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.tasks.Tasks;
+import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.firebase.FileStorageConnector;
+import engine.entities.Entity;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -12,6 +25,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -19,9 +33,7 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -52,11 +64,12 @@ public class Menu {
     private Screen authoring;
     private Stage authoringStage = new Stage();
     private ListView<String> list;
+    private Map<String, String> gameUIDS;
 
     public Menu(Stage stage) {
+        gameUIDS = new HashMap<>();
         myStage = stage;
         myRoot = new Pane();
-
         myScene = new Scene(myRoot, WIDTH, HEIGHT);
         addButtons();
         addTitle();
@@ -78,12 +91,21 @@ public class Menu {
         double width = 200;
         double height = 150;
         double botMargin = 50;
-        list = new ListView<String>();
-//        TODO: Get the actual list of games
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App", "Single", "Double",
-                "Suite", "Family App", "Single", "Double", "Suite", "Family App");
-        list.setItems(items);
+        list = new ListView<>();
+        FirebaseDatabase.getInstance().getReference("gameNames").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataSnapshot.getChildren().forEach(key -> {
+                    list.getItems().add(key.getKey());
+                    gameUIDS.put(key.getKey(), (String) key.getValue());
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError.getMessage());
+            }
+        });
         list.setLayoutX(WIDTH/2-width/2);
         list.setLayoutY(HEIGHT-height-botMargin);
         list.setPrefSize(width, height);
@@ -109,33 +131,24 @@ public class Menu {
         myRoot.getStyleClass().add("panel");
     }
 
+
     /**
      * Handles switching to the Authoring screen with the pencil image is clicked
      */
     private void onAuthoringPressed() {
-        if (!authoringStage.isShowing()) {
+        if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
+            String UID = gameUIDS.get(list.getSelectionModel().getSelectedItem());
+            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
-//                System.out.println("saving new authoring display defaults =====");
-//                System.out.println(VoogaPeaches.getUser().getUserName());
-//                System.out.println(VoogaPeaches.getUser().getThemeName());
-//                System.out.println(VoogaPeaches.getUser().getWorkspaceName());
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-                try {
-                    connector.addToDatabase(VoogaPeaches.getUser());
-                } catch (ObjectIdNotFoundException e) {
-                    //TODO: is this possible? If so what do?
-                }
+                try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
             });
         }
-        else {
-            //do nothing, only can have one authoring environment open at once
-        }
-        //myStage.close();
     }
 
     /**
@@ -145,11 +158,25 @@ public class Menu {
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
         Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
-
-        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton));
+        Button newGame = new Button("New Game");
+        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton, newGame));
         myRoot.getChildren().addAll(buttons);
         buttons.get(0).setOnAction((e) -> onAuthoringPressed());
         buttons.get(1).setOnAction((e) -> onPlayingPressed());
+        buttons.get(2).setOnAction((e) -> onCreateNewGame());
+    }
+
+    private void onCreateNewGame(){
+        String UID = gameUIDS.get(list.getSelectionModel().getSelectedItem());
+        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+        authoringStage.setMaximized(true);
+        authoringStage.setResizable(false);
+        authoring = new Screen(authoringStage);
+        authoringStage.setOnCloseRequest(event -> {
+            authoring.save();
+            DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
+            try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
+        });
     }
 
     /**

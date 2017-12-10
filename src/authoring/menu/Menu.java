@@ -19,7 +19,6 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
 import java.io.File;
-import java.util.*;
 
 /**
  *
@@ -32,30 +31,34 @@ import java.util.*;
  */
 public class Menu {
 
-    private static final String AUTHORING_IMAGE = "resources/menuImages/authoring.png";
-    private static final String PLAYER_IMAGE = "resources/menuImages/player.png";
-    private static final String NEW_GAME_IMAGE = "resources/menuImages/new_game_button.png";
-    private static final double WIDTH = Double.parseDouble(PropertiesReader.value("menulayout", "width"));
-    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value("menulayout", "height"));
-    private static final String TITLE = "main.VoogaPeaches: Menu";
+    private static final String MENU_LAYOUT = "menulayout";
+    private static final double WIDTH = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "width"));
+    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "height"));
+    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production";
+    private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
+    private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
+    private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newgamepic");
+    private static final String TITLE = PropertiesReader.value(MENU_LAYOUT,"title");
+    private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
     private static final double SELECTION_HEIGHT_RATIO = 0.28;
     private static final int SELECTION_LIST_WIDTH = 200;
     private static final int SELECTION_LIST_HEIGHT = 150;
     private static final String THEME_MESSAGE = "THEME_MESSAGE";
     private static final String PANEL = "panel";
-    private static final String AUTHORING_TITLE = "main.VoogaPeaches: A Programmers for Peaches Production";
     private static final int HGAP = 50;
     private static final double GRID_WIDTH_RATIO = 0.28;
     private static final double GRID_HEIGHT_RATIO = 0.7;
     private static final int SELECTION_LIST_XOFFSET = 100;
     private static final double SELECTION_WIDTH_RATIO = 0.5;
-    private static final String TITLE_IMAGE_PATH = "resources/menuImages/VoogaTransparent.png";
     private static final double TITLE_SCALEX = 0.75;
     private static final double TITLE_SCALEY = 0.75;
     private static final double TITLE_WIDTH_RATIO = 0.5;
     private static final double TITLE_HEIGHT_RATIO = 0.2;
     private static final int TITLE_WIDTH_CENTER = 2;
     private static final int TITLE_HEIGHT_CENTER = 2;
+    private static final String AUTHORING_TOOLTIP = "authoring";
+    private static final String PLAYING_TOOLTIP = "playing";
+    private static final String NEWGAME_TOOLTIP = "newgame";
 
     private Pane myRoot;
     private Screen authoring;
@@ -146,9 +149,12 @@ public class Menu {
      * Creates the two buttons and connects them to opening the Authoring and Game Playing Environments
      */
     private void addButtons() {
-        Button authoringButton = new MenuButton( ( ) -> authoringPressed(), AUTHORING_IMAGE).getButton();
+        Button authoringButton = new MenuButton(() -> authoringPressed(), AUTHORING_IMAGE).getButton();
+        authoringButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, AUTHORING_TOOLTIP)));
         Button playButton = new MenuButton(() -> playPressed(), PLAYER_IMAGE).getButton();
+        playButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, PLAYING_TOOLTIP)));
         Button newGame = new MenuButton(() -> newGamePressed(), NEW_GAME_IMAGE ).getButton();
+        newGame.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, NEWGAME_TOOLTIP)));
         GridPane grid = new GridPane();
         grid.add(newGame, 0,0);
         grid.add(authoringButton,1,0);

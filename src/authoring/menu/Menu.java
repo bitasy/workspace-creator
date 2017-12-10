@@ -165,7 +165,7 @@ public class Menu {
     private void addTitle() {
         ImageView title = new ImageView(new File(TITLE_IMAGE_PATH).toURI().toString());
         title.setScaleX(TITLE_SCALEX);
-        title.setScaleY(TITLE_SCALEY)
+        title.setScaleY(TITLE_SCALEY);
         title.setLayoutX(WIDTH * TITLE_WIDTH_RATIO - title.getBoundsInLocal().getWidth() / TITLE_WIDTH_CENTER);
         title.setLayoutY(HEIGHT * TITLE_HEIGHT_RATIO - title.getBoundsInLocal().getHeight() / TITLE_HEIGHT_CENTER);
         myRoot.getChildren().add(title);

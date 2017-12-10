@@ -99,6 +99,11 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         body.setMinHeight(height);
     }
 
+    @Override
+    protected void saveState(){
+        setDividerProperties();
+    }
+
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
@@ -109,6 +114,10 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     private void setDividerFields() {
         middleDivision = middle.getDividerPositions()[0];
         bodyDivision = body.getDividerPositions()[0];
+        setDividerProperties();
+    }
+
+    private void setDividerProperties() {
         properties.setProperty("middledivision", middleDivision + "");
         properties.setProperty("bodydivision", bodyDivision + "");
     }

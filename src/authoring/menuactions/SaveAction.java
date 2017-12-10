@@ -1,14 +1,8 @@
 package authoring.menuactions;
 
 import authoring.MenuAction;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import authoring.menu.GameSavePrompt;
 
-import java.io.File;
-import java.util.Optional;
 import authoring.PanelController;
 
 /**
@@ -27,6 +21,6 @@ public class SaveAction implements MenuAction{
 
     @Override
     public void execute(){
-        panelController.save("needs ot be changed");
+        GameSavePrompt save = new GameSavePrompt(panelController);
     }
 }

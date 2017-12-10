@@ -14,12 +14,17 @@ import util.math.num.Vector;
  * @author Estelle He
  */
 public class PanelController {
+    private static final int GRID_SIZE = 50;
+    private static final int CAMERA_INIT_X = 400;
+    private static final int CAMERA_INIT_Y = 250;
+    private static final int CAMERA_INIT_X_SIZE = 800;
+    private static final int CAMERA_INIT_Y_SIZE = 500;
     private Engine myEngine;
 
 	private EntityManager myEntityManager;
 
 	public PanelController() {
-		myEngine = new Engine(new Entity(), 50); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(new Entity(), GRID_SIZE); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
@@ -28,7 +33,7 @@ public class PanelController {
      * @return camera view
      */
 	public ScrollPane getCamera(){
-	    return myEngine.getCameraView(new Vector(400, 250), new Vector(800, 500));
+	    return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
 	}
 
     /**
@@ -55,6 +60,13 @@ public class PanelController {
 
     public void save(String name) {
         myEngine.save(name);
+    }
+
+    public ScrollPane load(Entity root) {
+        myEngine.pause();
+        myEngine = null;
+        myEngine = new Engine(root, GRID_SIZE);
+        return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
     }
 
     /**

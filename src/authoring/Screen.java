@@ -164,7 +164,6 @@ public class Screen {
     }
 
     public void load(Entity root) {
-        System.out.println((new JSONObject(JSONHelper.jsonMapFromObject(root))).toString(4));
         controller.load(root);
     }
 

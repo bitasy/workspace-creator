@@ -75,6 +75,8 @@ public abstract class AbstractWorkspace implements Workspace{
                 Boolean.toString(bool))
         );
 
+        positions.clear();
+
         saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
     }
 

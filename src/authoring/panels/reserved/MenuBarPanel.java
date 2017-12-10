@@ -30,16 +30,16 @@ public class MenuBarPanel implements Panel {
     private static final String WORKSPACEDATA = "workspacedata";
     private static final String CSSPATH = "csspath";
     private static final String CSS = "css";
-    public static final String PANELS = "panels";
-    public static final String THEMES = "themes";
-    public static final String WORKSPACES = "workspaces";
-    public static final String MENU_ITEM = "menu-item";
-    public static final String MENU = "Menu";
-    public static final String SAVE = "Save";
-    public static final String THEME_MESSAGE = "THEME_MESSAGE";
-    public static final String CSS_EXTENSION = ".css";
-    public static final String PANEL_TOGGLE = "PANEL_TOGGLE";
-    public static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
+    private static final String PANELS = "panels";
+    private static final String THEMES = "themes";
+    private static final String WORKSPACES = "workspaces";
+    private static final String MENU_ITEM = "menu-item";
+    private static final String MENU = "Menu";
+    private static final String SAVE = "Save";
+    private static final String THEME_MESSAGE = "THEME_MESSAGE";
+    private static final String CSS_EXTENSION = ".css";
+    private static final String PANEL_TOGGLE = "PANEL_TOGGLE";
+    private static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
 
     //TODO: Do you care about the lines within the menubar sections?
     private MenuBar bar;

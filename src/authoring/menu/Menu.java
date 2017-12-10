@@ -158,10 +158,25 @@ public class Menu {
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
         Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
-        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton));
+        Button newGame = new Button("New Game");
+        buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton, newGame));
         myRoot.getChildren().addAll(buttons);
         buttons.get(0).setOnAction((e) -> onAuthoringPressed());
         buttons.get(1).setOnAction((e) -> onPlayingPressed());
+        buttons.get(2).setOnAction((e) -> onCreateNewGame());
+    }
+
+    private void onCreateNewGame(){
+        String UID = gameUIDS.get(list.getSelectionModel().getSelectedItem());
+        authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+        authoringStage.setMaximized(true);
+        authoringStage.setResizable(false);
+        authoring = new Screen(authoringStage);
+        authoringStage.setOnCloseRequest(event -> {
+            authoring.save();
+            DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
+            try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
+        });
     }
 
     /**

@@ -61,7 +61,6 @@ public class Menu {
         stage.show();
     }
 
-
     /**
      * Adds the game selector in the middle of the screen.
      */
@@ -91,7 +90,6 @@ public class Menu {
         myRoot.getStyleClass().add("panel");
     }
 
-
     /**
      * Handles switching to the Authoring screen with the pencil image is clicked
      */
@@ -111,9 +109,7 @@ public class Menu {
         }
     }
 
-    private void playPressed(){
-
-    }
+    private void playPressed(){ }
 
     private void newGamePressed(){
         authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");

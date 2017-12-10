@@ -19,5 +19,4 @@ public class InsertData {
     TabPane getInsertPane() {
         return insertPane;
     }
-
 }

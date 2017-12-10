@@ -3,6 +3,8 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
+import database.User;
+import database.firebase.DatabaseConnector;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.ErrorDisplay;
 import util.PropertiesReader;
+import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
@@ -142,9 +145,18 @@ public class Screen {
     public void save(){
         try {
             workspaceManager.saveWorkspaces();
+            DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
+            db.addToDatabase(VoogaPeaches.getUser());
+            // Have to force a sleep to wait for data to finish sending, but
+            // with actual project this shouldn't be a problem
+            Thread.sleep(1000);//TODO replace with PauseTransition if possible
         } catch (IOException e){
             errorMessage.addMessage(String.format(PropertiesReader.value("reflect","IOerror"), e.getMessage()));
             errorMessage.displayError();
+        } catch (ObjectIdNotFoundException e) {
+            System.out.println("problem with saving!");
+        } catch (InterruptedException e) {
+            System.out.println("problem with saving!");
         }
     }
 

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <menu>
-        <name>File</name>
+        <name class = "top">File</name>
         <item>
-            <name>Save</name>
+            <name class = "sub">Save</name>
             <type>button</type>
             <strategy>Save</strategy>
         </item>
     </menu>
     <menu>
-        <name>View</name>
+        <name class = "top">View</name>
         <item>
-            <name>Panel...</name>
+            <name class = "sub">Panel...</name>
             <type>loaded</type>
             <strategy>panels</strategy>
         </item>
         <item>
-            <name>Theme...</name>
+            <name class = "sub">Theme...</name>
             <type>loaded</type>
             <strategy>themes</strategy>
         </item>
         <item>
-            <name>Workspace...</name>
+            <name class = "sub">Workspace...</name>
             <type>loaded</type>
             <strategy>workspaces</strategy>
         </item>

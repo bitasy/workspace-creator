@@ -22,7 +22,14 @@ public interface Workspace {
     void addCameraPanel(Region cameraPanel);
 
     /**
-     * Saves the workspace settings to a file.
+     * Loads the workspace settings from a file and subscribes it to tab changes.
+     * @throws IOException if the workspace settings cannot be found or read
      */
-    void save() throws IOException;
+    void activate() throws IOException;
+
+    /**
+     * Saves the workspace settings to a file and freezes changes it to.
+     * @throws IOException if the workspace settings cannot be found or written to
+     */
+    void deactivate() throws IOException;
 }

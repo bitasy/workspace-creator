@@ -3,11 +3,13 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import util.ErrorDisplay;
 import main.VoogaPeaches;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
-import util.pubsub.messages.WorkspaceChange;
+import util.pubsub.messages.StringMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ public class WorkspaceManager {
     private Map<String, Workspace> workspaces = new HashMap<>();
     private PanelManager panelManager;
     private CameraPanel cameraPanel;
+    private Workspace currentWorkspace;
 
     /**
      * Creates a new workspace manager and initializes the workspaces.
@@ -42,8 +45,14 @@ public class WorkspaceManager {
 
         PubSub.getInstance().subscribe(
                 "WORKSPACE_CHANGE",
-                message -> switchWorkspace(((WorkspaceChange)message).readMessage()
-        ));
+                message -> {
+                    try {
+                        switchWorkspace(((StringMessage)message).readMessage()
+                );
+                    } catch (IOException e) {
+                        new ErrorDisplay("IO Error", "Couldn't switch workspace");//TODO: put this in a properties file
+                    }
+                });
     }
 
     /**
@@ -59,7 +68,7 @@ public class WorkspaceManager {
      */
     public void saveWorkspaces() throws IOException {
         for(Workspace workspace : workspaces.values()){
-            workspace.save();
+            workspace.deactivate();
         }
     }
 
@@ -84,10 +93,18 @@ public class WorkspaceManager {
      * Changes the workspace currently being viewed on the screen.
      * @param newWorkspace the name of the new workspace
      */
-    private void switchWorkspace(String newWorkspace){
+    private void switchWorkspace(String newWorkspace) throws IOException {
         Workspace workspace = workspaces.get(newWorkspace);
+        if(currentWorkspace != null){
+            if(workspace == currentWorkspace) return;
+            currentWorkspace.deactivate();
+        }
+        currentWorkspace = workspace;
+        workspace.activate();
         workspace.addCameraPanel(cameraPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
-        currentWorkspaceArea.getChildren().add(workspace.getWorkspace());
+        Region workRegion = workspace.getWorkspace();
+        workRegion.setMaxHeight(currentWorkspaceArea.getMaxHeight());
+        currentWorkspaceArea.getChildren().add(workRegion);
     }
 }

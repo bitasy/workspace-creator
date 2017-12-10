@@ -37,6 +37,7 @@ public class Menu {
     public static final String PROPERTIES_FILE = "menulayout";
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value(PROPERTIES_FILE, "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(PROPERTIES_FILE, "height"));
+    public static final String AUTHORINGTITLE = "VoogaPeaches: A Programmers for Peaches Production";
 
     private List<Button> buttons;
 
@@ -108,7 +109,7 @@ public class Menu {
      */
     private void onAuthoringPressed() {
         if (!authoringStage.isShowing()) {
-            authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
+            authoringStage.setTitle(AUTHORINGTITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);

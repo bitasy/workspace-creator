@@ -30,8 +30,10 @@ import util.exceptions.ObjectIdNotFoundException;
  */
 public class Login {
 
+    public static final String TITLE = "VoogaPeaches: Login to Your Account";
     private Stage myStage;
     private Scene myScene;
+
     private VBox myArea;
     private TextField userTextField;
 
@@ -45,11 +47,15 @@ public class Login {
 
         myStage.setScene(myScene);
         myStage.setResizable(false);
-        myStage.setTitle("Login to Your Account");
+        myStage.setTitle(TITLE);
 
         updateTheme();
     }
 
+    /**
+     * Creates the layout of the login screen, connecting the login button to log in existing users and the create profile to making a new user
+     * @return VBox with the labels and textfields for the login
+     */
     private VBox createVBoxLayout() {
         VBox vbox = new VBox();
         vbox.setSpacing(10);
@@ -72,6 +78,10 @@ public class Login {
         return vbox;
     }
 
+    /**
+     * When a new username is entered, the database will eb checked for the username (to see if it already exists) and then if not it will create the new account and then launch the menu with the default display theme for the new account
+     * Note: a new account is not associated with any game list
+     */
     private void createAccount(){
         if(!userTextField.getText().trim().isEmpty()){
             User newUser = new User(userTextField.getText().trim());
@@ -125,10 +135,4 @@ public class Login {
         myArea.getStylesheets().add("light.css"); //update from database
         myArea.getStyleClass().add("panel");
     }
-
-
-    public Stage getStage() {
-        return myStage;
-    }
-
 }

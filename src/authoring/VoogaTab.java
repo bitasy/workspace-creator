@@ -34,6 +34,7 @@ import java.util.List;
  * <p>
  * @author Michael Berry
  * @author Brian Nieves
+ * @author Kelly Zhang
  * @see <a href = "http://berry120.blogspot.co.uk/2014/01/draggable-and-detachable-tabs-in-javafx.html">Draggable and detachable tabs in JavaFX 2</a>
  */
 public class VoogaTab extends Tab{

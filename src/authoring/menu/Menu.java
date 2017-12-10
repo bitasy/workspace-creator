@@ -50,7 +50,6 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
-    private String currentTheme;
     private Stage authoringStage = new Stage();
     private ListView<String> list;
 
@@ -92,11 +91,12 @@ public class Menu {
     }
 
     /**
-     * Used to subscribe to PubSub and get new themes as they are published
+     * Used to set the initial theme, subscribe to PubSub and get new themes as they are published
      */
     private void updateTheme() {
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
-        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
+        String initialTheme = VoogaPeaches.getUser().getThemeName();
+        myRoot.getStylesheets().add(initialTheme);
+        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(initialTheme));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
@@ -120,10 +120,10 @@ public class Menu {
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
-                System.out.println("saving new authoring display defaults =====");
-                System.out.println(VoogaPeaches.getUser().getUserName());
-                System.out.println(VoogaPeaches.getUser().getThemeName());
-                System.out.println(VoogaPeaches.getUser().getWorkspaceName());
+//                System.out.println("saving new authoring display defaults =====");
+//                System.out.println(VoogaPeaches.getUser().getUserName());
+//                System.out.println(VoogaPeaches.getUser().getThemeName());
+//                System.out.println(VoogaPeaches.getUser().getWorkspaceName());
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try {
                     connector.addToDatabase(VoogaPeaches.getUser());
@@ -138,6 +138,9 @@ public class Menu {
         //myStage.close();
     }
 
+    /**
+     * Creates the two buttons and connects them to opening the Authoring and Game Playing Environments
+     */
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);

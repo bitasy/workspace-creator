@@ -68,6 +68,9 @@ public class Screen {
         errorMessage.displayError();
     }
 
+    /**
+     * sets the initial theme as the user's preference (or the default if a new user), also subscribes to pubsub to allow for updating across all screens for the user's theme
+     */
     private void updateTheme() {
         root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
         PubSub.getInstance().subscribe(
@@ -133,6 +136,9 @@ public class Screen {
         stage.setHeight(primaryScreenBounds.getHeight());
     }
 
+    /**
+     * saves the workspace information to their files
+     */
     public void save(){
         try {
             workspaceManager.saveWorkspaces();

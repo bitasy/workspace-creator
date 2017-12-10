@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 /**
  * Launches the program.
  * @author Brian Nieves
+ * @author Kelly Zhang
  */
 public class VoogaPeaches extends Application {
 
@@ -19,7 +20,7 @@ public class VoogaPeaches extends Application {
     @Override
 	public void start(Stage stage) {
         Login myLogin = new Login(stage);
-        myLogin.getStage().show();
+        stage.show();
     }
 
     @Override

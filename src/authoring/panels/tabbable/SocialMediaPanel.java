@@ -11,16 +11,24 @@ import javafx.scene.layout.VBox;
 
 public class SocialMediaPanel implements Panel {
 
+    private static final int HEIGHT = 1000;
+    private static final int WIDTH = 600;
+    private static final String SOCIALMEDIA_HTML = "SocialMedia.html";
+    private static final String PANEL = "panel";
+    private static final String FORWARD = "Forward >";
+    private static final String BACKWARD = "< Backward";
+    private static final String HOME = "Home";
+    private static final String SOCIAL_MEDIA = "Social Media";
     private VBox myArea;
     private ExtensionWebView myExtensionView;
 
     public SocialMediaPanel() {
         myArea = new VBox();
         myArea.fillWidthProperty().setValue(true);
-        myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
+        myExtensionView = new ExtensionWebView(SOCIALMEDIA_HTML, HEIGHT, WIDTH);
         myArea.getChildren().add(myExtensionView.getView());
         createHistoryButtons();
-        getRegion().getStyleClass().add("panel");
+        getRegion().getStyleClass().add(PANEL);
     }
 
     private void createHistoryButtons() {
@@ -36,12 +44,12 @@ public class SocialMediaPanel implements Panel {
         Button history = new Button() {
             @Override
             public void fire() {
-                myExtensionView.loadHTML("SocialMedia.html");
+                myExtensionView.loadHTML(SOCIALMEDIA_HTML);
             }
         };
-        forwards.setText("Forward >");
-        backwards.setText("< Backward");
-        history.setText("Home");
+        forwards.setText(FORWARD);
+        backwards.setText(BACKWARD);
+        history.setText(HOME);
         bar.getItems().add(backwards);
         bar.getItems().add(forwards);
         bar.getItems().add(history);
@@ -58,7 +66,7 @@ public class SocialMediaPanel implements Panel {
 
     @Override
     public String title(){
-        return "Social Media";
+        return SOCIAL_MEDIA;
     }
 
 }

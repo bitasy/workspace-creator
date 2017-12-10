@@ -3,6 +3,10 @@ package authoring.menu;
 import authoring.Screen;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.firebase.FileStorageConnector;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -12,6 +16,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -83,10 +88,17 @@ public class Menu {
         double height = 150;
         double botMargin = 50;
         list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App", "Single", "Double",
-                "Suite", "Family App", "Single", "Double", "Suite", "Family App");
-        list.setItems(items);
+        FileStorageConnector connector = new FileStorageConnector();
+        KeyFrame frame = new KeyFrame(Duration.millis(300), e -> {
+            list.setItems(FXCollections.observableArrayList(connector.fileNames()));
+        });
+        Timeline animation = new Timeline();
+        animation.setCycleCount(Animation.INDEFINITE);
+        animation.getKeyFrames().add(frame);
+        animation.play();
+
+        //ObservableList<String> items = FXCollections.observableArrayList (connector.fileNames());
+        //list.setItems(items);
         list.setLayoutX(WIDTH/2-width/2);
         list.setLayoutY(HEIGHT-height-botMargin);
         list.setPrefSize(width, height);

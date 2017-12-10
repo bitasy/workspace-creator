@@ -112,8 +112,10 @@ public class Menu {
             authoringStage.setTitle(AUTHORINGTITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
+            buttons.get(0).setDisable(true);
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
+                buttons.get(0).setDisable(false);
                 authoring.save();
 //                System.out.println("saving new authoring display defaults =====");
 //                System.out.println(VoogaPeaches.getUser().getUserName());
@@ -130,7 +132,6 @@ public class Menu {
         else {
             //do nothing, only can have one authoring environment open at once
         }
-        //myStage.close();
     }
 
     /**

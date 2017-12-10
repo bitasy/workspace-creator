@@ -17,6 +17,9 @@ import java.util.Set;
  * @author Brian Nieves
  */
 public class PanelManager {
+
+    private static final String REFLECT = "reflect";
+    private static final String TABPATH = "tabpath";
     private Map<String, Panel> panels;
     private ErrorDisplay errorMessage;
     private PanelController controller;
@@ -65,7 +68,7 @@ public class PanelManager {
      * @throws FileNotFoundException if the directory for tabbable panels does not exist.
      */
     private void loadPanels() throws FileNotFoundException {
-        Map<String, Object> panels = Loader.loadObjects(PropertiesReader.value("reflect", "tabpath"));
+        Map<String, Object> panels = Loader.loadObjects(PropertiesReader.value(REFLECT, TABPATH));
         for(String name : panels.keySet()){
             Panel panel = (Panel) panels.get(name);
             panel.setController(controller);

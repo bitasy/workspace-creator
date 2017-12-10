@@ -30,25 +30,32 @@ import util.exceptions.ObjectIdNotFoundException;
  */
 public class Login {
 
-    public static final String TITLE = "VoogaPeaches: Login to Your Account";
+
+    private static final int INSET = 5;
+    private static final String TITLE = "VoogaPeaches: Login to Your Account";
+    private static final int SPACING = 10;
+    private static final String USER_NAME = "User Name";
+    private static final String LOGIN = "Login";
+    private static final String CREATE_PROFILE = "Create Profile";
+    private static final String LIGHT_CSS = "light.css";
+    private static final String PANEL = "panel";
+    public static final int WIDTH = 350;
+    public static final int HEIGHT = 125;
     private Stage myStage;
     private Scene myScene;
-
     private VBox myArea;
     private TextField userTextField;
 
     public Login(Stage stage) {
         myStage = stage;
         myArea = createVBoxLayout();
-        myScene = new Scene(myArea, 350,125);
+        myScene = new Scene(myArea, WIDTH, HEIGHT);
         myScene.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.ENTER) loginPressed();
         });
-
         myStage.setScene(myScene);
         myStage.setResizable(false);
         myStage.setTitle(TITLE);
-
         updateTheme();
     }
 
@@ -58,22 +65,19 @@ public class Login {
      */
     private VBox createVBoxLayout() {
         VBox vbox = new VBox();
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(5));
+        vbox.setSpacing(SPACING);
+        vbox.setPadding(new Insets(INSET));
         vbox.setAlignment(Pos.CENTER_LEFT);
-        Text userLabel = new Text("User Name");
+        Text userLabel = new Text(USER_NAME);
         userTextField = new TextField();
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-
-        Button loginButton = new Button("Login");
+        grid.setHgap(SPACING);
+        Button loginButton = new Button(LOGIN);
         loginButton.setOnAction(e -> loginPressed());
         grid.add(loginButton, 0,0);
-
-        Button signupButton = new Button("Create Profile");
+        Button signupButton = new Button(CREATE_PROFILE);
         signupButton.setOnAction(e -> createAccount() );
         grid.add(signupButton, 1, 0);
-
         vbox.getChildren().addAll(userLabel, userTextField, grid);
         return vbox;
     }
@@ -132,7 +136,7 @@ public class Login {
     }
 
     private void updateTheme() {
-        myArea.getStylesheets().add("light.css"); //update from database
-        myArea.getStyleClass().add("panel");
+        myArea.getStylesheets().add(LIGHT_CSS); //update from database
+        myArea.getStyleClass().add(PANEL);
     }
 }

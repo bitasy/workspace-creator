@@ -1,5 +1,6 @@
 package authoring;
 
+import database.jsonhelpers.JSONHelper;
 import engine.Engine;
 import engine.EntityManager;
 import engine.entities.Entity;
@@ -24,7 +25,7 @@ public class PanelController {
 	private EntityManager myEntityManager;
 
 	public PanelController() {
-		myEngine = new Engine(new Entity(), GRID_SIZE); //depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+		myEngine = new Engine(new Entity(), GRID_SIZE, false);//depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
@@ -63,9 +64,9 @@ public class PanelController {
     }
 
     public ScrollPane load(Entity root) {
+        System.out.println(root.getChildren().size());
         myEngine.pause();
-        myEngine = null;
-        myEngine = new Engine(root, GRID_SIZE);
+        myEngine = new Engine(root, GRID_SIZE, false);
         return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
     }
 

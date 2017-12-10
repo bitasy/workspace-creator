@@ -164,6 +164,7 @@ public class MenuReader {
             }
             current = current.getNextSibling();
         }
+        newMenu.getStyleClass().add("menu-bar");
         return newMenu;
     }
 
@@ -184,6 +185,7 @@ public class MenuReader {
             }
 
             Menu subMenu = parseSubMenu(menuItem, head, length);
+            subMenu.getStyleClass().add("menu-bar");
             return subMenu;
         } else if (getContent(menuItem, TYPE_TAG).equals(BUTTON_TAG)) {
             String name = getContent(menuItem, NAME_TAG);
@@ -195,6 +197,7 @@ public class MenuReader {
             String load = getContent(menuItem, STRATEGY_TAG);
             Menu loadedMenu = new Menu(getContent(menuItem, NAME_TAG));
             loadedMenu.getItems().addAll(loads.get(load));
+            loadedMenu.getStyleClass().add("menu-bar");
             return loadedMenu;
         }
     }

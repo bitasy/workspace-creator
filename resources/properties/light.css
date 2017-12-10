@@ -1,20 +1,75 @@
-.button {
-    -fx-base: #d9d9d9; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+* { //variables
+-my-black:#525252;
+-grey:#737373;
+-whitest:#f7f7f7;
+-my-white:#d9d9d9;
+-light-grey:#969696;
+-lighter-grey:#bdbdbd;
 }
 
-.choice-box {
-    -fx-background-color: #d9d9d9;
-}
-
+//PANEL LAYOUT
 .panel {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: -my-white;
+}
+.split-pane:horizontal >.split-pane-divider,
+.split-pane:vertical >.split-pane-divider {
+    -fx-background-color: -my-black;
+}
+.tool-bar {
+    -fx-background-color: -lighter-grey;
+}
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -my-black;
+}
+.tab {
+    -fx-background-color: -lighter-grey;
 }
 
-.camera {
-    -fx-background: #ffffff;
+//PANEL ITEMS
+.button {
+    -fx-base: -light-grey; -fx-focus-color: -my-black; -fx-faint-focus-color: -grey;
+}
+.choice-box {
+    -fx-background-color: -light-grey;
+}
+.scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
+    -fx-background-color: transparent;
+}
+.scroll-pane { //https://stackoverflow.com/questions/23201134/transparent-argb-hex-value
+    -fx-background-color: -whitest;
+}
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: -lighter-grey;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -my-black;
+}
+.scroll-pane > .corner {
+    -fx-background-color: -lighter-grey;
+}
+.text-field {
+    -fx-control-inner-background: -light-grey;
 }
 
-.menuBar {
-    -fx-border-style: solid; -fx-border-width: 0 0 1 0; -fx-border-color: dimgray;
-    -fx-background-color: #ffffff; -fx-focus-color: #039ED3; -fx-faint-focus-color: #039ED322;
+//MENU
+.menu-bar {
+    -fx-border-color: -lighter-grey;
+    -fx-background-color: -light-grey; -fx-focus-color: -my-black; -fx-faint-focus-color: -grey;
+}
+.menu:hover {
+    -fx-background-color: -my-black;
+}
+//https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: -my-black;
+}
+.menu-item {
+    -fx-background-color: -light-grey; -fx-focus-color: -my-black; -fx-faint-focus-color: -grey;
+}
+.menu-item:focused {
+    -fx-background-color: -my-black;
 }

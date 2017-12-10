@@ -3,24 +3,39 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import util.ErrorDisplay;
+import main.VoogaPeaches;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
-import util.pubsub.messages.WorkspaceChange;
+import util.pubsub.messages.StringMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * WorkspaceManager loads and handles the workspaces available for use.
+ * @author Brian Nieves
+ */
 public class WorkspaceManager {
 
     private Pane currentWorkspaceArea;
     private Map<String, Workspace> workspaces = new HashMap<>();
     private PanelManager panelManager;
     private CameraPanel cameraPanel;
+    private Workspace currentWorkspace;
 
-
+    /**
+     * Creates a new workspace manager and initializes the workspaces.
+     * @author Brian Nieves
+     * @param workspaceArea the area of the screen to display the current workspace in
+     * @param panelManager the manager of the panels to display in the workspace
+     * @param cameraPanel the camera panel to add to the workspaces manually
+     * @throws IOException if the workspace directory cannot be found
+     */
     public WorkspaceManager(Pane workspaceArea, PanelManager panelManager, CameraPanel cameraPanel) throws IOException {
         currentWorkspaceArea = workspaceArea;
         this.panelManager = panelManager;
@@ -30,8 +45,14 @@ public class WorkspaceManager {
 
         PubSub.getInstance().subscribe(
                 "WORKSPACE_CHANGE",
-                message -> switchWorkspace(((WorkspaceChange)message).readMessage()
-        ));
+                message -> {
+                    try {
+                        switchWorkspace(((StringMessage)message).readMessage()
+                );
+                    } catch (IOException e) {
+                        new ErrorDisplay("IO Error", "Couldn't switch workspace");//TODO: put this in a properties file
+                    }
+                });
     }
 
     /**
@@ -40,6 +61,15 @@ public class WorkspaceManager {
      */
     public Set<String> getWorkspaces(){
         return workspaces.keySet();
+    }
+
+    /**
+     * Saves all of the loaded workspace settings to their respective files.
+     */
+    public void saveWorkspaces() throws IOException {
+        for(Workspace workspace : workspaces.values()){
+            workspace.deactivate();
+        }
     }
 
     /**
@@ -56,13 +86,25 @@ public class WorkspaceManager {
             Workspace workspace = (Workspace) workspaces.get(space);
             this.workspaces.put(space, workspace);
         }
-        switchWorkspace(PropertiesReader.value("screenlayout", "currentworkspace"));
+        switchWorkspace(VoogaPeaches.getUser().getWorkspaceName());
     }
 
-    private void switchWorkspace(String newWorkspace){
+    /**
+     * Changes the workspace currently being viewed on the screen.
+     * @param newWorkspace the name of the new workspace
+     */
+    private void switchWorkspace(String newWorkspace) throws IOException {
         Workspace workspace = workspaces.get(newWorkspace);
+        if(currentWorkspace != null){
+            if(workspace == currentWorkspace) return;
+            currentWorkspace.deactivate();
+        }
+        currentWorkspace = workspace;
+        workspace.activate();
         workspace.addCameraPanel(cameraPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
-        currentWorkspaceArea.getChildren().add(workspace.getWorkspace());
+        Region workRegion = workspace.getWorkspace();
+        workRegion.setMaxHeight(currentWorkspaceArea.getMaxHeight());
+        currentWorkspaceArea.getChildren().add(workRegion);
     }
 }

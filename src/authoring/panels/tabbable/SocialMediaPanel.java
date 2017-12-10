@@ -1,7 +1,7 @@
 package authoring.panels.tabbable;
 
-import authoring.IPanelController;
 import authoring.Panel;
+import authoring.PanelController;
 import extensions.ExtensionWebView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
@@ -19,8 +19,8 @@ public class SocialMediaPanel implements Panel {
         myArea.fillWidthProperty().setValue(true);
         myExtensionView = new ExtensionWebView("SocialMedia.html",1000,600);
         myArea.getChildren().add(myExtensionView.getView());
-        myArea.getStyleClass().add("panel");
         createHistoryButtons();
+        getRegion().getStyleClass().add("panel");
     }
 
     private void createHistoryButtons() {
@@ -54,9 +54,7 @@ public class SocialMediaPanel implements Panel {
     }
 
     @Override
-    public void setController(IPanelController controller) {
-        //TODO: Create controller
-    }
+    public void setController(PanelController controller) {}
 
     @Override
     public String title(){

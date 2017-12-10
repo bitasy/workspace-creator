@@ -62,7 +62,7 @@ public class ErrorDisplay {
             errors.getDialogPane().getStyleClass().add("panel");
             errors.setTitle(title);
             errors.setContentText(errorMessage.toString());
-            
+
             errors.showAndWait();
         }
         clear();

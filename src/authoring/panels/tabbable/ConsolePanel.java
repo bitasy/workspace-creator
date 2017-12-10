@@ -13,20 +13,14 @@ import util.Console;
 public class ConsolePanel implements Panel{
 
     private Pane myPane;
-    private Console myConsole;
-
     private TextArea consoleField = new TextArea();
-    {
-        consoleField.setEditable(false);
-    }
+    private Console myConsole;
 
     public ConsolePanel() {
         myPane = new Pane();
         myPane.getStyleClass().add("panel");
-
+        consoleField.setEditable(false);
     }
-
-
 
     @Override
     public Region getRegion() {

@@ -63,6 +63,15 @@ public class Positions {
     }
 
     /**
+     * Clears every position of its panels.
+     */
+    public void clear(){
+        for(Position position : positions){
+            position.pane.getTabs().clear();
+        }
+    }
+
+    /**
      * Represents a single position that consists of a single TabPane.
      * @author Brian Nieves
      */

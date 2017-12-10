@@ -12,6 +12,7 @@ import java.util.Set;
  */
 public class Positions {
 
+    public static final String DRAG_TAB = "dragTab";
     private final Position[] positions;
 
     /**
@@ -84,7 +85,7 @@ public class Positions {
             pane = new TabPane();
             pane.setMinWidth(0);
             pane.setMinHeight(0);
-            pane.getStyleClass().add("dragTab");
+            pane.getStyleClass().add(DRAG_TAB);
         }
 
         /**

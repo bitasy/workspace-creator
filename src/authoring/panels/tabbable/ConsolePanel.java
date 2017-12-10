@@ -5,6 +5,7 @@ import authoring.PanelController;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import util.Console;
 
 /**
  *
@@ -12,16 +13,20 @@ import javafx.scene.layout.Region;
 public class ConsolePanel implements Panel{
 
     private Pane myPane;
-
-    public ConsolePanel() {
-        myPane = new Pane();
-        myPane.getStyleClass().add("panel");
-    }
+    private Console myConsole;
 
     private TextArea consoleField = new TextArea();
     {
         consoleField.setEditable(false);
     }
+
+    public ConsolePanel() {
+        myPane = new Pane();
+        myPane.getStyleClass().add("panel");
+
+    }
+
+
 
     @Override
     public Region getRegion() {

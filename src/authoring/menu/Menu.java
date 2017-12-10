@@ -34,15 +34,9 @@ import java.util.List;
  */
 public class Menu {
 
-    private static final String AUTHORING_ENVIRONMENT = "AUTHORING";
-    private static final String PLAYER = "PLAY";
-    private static final String SETTINGS = "SETTINGS";
-    private static final String AUTHORINGPIC = "resources/menuImages/authoring.png";
-    private static final String PLAYERPIC = "resources/menuImages/player.png";
-    private static final String SETTINGSPIC = "resources/menuImages/settings.png";
-
-    private static final double WIDTH = Double.parseDouble(PropertiesReader.value("menulayout", "width"));
-    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value("menulayout", "height"));
+    public static final String PROPERTIES_FILE = "menulayout";
+    private static final double WIDTH = Double.parseDouble(PropertiesReader.value(PROPERTIES_FILE, "width"));
+    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(PROPERTIES_FILE, "height"));
 
     private List<Button> buttons;
 
@@ -62,7 +56,7 @@ public class Menu {
         addTitle();
         myStage.setScene(myScene);
         myStage.setResizable(false);
-        myStage.setTitle("main.VoogaPeaches: Menu");
+        myStage.setTitle(PropertiesReader.value(PROPERTIES_FILE,"title"));
         myStage.show();
         myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         formatButtons();
@@ -143,8 +137,8 @@ public class Menu {
      */
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
-        Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
-        Button playerButton = createMenuButton(PLAYERPIC, PLAYER);
+        Button authoringButton = createMenuButton(PropertiesReader.value(PROPERTIES_FILE, "authorpic"), PropertiesReader.value(PROPERTIES_FILE, "authoring"));
+        Button playerButton = createMenuButton(PropertiesReader.value(PROPERTIES_FILE, "playerpic"), PropertiesReader.value(PROPERTIES_FILE, "playing"));
 
         buttons = new ArrayList<>(Arrays.asList(authoringButton, playerButton));
         myRoot.getChildren().addAll(buttons);

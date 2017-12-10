@@ -33,9 +33,8 @@ public class YoutubePanel implements Panel {
 
     public YoutubePanel() {
         myAreaOut = new HBox();
-        myAreaOut.getChildren().add(myArea);
         myArea = new VBox();
-        //myAreaOut.getChildren().add(myArea);
+        myAreaOut.getChildren().add(myArea);
         myArea.fillWidthProperty().setValue(true);
         setupVideoLinkMap();
         createDropDownMenu();

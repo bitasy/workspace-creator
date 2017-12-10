@@ -29,6 +29,4 @@ public class MenuButton extends CustomButton {
         view.setFitHeight(IMAGE_SIZE);
         return view;
     }
-
-
 }

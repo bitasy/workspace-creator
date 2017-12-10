@@ -17,6 +17,4 @@ public class CustomButton {
     public Button getButton() {
         return button;
     }
-
-
 }

@@ -5,6 +5,8 @@ import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.jsonhelpers.JSONHelper;
+import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
+import org.json.JSONObject;
 import util.ErrorDisplay;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -158,6 +161,11 @@ public class Screen {
         } catch (InterruptedException e) {
             System.out.println("problem with saving!");
         }
+    }
+
+    public void load(Entity root) {
+        System.out.println((new JSONObject(JSONHelper.jsonMapFromObject(root))).toString(4));
+        controller.load(root);
     }
 
     /**

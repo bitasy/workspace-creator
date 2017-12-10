@@ -38,7 +38,6 @@ public class Menu {
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value("menulayout", "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value("menulayout", "height"));
 
-
     private Pane myRoot;
     private Screen authoring;
     private Stage authoringStage = new Stage();

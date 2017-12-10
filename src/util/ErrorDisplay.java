@@ -62,6 +62,9 @@ public class ErrorDisplay {
             errors.setContentText(errorMessage.toString());
             errors.showAndWait();
 
+            if (errors.getDialogPane().getStylesheets().size() >= 1) {
+                errors.getDialogPane().getStylesheets().remove(0);
+            }
             errors.getDialogPane().getStylesheets().add(VoogaPeaches.getUser().getThemeName());
             errors.getDialogPane().getStyleClass().add("panel");
         }

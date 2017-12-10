@@ -9,6 +9,7 @@ import authoring.PanelController;
  * Defines the MenuAction that saves the game currently being worked on in the authoring environment.
  */
 public class SaveAction implements MenuAction{
+
     private final PanelController panelController;
 
     /**

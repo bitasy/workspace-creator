@@ -39,6 +39,7 @@ public class YoutubePanel implements Panel {
         setupVideoLinkMap();
         createDropDownMenu();
         myArea.getChildren().add(videosDropDown);
+
         getRegion().getStyleClass().add("panel");
     }
 

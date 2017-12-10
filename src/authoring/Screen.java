@@ -3,6 +3,8 @@ package authoring;
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
+import database.User;
+import database.firebase.DatabaseConnector;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.ErrorDisplay;
 import util.PropertiesReader;
+import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
@@ -32,14 +35,12 @@ public class Screen {
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
     private ErrorDisplay errorMessage;
-    private String myTheme;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage, String theme){
-        this.myTheme = theme;
+    public Screen(Stage stage){
         root = new VBox();
         controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value("reflect","errortitle"));
@@ -70,15 +71,20 @@ public class Screen {
         errorMessage.displayError();
     }
 
+    /**
+     * sets the initial theme as the user's preference (or the default if a new user), also subscribes to pubsub to allow for updating across all screens for the user's theme
+     */
     private void updateTheme() {
-        root.getStylesheets().add(myTheme); //update from database
+        root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
                     if (root.getStylesheets().size() >= 1) {
                         root.getStylesheets().remove(0);
                     }
-                    root.getStylesheets().add(((StringMessage) message).readMessage());
+                    String newTheme = ((StringMessage) message).readMessage();
+                    root.getStylesheets().add(newTheme);
+                    VoogaPeaches.getUser().setTheme(newTheme);
                 }
         );
         //TODO: on screen close update the database with the theme file name string
@@ -133,12 +139,24 @@ public class Screen {
         stage.setHeight(primaryScreenBounds.getHeight());
     }
 
+    /**
+     * saves the workspace information to their files
+     */
     public void save(){
         try {
             workspaceManager.saveWorkspaces();
+            DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
+            db.addToDatabase(VoogaPeaches.getUser());
+            // Have to force a sleep to wait for data to finish sending, but
+            // with actual project this shouldn't be a problem
+            Thread.sleep(1000);//TODO replace with PauseTransition if possible
         } catch (IOException e){
             errorMessage.addMessage(String.format(PropertiesReader.value("reflect","IOerror"), e.getMessage()));
             errorMessage.displayError();
+        } catch (ObjectIdNotFoundException e) {
+            System.out.println("problem with saving!");
+        } catch (InterruptedException e) {
+            System.out.println("problem with saving!");
         }
     }
 

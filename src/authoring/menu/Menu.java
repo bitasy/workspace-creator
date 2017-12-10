@@ -3,10 +3,6 @@ package authoring.menu;
 import authoring.Screen;
 import database.User;
 import database.firebase.DatabaseConnector;
-import database.firebase.FileStorageConnector;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -16,7 +12,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -34,6 +29,7 @@ import java.util.List;
  * All user interactions are determined and executed in here
  *
  * @author Kelly Zhang
+ * @author Simran
  *
  */
 public class Menu {
@@ -54,18 +50,16 @@ public class Menu {
     private Scene myScene;
     private Pane myRoot;
     private Screen authoring;
-    private String currentTheme;
     private Stage authoringStage = new Stage();
     private ListView<String> list;
 
     public Menu(Stage stage) {
         myStage = stage;
         myRoot = new Pane();
-        currentTheme = VoogaPeaches.getUser().getThemeName();
 
         myScene = new Scene(myRoot, WIDTH, HEIGHT);
-        setupScene();
-
+        addButtons();
+        addTitle();
         myStage.setScene(myScene);
         myStage.setResizable(false);
         myStage.setTitle("main.VoogaPeaches: Menu");
@@ -74,61 +68,62 @@ public class Menu {
         formatButtons();
         setupGames();
         updateTheme();
-
-        VoogaPeaches.createMenu(this);
     }
 
-    public void setupScene() {
-        addButtons();
-        addTitle();
-    }
 
+    /**
+     * Adds the game selector in the middle of the screen.
+     */
     private void setupGames() {
         double width = 200;
         double height = 150;
         double botMargin = 50;
         list = new ListView<String>();
-        FileStorageConnector connector = new FileStorageConnector();
-        KeyFrame frame = new KeyFrame(Duration.millis(300), e -> {
-            list.setItems(FXCollections.observableArrayList(connector.fileNames()));
-        });
-        Timeline animation = new Timeline();
-        animation.setCycleCount(Animation.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-
-        //ObservableList<String> items = FXCollections.observableArrayList (connector.fileNames());
-        //list.setItems(items);
+//        TODO: Get the actual list of games
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Single", "Double", "Suite", "Family App", "Single", "Double",
+                "Suite", "Family App", "Single", "Double", "Suite", "Family App");
+        list.setItems(items);
         list.setLayoutX(WIDTH/2-width/2);
         list.setLayoutY(HEIGHT-height-botMargin);
         list.setPrefSize(width, height);
         myRoot.getChildren().add(list);
     }
 
+    /**
+     * Used to set the initial theme, subscribe to PubSub and get new themes as they are published
+     */
     private void updateTheme() {
-        myRoot.getStylesheets().add(currentTheme);
-        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(VoogaPeaches.getUser().getThemeName()));
+        String initialTheme = VoogaPeaches.getUser().getThemeName();
+        myRoot.getStylesheets().add(initialTheme);
+        PubSub.getInstance().publish("THEME_MESSGE",new StringMessage(initialTheme));
         PubSub.getInstance().subscribe(
                 "THEME_MESSAGE",
                 (message) -> {
                     if (myRoot.getStylesheets().size() >= 1) {
                         myRoot.getStylesheets().remove(0);
                     }
-                    currentTheme = ((StringMessage) message).readMessage();
-                    myRoot.getStylesheets().add(currentTheme);
+                    myRoot.getStylesheets().add(((StringMessage) message).readMessage());
                 }
         );
         myRoot.getStyleClass().add("panel");
     }
 
+    /**
+     * Handles switching to the Authoring screen with the pencil image is clicked
+     */
     private void onAuthoringPressed() {
         if (!authoringStage.isShowing()) {
             authoringStage.setTitle("main.VoogaPeaches: A Programmers for Peaches Production");
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage, currentTheme);
+            authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
+//                System.out.println("saving new authoring display defaults =====");
+//                System.out.println(VoogaPeaches.getUser().getUserName());
+//                System.out.println(VoogaPeaches.getUser().getThemeName());
+//                System.out.println(VoogaPeaches.getUser().getWorkspaceName());
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try {
                     connector.addToDatabase(VoogaPeaches.getUser());
@@ -140,9 +135,12 @@ public class Menu {
         else {
             //do nothing, only can have one authoring environment open at once
         }
-        //myStage.close(); //TODO: keep the menu open! easier and then we only have one menu and do not have to make another
+        //myStage.close();
     }
 
+    /**
+     * Creates the two buttons and connects them to opening the Authoring and Game Playing Environments
+     */
     private void addButtons() { //https://stackoverflow.com/questions/40883858/how-to-evenly-distribute-elements-of-a-javafx-vbox
         //http://docs.oracle.com/javafx/2/ui_controls/button.htm
         Button authoringButton = createMenuButton(AUTHORINGPIC, AUTHORING_ENVIRONMENT);
@@ -154,10 +152,16 @@ public class Menu {
         buttons.get(1).setOnAction((e) -> onPlayingPressed());
     }
 
+    /**
+     * Will switch to the playing environment
+     */
     private void onPlayingPressed() {
         System.out.println("Implement Playing lol");
     }
 
+    /**
+     * Used to set the positioning of the buttons
+     */
     private void formatButtons() {
         int numButtons = buttons.size();
 
@@ -169,11 +173,25 @@ public class Menu {
         }
     }
 
+    /**
+     * Helper method to set the position of a button to the given x and y
+     *
+     * @param button
+     * @param x
+     * @param y
+     */
     private void setMenuButtonLayout(Button button, double x, double y) {
         button.setLayoutX(x);
         button.setLayoutY(y);
     }
 
+    /**
+     * Creates a new button specific to the menu
+     *
+     * @param imageName
+     * @param buttonText
+     * @return
+     */
     private Button createMenuButton(String imageName, String buttonText) {
         Button myButton = new Button();
         myButton.setGraphic(createImageView(imageName));
@@ -183,6 +201,9 @@ public class Menu {
         return myButton;
     }
 
+    /**
+     * Adds the Vooga Peaches text to the menu
+     */
     private void addTitle() {
         ImageView title = createImageView("resources/menuImages/VoogaTransparent.png");
         title.setScaleX(0.75);
@@ -192,16 +213,15 @@ public class Menu {
         myRoot.getChildren().add(title);
     }
 
+    /**
+     * Helper method to create the imageview for the buttons
+     *
+     * @param picLocation
+     * @return
+     */
     private ImageView createImageView(String picLocation) {
         File myFile = new File(picLocation);
         ImageView myImageView = new ImageView(myFile.toURI().toString());
         return myImageView;
-    }
-    public Stage getStage() {
-        return myStage;
-    }
-
-    public String getCurrentTheme() {
-        return currentTheme;
     }
 }

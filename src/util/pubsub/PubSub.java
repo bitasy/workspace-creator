@@ -54,11 +54,13 @@ public class PubSub {
     }
 
     public void unsubscribe(String channel, Consumer<Message> callback) {
+        channel = channel.toLowerCase();
         if (callbacks != null && callbacks.containsKey(channel))
             callbacks.get(channel).remove(callback);
     }
 
     public void unsubscribeSync(String channel) {
+        channel = channel.toLowerCase();
         if (callbacksSync != null && callbacksSync.containsKey(channel))
             callbacks.put(channel, null);
     }

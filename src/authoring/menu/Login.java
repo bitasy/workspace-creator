@@ -30,7 +30,6 @@ import util.exceptions.ObjectIdNotFoundException;
  */
 public class Login {
 
-
     private static final int INSET = 5;
     private static final String TITLE = "VoogaPeaches: Login to Your Account";
     private static final int SPACING = 10;
@@ -39,8 +38,9 @@ public class Login {
     private static final String CREATE_PROFILE = "Create Profile";
     private static final String LIGHT_CSS = "light.css";
     private static final String PANEL = "panel";
-    public static final int WIDTH = 350;
-    public static final int HEIGHT = 125;
+    private static final int WIDTH = 350;
+    private static final int HEIGHT = 125;
+
     private Stage myStage;
     private Scene myScene;
     private VBox myArea;
@@ -57,6 +57,10 @@ public class Login {
         myStage.setResizable(false);
         myStage.setTitle(TITLE);
         updateTheme();
+    }
+
+    private void createButtons() {
+
     }
 
     /**

@@ -4,6 +4,7 @@ import database.jsonhelpers.JSONHelper;
 import engine.Engine;
 import engine.EntityManager;
 import engine.entities.Entity;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import util.math.num.Vector;
@@ -35,7 +36,7 @@ public class PanelController {
      * get camera view
      * @return camera view
      */
-	public ScrollPane getCamera(){
+	public Node getCamera(){
 	    return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
 	}
 
@@ -65,7 +66,7 @@ public class PanelController {
         myEngine.save(name);
     }
 
-    public ScrollPane load(Entity root) {
+    public Node load(Entity root) {
         System.out.println(root.getChildren().size());
         myEngine.pause();
         myEngine = new Engine(root, GRID_SIZE, false);
@@ -76,7 +77,7 @@ public class PanelController {
      * get minimap
      * @return
      */
-    public Pane getMiniMap() {
+    public Node getMiniMap() {
         return myEngine.getMiniMap(new Vector(VALUE1, VALUE2));
     }
 }

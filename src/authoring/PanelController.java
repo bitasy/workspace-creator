@@ -67,7 +67,6 @@ public class PanelController {
     }
 
     public void load(Entity root) {
-        System.out.println(root.getChildren().size());
         myEngine.load(root, GRID_SIZE, false);
     }
 

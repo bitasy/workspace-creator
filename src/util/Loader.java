@@ -66,7 +66,7 @@ public class Loader{
             } catch (IllegalAccessException e) {
                 errorMessage.addMessage(String.format(PropertiesReader.value("reflect", "hiddenconstructor"), e.getMessage()));
             } catch (InvocationTargetException e) {
-                errorMessage.addMessage(String.format(PropertiesReader.value("reflect", "noinvocation"), e.getMessage()));
+                errorMessage.addMessage(String.format(PropertiesReader.value("reflect", "noinvocation"), e.getTargetException().getMessage()));
             }
         }
         errorMessage.displayError();

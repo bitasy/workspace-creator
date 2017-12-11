@@ -2,6 +2,7 @@ package authoring;
 
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import util.ErrorDisplay;
@@ -22,6 +23,11 @@ import java.util.Set;
  */
 public class WorkspaceManager {
 
+    private static final String REFLECT = "reflect";
+    private static final String WORKSPACEPATH = "workspacepath";
+    private static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
+    private static final String IO_ERROR = "IO Error";
+    private static final String COULD_NOT_SWITCH_WORKSPACE_ERROR = "Couldn't switch workspace";
     private Pane currentWorkspaceArea;
     private Map<String, Workspace> workspaces = new HashMap<>();
     private PanelManager panelManager;
@@ -44,13 +50,13 @@ public class WorkspaceManager {
         createWorkspaces(workspaceArea.minWidthProperty().doubleValue(), workspaceArea.minHeightProperty().doubleValue());
 
         PubSub.getInstance().subscribe(
-                "WORKSPACE_CHANGE",
+                WORKSPACE_CHANGE,
                 message -> {
                     try {
                         switchWorkspace(((StringMessage)message).readMessage()
                 );
                     } catch (IOException e) {
-                        new ErrorDisplay("IO Error", "Couldn't switch workspace");//TODO: put this in a properties file
+                        new ErrorDisplay(IO_ERROR, COULD_NOT_SWITCH_WORKSPACE_ERROR);//TODO: put this in a properties file
                     }
                 });
     }
@@ -80,7 +86,7 @@ public class WorkspaceManager {
      */
     private void createWorkspaces(double width, double height) throws IOException{
         Map<String, Object> workspaces = Loader.loadObjects(
-                PropertiesReader.value("reflect", "workspacepath"),
+                PropertiesReader.value(REFLECT, WORKSPACEPATH),
                 width, height, panelManager);
         for(String space : workspaces.keySet()){
             Workspace workspace = (Workspace) workspaces.get(space);

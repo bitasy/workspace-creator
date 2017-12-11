@@ -107,6 +107,11 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         middle.setDividerPositions(leftDivision, rightDivision);
     }
 
+    @Override
+    protected void saveState(){
+        setDividerProperties();
+    }
+
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
@@ -119,6 +124,10 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
         bodyDivision = body.getDividerPositions()[0];
         leftDivision = middle.getDividerPositions()[0];
         rightDivision = middle.getDividerPositions()[1];
+        setDividerProperties();
+    }
+
+    private void setDividerProperties() {
         properties.setProperty(LEFT_DIVISION_STRING, leftDivision + EMPTY_STRING);
         properties.setProperty(RIGHT_DIVISION_STRING, rightDivision + EMPTY_STRING);
         properties.setProperty(BODY_DIVISION_STRING, bodyDivision + EMPTY_STRING);

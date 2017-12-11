@@ -32,7 +32,6 @@ import util.exceptions.ObjectIdNotFoundException;
  */
 public class Login {
 
-
     private static final int INSET = 5;
     private static final String TITLE = "VoogaPeaches: Login to Your Account";
     private static final int SPACING = 10;
@@ -61,6 +60,10 @@ public class Login {
         myStage.setResizable(false);
         myStage.setTitle(TITLE);
         updateTheme();
+    }
+
+    private void createButtons() {
+
     }
 
     /**

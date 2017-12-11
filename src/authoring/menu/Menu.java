@@ -6,6 +6,7 @@ import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.jsonhelpers.JSONHelper;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -79,7 +80,6 @@ public class Menu {
         addTitle();
         setupGames();
         addButtons();
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         updateTheme();
     }
 
@@ -127,11 +127,11 @@ public class Menu {
     private void authoringPressed() {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
+            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();
@@ -172,7 +172,8 @@ public class Menu {
         grid.add(authoringButton,1,0);
         grid.add(playButton,2,0);
         grid.setHgap(HGAP);
-        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO);
+        System.out.println(authoringButton.getBoundsInLocal().getWidth());
+        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO - 25);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
 
         javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());

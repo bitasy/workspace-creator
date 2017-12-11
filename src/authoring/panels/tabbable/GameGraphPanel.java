@@ -37,7 +37,7 @@ public class GameGraphPanel implements Panel {
         displayBox.setOnMouseDragged(e -> {
             //currentGroup.setLayoutX(e.getX());
             //currentGroup.setLayoutY(e.getY());
-            System.out.println(currentGroup.getTranslateX());
+
             currentGroup.setTranslateX(e.getScreenX());
             currentGroup.setTranslateY(e.getY());
         });

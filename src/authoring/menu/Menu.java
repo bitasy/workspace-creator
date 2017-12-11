@@ -1,16 +1,20 @@
 package authoring.menu;
 
 import authoring.Screen;
+import authoring.buttons.strategies.Logout;
 import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
@@ -19,6 +23,7 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
 import java.io.File;
+import java.util.Stack;
 
 /**
  *
@@ -60,14 +65,17 @@ public class Menu {
     private static final String PLAYING_TOOLTIP = "playing";
     private static final String NEWGAME_TOOLTIP = "newgame";
     public static final String DASH = " -- ";
+    private static final String USER = "User: ";
 
     private Pane myRoot;
+    private Stage myStage;
     private Screen authoring;
     private Stage authoringStage = new Stage();
     private GameSelectionList list;
 
     public Menu(Stage stage) {
-        setupStage(stage);
+        myStage = stage;
+        setupStage();
         addTitle();
         setupGames();
         addButtons();
@@ -75,13 +83,13 @@ public class Menu {
         updateTheme();
     }
 
-    private void setupStage(Stage stage){
+    private void setupStage(){
         myRoot = new Pane();
         Scene s = new Scene(myRoot, WIDTH, HEIGHT);
-        stage.setScene(s);
-        stage.setResizable(false);
-        stage.setTitle(TITLE);
-        stage.show();
+        myStage.setScene(s);
+        myStage.setResizable(false);
+        myStage.setTitle(TITLE);
+        myStage.show();
     }
 
     /**
@@ -125,6 +133,7 @@ public class Menu {
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
             authoringStage.setOnCloseRequest(event -> {
+                myStage.close();
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
@@ -140,9 +149,11 @@ public class Menu {
         authoringStage.setResizable(false);
         authoring = new Screen(authoringStage);
         authoringStage.setOnCloseRequest(event -> {
+            myStage.close();
             authoring.save();
             DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
             try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
+
         });
     }
 
@@ -163,7 +174,11 @@ public class Menu {
         grid.setHgap(HGAP);
         grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
-        myRoot.getChildren().addAll(grid);
+
+        javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());
+        user.getItems().add(new Logout(grid));
+        MenuBar bar = new MenuBar(user);
+        myRoot.getChildren().addAll(bar, grid);
     }
 
     /**

@@ -139,16 +139,22 @@ public abstract class AbstractWorkspace implements Workspace{
     }
 
     /**
-     * Saves the gvien workspace state to the settings file for the workspace. Used to save the current workspace data.
+     * Saves the given workspace state to the settings file for the workspace. Used to save the current workspace data.
      * @param file the workspace file
      * @param properties the state of the workspace to save
      * @throws IOException if the file cannot be written to
      */
-    private void saveToFile(File file, Properties properties) throws IOException{
+    protected void saveToFile(File file, Properties properties) throws IOException{
+        saveState();
         OutputStream output = new FileOutputStream(file);
         properties.store(output, String.format(PropertiesReader.value(DATA, "dataheader"), getClass().getSimpleName()));
         output.close();
     }
+
+    /**
+     * Saves the state of the current workspace. Also used to save the defaults of a workspace for a new user.
+     */
+    protected abstract void saveState();
 
     private Tab newTab(String panel) {
         Tab tab = tabManager.newTab(panel);

@@ -36,7 +36,7 @@ public class PanelController {
      * get camera view
      * @return camera view
      */
-	public Node getCamera(){
+	public ScrollPane getCamera(){
 	    return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
 	}
 
@@ -66,18 +66,16 @@ public class PanelController {
         myEngine.save(name);
     }
 
-    public Node load(Entity root) {
-
-        myEngine.pause();
-        myEngine = new Engine(root, GRID_SIZE, false);
-        return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
+    public void load(Entity root) {
+        System.out.println(root.getChildren().size());
+        myEngine.load(root, GRID_SIZE, false);
     }
 
     /**
      * get minimap
      * @return
      */
-    public Node getMiniMap() {
+    public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(VALUE1, VALUE2));
     }
 }

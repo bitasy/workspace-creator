@@ -66,9 +66,7 @@ public class PanelController {
     }
 
     public ScrollPane load(Entity root) {
-        System.out.println(root.getChildren().size());
-        myEngine.pause();
-        myEngine = new Engine(root, GRID_SIZE, false);
+        myEngine.load(root, GRID_SIZE, false);
         return myEngine.getCameraView(new Vector(CAMERA_INIT_X, CAMERA_INIT_Y), new Vector(CAMERA_INIT_X_SIZE, CAMERA_INIT_Y_SIZE));
     }
 

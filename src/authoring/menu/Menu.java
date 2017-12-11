@@ -5,6 +5,7 @@ import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.jsonhelpers.JSONHelper;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -115,11 +116,11 @@ public class Menu {
     private void authoringPressed() {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
+            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);

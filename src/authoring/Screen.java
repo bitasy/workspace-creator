@@ -10,6 +10,7 @@ import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -48,6 +49,7 @@ public class Screen {
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
     private ErrorDisplay errorMessage;
+    private CameraPanel camera;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
@@ -120,7 +122,7 @@ public class Screen {
         double cameraWidth = width * cameraWidthRatio;
         double cameraHeight = cameraWidth * getDoubleValue(CAMERA_HEIGHT_TO_WIDTH_RATIO);
 
-        CameraPanel camera = new CameraPanel(cameraWidth, cameraHeight);
+        camera = new CameraPanel(cameraWidth, cameraHeight);
         camera.setController(controller);
 
         Pane workspaceArea = new Pane();
@@ -174,7 +176,10 @@ public class Screen {
     }
 
     public void load(Entity root) {
-        controller.load(root);
+        System.out.println("In screen: " + root.UIDforObject());
+        ScrollPane newPane = controller.load(root);
+        if(newPane == null) System.out.println("null pane");
+        camera.setView(newPane);
     }
 
     /**

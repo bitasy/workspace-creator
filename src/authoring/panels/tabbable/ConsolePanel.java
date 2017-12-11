@@ -7,10 +7,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import util.Console;
 
-/**
- *
- */
 public class ConsolePanel implements Panel{
+
+    private static final String PANEL = "panel";
+    private static final String CONSOLE = "Console";
 
     private Pane myPane;
     private TextArea consoleField = new TextArea();
@@ -18,7 +18,8 @@ public class ConsolePanel implements Panel{
 
     public ConsolePanel() {
         myPane = new Pane();
-        myPane.getStyleClass().add("panel");
+        myPane.getStyleClass().add(PANEL);
+
         consoleField.setEditable(false);
     }
 
@@ -34,7 +35,6 @@ public class ConsolePanel implements Panel{
 
     @Override
     public String title(){
-        return "Console";
+        return CONSOLE;
     }
-
 }

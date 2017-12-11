@@ -35,6 +35,7 @@ public class YoutubePanel implements Panel {
     private List<WebView> loadedVideos;
     private WebView myVideo;
 
+
     public YoutubePanel() {
         myAreaOut = new HBox();
         myArea = new VBox();
@@ -50,14 +51,14 @@ public class YoutubePanel implements Panel {
      * creates a map for the video names to their links using the properties reader
      */
     private void setupVideoLinkMap() {
-        videoLinks = new ArrayList(PropertiesReader.map(TUTORIALS).keySet());
+        videoLinks = new ArrayList(PropertiesReader.map("tutorials").keySet());
         //TODO: quick fix to get spaces in keys, can make better
 
         Collections.sort(videoLinks, String.CASE_INSENSITIVE_ORDER);
 
         loadedVideos = new ArrayList<>();
         for (int i = 0; i < videoLinks.size(); i++) {
-            loadedVideos.add(loadVideo(PropertiesReader.value(TUTORIALS, videoLinks.get(i))));
+            loadedVideos.add(loadVideo(PropertiesReader.value("tutorials", videoLinks.get(i))));
         }
     }
 
@@ -67,7 +68,7 @@ public class YoutubePanel implements Panel {
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
-        videosDropDown.setTooltip(new Tooltip(TOOLTIP_PROMPT));
+        videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -94,6 +95,7 @@ public class YoutubePanel implements Panel {
         return webView;
     }
 
+
     @Override
     public Region getRegion() {
         return myAreaOut;
@@ -101,6 +103,6 @@ public class YoutubePanel implements Panel {
 
     @Override
     public String title() {
-        return YOUTUBE;
+        return "Youtube";
     }
 }

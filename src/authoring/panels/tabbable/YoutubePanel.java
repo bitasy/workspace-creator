@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -22,37 +23,38 @@ import java.util.*;
  */
 public class YoutubePanel implements Panel {
 
-    public static final String PANEL = "panel";
-    public static final String TUTORIALS = "tutorials";
-    public static final String TOOLTIP_PROMPT = "Select a video";
-    public static final String YOUTUBE = "Youtube";
+    private HBox myAreaOut;
     private VBox myArea;
     private List<String> videoLinks;
     private ChoiceBox<String> videosDropDown;
     private List<WebView> loadedVideos;
     private WebView myVideo;
 
+
     public YoutubePanel() {
+        myAreaOut = new HBox();
         myArea = new VBox();
+        myAreaOut.getChildren().add(myArea);
         myArea.fillWidthProperty().setValue(true);
         setupVideoLinkMap();
         createDropDownMenu();
         myArea.getChildren().add(videosDropDown);
-        getRegion().getStyleClass().add(PANEL);
+
+        getRegion().getStyleClass().add("panel");
     }
 
     /**
      * creates a map for the video names to their links using the properties reader
      */
     private void setupVideoLinkMap() {
-        videoLinks = new ArrayList(PropertiesReader.map(TUTORIALS).keySet());
+        videoLinks = new ArrayList(PropertiesReader.map("tutorials").keySet());
         //TODO: quick fix to get spaces in keys, can make better
 
         Collections.sort(videoLinks, String.CASE_INSENSITIVE_ORDER);
 
         loadedVideos = new ArrayList<>();
         for (int i = 0; i < videoLinks.size(); i++) {
-            loadedVideos.add(loadVideo(PropertiesReader.value(TUTORIALS, videoLinks.get(i))));
+            loadedVideos.add(loadVideo(PropertiesReader.value("tutorials", videoLinks.get(i))));
         }
     }
 
@@ -62,7 +64,7 @@ public class YoutubePanel implements Panel {
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
-        videosDropDown.setTooltip(new Tooltip(TOOLTIP_PROMPT));
+        videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -89,13 +91,14 @@ public class YoutubePanel implements Panel {
         return webView;
     }
 
+
     @Override
     public Region getRegion() {
-        return myArea;
+        return myAreaOut;
     }
 
     @Override
     public String title() {
-        return YOUTUBE;
+        return "Youtube";
     }
 }

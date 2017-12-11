@@ -2,10 +2,19 @@ package authoring.panels.reserved;
 
 import authoring.Panel;
 import authoring.PanelController;
+import authoring.buttons.strategies.Logout;
+import authoring.menu.Login;
 import authoring.menuactions.SaveAction;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.event.ActionEvent;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import main.VoogaPeaches;
 import util.Loader;
 import util.MenuReader;
 import util.pubsub.PubSub;
@@ -26,22 +35,20 @@ public class MenuBarPanel implements Panel {
 
     private static final String SCREENLAYOUT = "screenlayout";
     private static final String MENUBARPATH = "menubarpath";
-    private static final String MENU_BAR = "menu-bar";
     private static final String WORKSPACEDATA = "workspacedata";
     private static final String CSSPATH = "csspath";
     private static final String CSS = "css";
     private static final String PANELS = "panels";
     private static final String THEMES = "themes";
     private static final String WORKSPACES = "workspaces";
-    private static final String MENU_ITEM = "menu-item";
     private static final String MENU = "Menu";
     private static final String SAVE = "Save";
     private static final String THEME_MESSAGE = "THEME_MESSAGE";
     private static final String CSS_EXTENSION = ".css";
     private static final String PANEL_TOGGLE = "PANEL_TOGGLE";
     private static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
+    private static final String USER = "User: ";
 
-    //TODO: Do you care about the lines within the menubar sections?
     private MenuBar bar;
     private PanelController controller;
     private Set<String> workspaces;
@@ -59,8 +66,6 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-
-        bar.getStyleClass().add(MENU_BAR);
     }
 
     /**
@@ -71,8 +76,7 @@ public class MenuBarPanel implements Panel {
     private Set<String> createThemeList() throws FileNotFoundException {
         String themePath = PropertiesReader.value(WORKSPACEDATA, CSSPATH);
         String[] allThemes = Loader.validFiles(themePath, CSS);
-        Set<String> myThemes = new HashSet<String>(Arrays.asList(allThemes));
-        return myThemes;
+        return new HashSet<>(Arrays.asList(allThemes));
     }
 
     /**
@@ -94,7 +98,6 @@ public class MenuBarPanel implements Panel {
         for(String space : workspaces){
             MenuItem item = new MenuItem(space);
             item.setOnAction(e -> handleWorkspace(item));
-            item.getStyleClass().add(MENU_ITEM);
             workspaceTabs.add(item);
         }
         return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
@@ -104,7 +107,6 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> panelTabs = new ArrayList<>();
         for(String space : panels){
             MenuItem item = new MenuItem(space);
-            item.getStyleClass().add(MENU_ITEM);
             item.setOnAction(e -> handlePanel(item));
             panelTabs.add(item);
         }
@@ -119,7 +121,6 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> themeOptions = new ArrayList<>();
         for(String theme : themes){
             MenuItem item = new MenuItem(theme);
-            item.getStyleClass().add(MENU_ITEM);
             item.setOnAction(e -> handleTheme(item));
             themeOptions.add(item);
         }
@@ -128,7 +129,11 @@ public class MenuBarPanel implements Panel {
 
     @Override
     public Region getRegion(){
-        return bar;
+        Menu user = new Menu(USER + VoogaPeaches.getUser().getUserName());
+        user.getItems().add(new Logout(bar));
+
+        HBox.setHgrow(bar, Priority.ALWAYS);
+        return new HBox(bar, new MenuBar(user));
     }
 
     @Override

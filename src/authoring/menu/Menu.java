@@ -9,6 +9,8 @@ import database.firebase.DatabaseConnector;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import database.jsonhelpers.JSONHelper;
+import engine.entities.Entity;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
@@ -17,6 +19,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -132,8 +135,13 @@ public class Menu {
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
+            GameLoader loader = new GameLoader(UID, e -> {});
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+
+            }
+            this.authoring = new Screen(authoringStage,loader.loadGame());
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();
@@ -149,7 +157,7 @@ public class Menu {
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
+        authoring = new Screen(authoringStage, new Entity());
         authoringStage.setOnCloseRequest(event -> {
             myStage.close();
             authoring.save();

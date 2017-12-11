@@ -176,11 +176,6 @@ public class Screen {
         }
     }
 
-    public void load(Entity root) {
-        controller.load(root);
-        camera.setController(controller);
-    }
-
     /**
      * Returns a double from the screenlayout properties file.
      * @param key the property

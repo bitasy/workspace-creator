@@ -65,10 +65,6 @@ public class PanelController {
         myEngine.save(name);
     }
 
-    public void load(Entity root) {
-        myEngine.load(root, GRID_SIZE, false);
-        myEntityManager = myEngine.getEntityManager();
-    }
 
     /**
      * get minimap

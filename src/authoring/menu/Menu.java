@@ -124,7 +124,7 @@ public class Menu {
             authoringStage.setResizable(false);
             GameLoader loader = new GameLoader(UID, e -> {});
             try {
-                Thread.sleep(2000);
+                Thread.sleep(4000);
             } catch (Exception e) {
 
             }

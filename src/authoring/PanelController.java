@@ -16,12 +16,12 @@ import util.math.num.Vector;
 public class PanelController {
 
     private static final int GRID_SIZE = 50;
-    private static final int CAMERA_INIT_X = 400;
-    private static final int CAMERA_INIT_Y = 250;
-    private static final int CAMERA_INIT_X_SIZE = 800;
-    private static final int CAMERA_INIT_Y_SIZE = 500;
-    private static final int VALUE1 = 75;
-    private static final int VALUE2 = 75;
+    private static final int CAMERA_INIT_X_SIZE = 1000;
+    private static final int CAMERA_INIT_Y_SIZE = 700;
+    private static final int CAMERA_INIT_X = CAMERA_INIT_X_SIZE/2;
+    private static final int CAMERA_INIT_Y = CAMERA_INIT_Y_SIZE/2;
+    private static final int VALUE1 = CAMERA_INIT_X_SIZE/10;
+    private static final int VALUE2 = CAMERA_INIT_Y_SIZE/8;
     private Engine myEngine;
 
 	private EntityManager myEntityManager;

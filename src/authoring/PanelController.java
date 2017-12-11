@@ -1,6 +1,5 @@
 package authoring;
 
-import database.jsonhelpers.JSONHelper;
 import engine.Engine;
 import engine.EntityManager;
 import engine.entities.Entity;

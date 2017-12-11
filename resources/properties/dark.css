@@ -1,17 +1,16 @@
 * { //variables
--white:#d9d9d9;
--grey:#737373;
--darkest-black:#252525;
--darker-grey:#525252;
--light-grey:#969696;
--lighter-grey:#bdbdbd;
+    -white:#d9d9d9;
+    -grey:#737373;
+    -darkest-black:#252525;
+    -darker-grey:#525252;
+    -light-grey:#969696;
+    -lighter-grey:#bdbdbd;
+    -my-focus:#0093ff;
+    -my-focus-faint:#0093ff22;
 }
 
 //PANEL LAYOUT
 .panel {
-    -fx-background-color: -darker-grey;
-}
-.v-box {
     -fx-background-color: -darker-grey;
 }
 .split-pane:horizontal >.split-pane-divider,
@@ -30,10 +29,14 @@
 
 //PANEL ITEMS
 .button {
-    -fx-base: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
+    -fx-base: -light-grey; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
+}
+.button:disabled {
+    -fx-opacity: 0.4;
 }
 .choice-box {
-    -fx-background-color: -light-grey;
+    -fx-background-color: -light-grey; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
+    -fx-text-fill: black;
 }
 .scroll-pane > .viewport { //https://stackoverflow.com/questions/27318146/transparent-divider-in-splitpane
     -fx-background-color: transparent;
@@ -47,7 +50,10 @@
 }
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: -white;
+    -fx-background-color:
+                derive(-white, -36%),
+                derive(-white,73%),
+                linear-gradient(to bottom, derive(-white,-19%),derive(-white,61%));
 }
 .scroll-pane > .corner {
     -fx-background-color: -lighter-grey;
@@ -58,21 +64,6 @@
 
 //MENU
 .menu-bar {
-    -fx-border-color: -lighter-grey;
-    -fx-background-color: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
-}
-.menu:hover {
-    -fx-background-color: -white;
-}
-//https://stackoverflow.com/questions/12299162/how-to-style-menu-button-and-menu-items
-.menu-bar > .container > .menu-button:hover,
-.menu-bar > .container > .menu-button:focused,
-.menu-bar > .container > .menu-button:showing {
-    -fx-background-color: -white;
-}
-.menu-item {
-    -fx-background-color: -light-grey; -fx-focus-color: -white; -fx-faint-focus-color: -grey;
-}
-.menu-item:focused {
-    -fx-background-color: -white;
+    -fx-border-color: transparent;
+    -fx-base: -light-grey; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
 }

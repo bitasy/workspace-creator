@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -26,6 +27,8 @@ public class YoutubePanel implements Panel {
     public static final String TUTORIALS = "tutorials";
     public static final String TOOLTIP_PROMPT = "Select a video";
     public static final String YOUTUBE = "Youtube";
+
+    private HBox myAreaOut;
     private VBox myArea;
     private List<String> videoLinks;
     private ChoiceBox<String> videosDropDown;
@@ -33,7 +36,9 @@ public class YoutubePanel implements Panel {
     private WebView myVideo;
 
     public YoutubePanel() {
+        myAreaOut = new HBox();
         myArea = new VBox();
+        myAreaOut.getChildren().add(myArea);
         myArea.fillWidthProperty().setValue(true);
         setupVideoLinkMap();
         createDropDownMenu();
@@ -91,7 +96,7 @@ public class YoutubePanel implements Panel {
 
     @Override
     public Region getRegion() {
-        return myArea;
+        return myAreaOut;
     }
 
     @Override

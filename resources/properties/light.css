@@ -62,7 +62,7 @@
     -fx-control-inner-background: -light-grey; -fx-focus-color: -my-focus; -fx-faint-focus-color: -my-focus-faint;
 }
 .entity {
-   -fx-border-color: -my-focus;
+   -fx-border-color: -my-focus; -fx-border-style: solid; -fx-border-width: 5;
 }
 
 //MENU

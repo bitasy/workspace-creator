@@ -6,6 +6,8 @@ import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
 import database.jsonhelpers.JSONHelper;
+import engine.entities.Entity;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -13,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -119,8 +122,13 @@ public class Menu {
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
+            GameLoader loader = new GameLoader(UID, e -> {});
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+
+            }
+            this.authoring = new Screen(authoringStage,loader.loadGame());
             authoringStage.setOnCloseRequest(event -> {
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
@@ -135,7 +143,7 @@ public class Menu {
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
+        authoring = new Screen(authoringStage, new Entity());
         authoringStage.setOnCloseRequest(event -> {
             authoring.save();
             DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);

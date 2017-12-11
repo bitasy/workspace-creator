@@ -27,8 +27,8 @@ public class PanelController {
 
 	private EntityManager myEntityManager;
 
-	public PanelController() {
-		myEngine = new Engine(new Entity(), GRID_SIZE, false);//depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+	public PanelController(Entity root) {
+		myEngine = new Engine(root, GRID_SIZE, false);//depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
@@ -68,6 +68,7 @@ public class PanelController {
 
     public void load(Entity root) {
         myEngine.load(root, GRID_SIZE, false);
+        myEntityManager = myEngine.getEntityManager();
     }
 
     /**

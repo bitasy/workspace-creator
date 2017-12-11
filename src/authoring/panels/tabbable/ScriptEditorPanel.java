@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import util.ErrorDisplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,7 +34,7 @@ public class ScriptEditorPanel implements Panel {
                 try {
                     writer = new PrintWriter(script);
                 } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
+                    new ErrorDisplay("File not Found", "Script Editor can't load stuff").displayError();
                 }
                 writer.print(editor.getText());
                 writer.close();

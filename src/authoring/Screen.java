@@ -177,9 +177,7 @@ public class Screen {
 
     public void load(Entity root) {
         System.out.println("In screen: " + root.UIDforObject());
-        ScrollPane newPane = controller.load(root);
-        if(newPane == null) System.out.println("null pane");
-        camera.setView(newPane);
+        controller.load(root);
     }
 
     /**

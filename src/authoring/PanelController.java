@@ -20,8 +20,8 @@ public class PanelController {
     private static final int CAMERA_INIT_Y = 250;
     private static final int CAMERA_INIT_X_SIZE = 800;
     private static final int CAMERA_INIT_Y_SIZE = 500;
-    private static final int VALUE1 = 75;
-    private static final int VALUE2 = 75;
+    private static final int VALUE1 = 150;
+    private static final int VALUE2 = 150;
     private Engine myEngine;
 
 	private EntityManager myEntityManager;

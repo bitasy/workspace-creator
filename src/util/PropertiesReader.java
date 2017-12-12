@@ -38,9 +38,6 @@ public class PropertiesReader {
                 // Remove the .properties suffix at the end of the string and at the bundle to the map
                 String fileName = file.getName().substring(0, file.getName().length() - PROPERTIES_SUFFIX.length() - 1);
                 propertyBundles.put(fileName, ResourceBundle.getBundle(fileName));
-                if(fileName.equals("fields")){
-                    System.out.println(propertyBundles.get("fields").keySet().toString());
-                }
             }
         }
         return propertyBundles;

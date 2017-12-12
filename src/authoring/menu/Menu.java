@@ -1,18 +1,25 @@
 package authoring.menu;
 
 import authoring.Screen;
+import authoring.buttons.strategies.Logout;
 import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
 import database.firebase.DatabaseConnector;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import database.jsonhelpers.JSONHelper;
+import engine.entities.Entity;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -20,7 +27,7 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
 import java.io.File;
-import java.util.*;
+import java.util.Stack;
 
 /**
  *
@@ -33,38 +40,46 @@ import java.util.*;
  */
 public class Menu {
 
-    private static final String AUTHORING_IMAGE = "resources/menuImages/authoring.png";
-    private static final String PLAYER_IMAGE = "resources/menuImages/player.png";
-    private static final String NEW_GAME_IMAGE = "resources/menuImages/new_game_button.png";
-    private static final double WIDTH = Double.parseDouble(PropertiesReader.value("menulayout", "width"));
-    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value("menulayout", "height"));
-    private static final String TITLE = "main.VoogaPeaches: Menu";
+    private static final String MENU_LAYOUT = "menulayout";
+    private static final double WIDTH = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "width"));
+    private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "height"));
+    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production -- ";
+    private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
+    private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
+    private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newgamepic");
+    private static final String TITLE = PropertiesReader.value(MENU_LAYOUT,"title");
+    private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
     private static final double SELECTION_HEIGHT_RATIO = 0.28;
     private static final int SELECTION_LIST_WIDTH = 200;
     private static final int SELECTION_LIST_HEIGHT = 150;
     private static final String THEME_MESSAGE = "THEME_MESSAGE";
     private static final String PANEL = "panel";
-    private static final String AUTHORING_TITLE = "main.VoogaPeaches: A Programmers for Peaches Production";
     private static final int HGAP = 50;
     private static final double GRID_WIDTH_RATIO = 0.28;
     private static final double GRID_HEIGHT_RATIO = 0.7;
     private static final int SELECTION_LIST_XOFFSET = 100;
     private static final double SELECTION_WIDTH_RATIO = 0.5;
-    private static final String TITLE_IMAGE_PATH = "resources/menuImages/VoogaTransparent.png";
     private static final double TITLE_SCALEX = 0.75;
     private static final double TITLE_SCALEY = 0.75;
     private static final double TITLE_WIDTH_RATIO = 0.5;
     private static final double TITLE_HEIGHT_RATIO = 0.2;
     private static final int TITLE_WIDTH_CENTER = 2;
     private static final int TITLE_HEIGHT_CENTER = 2;
+    private static final String AUTHORING_TOOLTIP = "authoring";
+    private static final String PLAYING_TOOLTIP = "playing";
+    private static final String NEWGAME_TOOLTIP = "newgame";
+    public static final String DASH = " -- ";
+    private static final String USER = "User: ";
 
     private Pane myRoot;
+    private Stage myStage;
     private Screen authoring;
     private Stage authoringStage = new Stage();
     private GameSelectionList list;
 
     public Menu(Stage stage) {
-        setupStage(stage);
+        myStage = stage;
+        setupStage();
         addTitle();
         setupGames();
         addButtons();
@@ -72,13 +87,13 @@ public class Menu {
         updateTheme();
     }
 
-    private void setupStage(Stage stage){
+    private void setupStage(){
         myRoot = new Pane();
         Scene s = new Scene(myRoot, WIDTH, HEIGHT);
-        stage.setScene(s);
-        stage.setResizable(false);
-        stage.setTitle(TITLE);
-        stage.show();
+        myStage.setScene(s);
+        myStage.setResizable(false);
+        myStage.setTitle(TITLE);
+        myStage.show();
     }
 
     /**
@@ -116,12 +131,19 @@ public class Menu {
     private void authoringPressed() {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
+            authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            authoring = new Screen(authoringStage);
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
+            GameLoader loader = new GameLoader(UID, e -> {});
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+
+            }
+            this.authoring = new Screen(authoringStage,loader.loadGame());
             authoringStage.setOnCloseRequest(event -> {
+                myStage.close();
                 authoring.save();
                 DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
                 try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
@@ -135,11 +157,13 @@ public class Menu {
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
-        authoring = new Screen(authoringStage);
+        authoring = new Screen(authoringStage, new Entity());
         authoringStage.setOnCloseRequest(event -> {
+            myStage.close();
             authoring.save();
             DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
             try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
+
         });
     }
 
@@ -147,9 +171,12 @@ public class Menu {
      * Creates the two buttons and connects them to opening the Authoring and Game Playing Environments
      */
     private void addButtons() {
-        Button authoringButton = new MenuButton( ( ) -> authoringPressed(), AUTHORING_IMAGE).getButton();
+        Button authoringButton = new MenuButton(() -> authoringPressed(), AUTHORING_IMAGE).getButton();
+        authoringButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, AUTHORING_TOOLTIP)));
         Button playButton = new MenuButton(() -> playPressed(), PLAYER_IMAGE).getButton();
+        playButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, PLAYING_TOOLTIP)));
         Button newGame = new MenuButton(() -> newGamePressed(), NEW_GAME_IMAGE ).getButton();
+        newGame.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, NEWGAME_TOOLTIP)));
         GridPane grid = new GridPane();
         grid.add(newGame, 0,0);
         grid.add(authoringButton,1,0);
@@ -157,7 +184,11 @@ public class Menu {
         grid.setHgap(HGAP);
         grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
-        myRoot.getChildren().addAll(grid);
+
+        javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());
+        user.getItems().add(new Logout(grid));
+        MenuBar bar = new MenuBar(user);
+        myRoot.getChildren().addAll(bar, grid);
     }
 
     /**

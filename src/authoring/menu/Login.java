@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -30,6 +32,7 @@ import util.exceptions.ObjectIdNotFoundException;
  */
 public class Login {
 
+
     private static final int INSET = 5;
     private static final String TITLE = "VoogaPeaches: Login to Your Account";
     private static final int SPACING = 10;
@@ -38,13 +41,14 @@ public class Login {
     private static final String CREATE_PROFILE = "Create Profile";
     private static final String LIGHT_CSS = "light.css";
     private static final String PANEL = "panel";
-    private static final int WIDTH = 350;
-    private static final int HEIGHT = 125;
-
+    private static final String ERROR = "Unrecognized username.";
+    public static final int WIDTH = 350;
+    public static final int HEIGHT = 125;
     private Stage myStage;
     private Scene myScene;
     private VBox myArea;
     private TextField userTextField;
+    private Label error;
 
     public Login(Stage stage) {
         myStage = stage;
@@ -57,10 +61,6 @@ public class Login {
         myStage.setResizable(false);
         myStage.setTitle(TITLE);
         updateTheme();
-    }
-
-    private void createButtons() {
-
     }
 
     /**
@@ -82,7 +82,9 @@ public class Login {
         Button signupButton = new Button(CREATE_PROFILE);
         signupButton.setOnAction(e -> createAccount() );
         grid.add(signupButton, 1, 0);
-        vbox.getChildren().addAll(userLabel, userTextField, grid);
+        error = new Label(ERROR);
+        error.setVisible(false);
+        vbox.getChildren().addAll(userLabel, userTextField, grid, error);
         return vbox;
     }
 
@@ -137,6 +139,7 @@ public class Login {
             });
             myStage.close();
         }
+        error.setVisible(true);
     }
 
     private void updateTheme() {

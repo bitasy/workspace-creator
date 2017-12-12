@@ -6,6 +6,7 @@ import authoring.panels.reserved.MenuBarPanel;
 import database.User;
 import database.firebase.DatabaseConnector;
 import database.jsonhelpers.JSONHelper;
+import engine.EntityManager;
 import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -55,9 +56,9 @@ public class Screen {
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage){
+    public Screen(Stage stage, Entity rootEntity){
         root = new VBox();
-        controller = new PanelController();
+        controller = new PanelController(rootEntity);
         errorMessage = new ErrorDisplay(PropertiesReader.value(REFLECT, ERROR_TITLE));
 
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
@@ -173,11 +174,6 @@ public class Screen {
         } catch (InterruptedException e) {
             System.out.println("problem with saving!");
         }
-    }
-
-    public void load(Entity root) {
-        System.out.println("In screen: " + root.UIDforObject());
-        controller.load(root);
     }
 
     /**

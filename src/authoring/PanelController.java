@@ -72,4 +72,8 @@ public class PanelController {
     public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(VALUE1, VALUE2));
     }
+
+    public Engine getEngine() {
+        return myEngine;
+    }
 }

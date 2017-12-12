@@ -132,9 +132,8 @@ public class Menu {
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            GameLoader loader = new GameLoader(UID);
-            try { Thread.sleep(5000); } catch (Exception e) { }
-            this.authoring = new Screen(authoringStage,loader.loadGame());
+            Entity root = loadGame(UID);
+            this.authoring = new Screen(authoringStage,root);
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();
@@ -142,6 +141,16 @@ public class Menu {
                 try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
             });
         }
+    }
+
+
+    private Entity loadGame(String UID) {
+        GameLoader loader = new GameLoader(UID);
+        loader.loadInAssets();
+        while(!loader.assetsLoadedIn()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        loader.loadInRoot();
+        while(!loader.isGameLoaded()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        return loader.loadGame();
     }
 
     private void playPressed(){

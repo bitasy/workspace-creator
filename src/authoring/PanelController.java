@@ -3,7 +3,6 @@ package authoring;
 import engine.Engine;
 import engine.EntityManager;
 import engine.entities.Entity;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import util.math.num.Vector;
@@ -15,11 +14,11 @@ import util.math.num.Vector;
  */
 public class PanelController {
 
-    private static final int GRID_SIZE = 50;
-    private static final int CAMERA_INIT_X = 400;
-    private static final int CAMERA_INIT_Y = 250;
-    private static final int CAMERA_INIT_X_SIZE = 800;
-    private static final int CAMERA_INIT_Y_SIZE = 500;
+    public static final int GRID_SIZE = 50;
+    public static final int CAMERA_INIT_X = 400;
+    public static final int CAMERA_INIT_Y = 250;
+    public static final int CAMERA_INIT_X_SIZE = 800;
+    public static final int CAMERA_INIT_Y_SIZE = 500;
     private static final int VALUE1 = 150;
     private static final int VALUE2 = 150;
     private Engine myEngine;

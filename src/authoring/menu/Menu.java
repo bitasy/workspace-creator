@@ -135,12 +135,8 @@ public class Menu {
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            GameLoader loader = new GameLoader(UID, e -> {});
-            try {
-                Thread.sleep(4000);
-            } catch (Exception e) {
-
-            }
+            GameLoader loader = new GameLoader(UID);
+            try { Thread.sleep(5000); } catch (Exception e) { }
             this.authoring = new Screen(authoringStage,loader.loadGame());
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();

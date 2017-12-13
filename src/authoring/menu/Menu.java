@@ -164,7 +164,6 @@ public class Menu {
             Entity root = loadGame(UID);
             this.gaming = new GameWindow(gamingStage, root);
             gamingStage.setOnCloseRequest(event -> {
-
             });
         }
     }

@@ -63,6 +63,7 @@ public class PropertiesReader {
      */
     public static String value(String propertiesFile, String key) {
         try {
+            System.out.println("Read " + key + " in Properties reader");
             return (String) propertyBundles.get(propertiesFile).getObject(key);
         } catch (Exception e) {
             //TODO: reload from database to try to find the correct propertiesFile and/or key

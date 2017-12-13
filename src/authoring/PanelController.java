@@ -3,7 +3,6 @@ package authoring;
 import engine.Engine;
 import engine.EntityManager;
 import engine.entities.Entity;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import util.math.num.Vector;
@@ -15,19 +14,19 @@ import util.math.num.Vector;
  */
 public class PanelController {
 
-    private static final int GRID_SIZE = 50;
-    private static final int CAMERA_INIT_X = 400;
-    private static final int CAMERA_INIT_Y = 250;
-    private static final int CAMERA_INIT_X_SIZE = 800;
-    private static final int CAMERA_INIT_Y_SIZE = 500;
-    private static final int VALUE1 = 75;
-    private static final int VALUE2 = 75;
+    public static final int GRID_SIZE = 50;
+    public static final int CAMERA_INIT_X = 400;
+    public static final int CAMERA_INIT_Y = 250;
+    public static final int CAMERA_INIT_X_SIZE = 800;
+    public static final int CAMERA_INIT_Y_SIZE = 500;
+    private static final int VALUE1 = 150;
+    private static final int VALUE2 = 150;
     private Engine myEngine;
 
 	private EntityManager myEntityManager;
 
-	public PanelController() {
-		myEngine = new Engine(new Entity(), GRID_SIZE, false);//depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
+	public PanelController(Entity root) {
+		myEngine = new Engine(root, GRID_SIZE, false);//depending on the design of panelcontroller, gridszie would either be retrived from camera panel or properties file
 	    myEntityManager = myEngine.getEntityManager();
 	}
 
@@ -65,10 +64,6 @@ public class PanelController {
         myEngine.save(name);
     }
 
-    public void load(Entity root) {
-        System.out.println(root.getChildren().size());
-        myEngine.load(root, GRID_SIZE, false);
-    }
 
     /**
      * get minimap
@@ -76,5 +71,9 @@ public class PanelController {
      */
     public Pane getMiniMap() {
         return myEngine.getMiniMap(new Vector(VALUE1, VALUE2));
+    }
+
+    public Engine getEngine() {
+        return myEngine;
     }
 }

@@ -67,7 +67,6 @@ public class PropertiesReader {
         } catch (Exception e) {
             //TODO: reload from database to try to find the correct propertiesFile and/or key
             // if that fails then return empty string/error message
-            System.out.println(propertiesFile);
             throw new IllegalStateException(NO_PROP_FOUND);
         }
     }

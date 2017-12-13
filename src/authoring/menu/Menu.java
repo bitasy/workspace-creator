@@ -147,9 +147,9 @@ public class Menu {
     private Entity loadGame(String UID) {
         GameLoader loader = new GameLoader(UID);
         loader.loadInAssets();
-        while(!loader.assetsLoadedIn()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }
         loader.loadInRoot();
-        while(!loader.isGameLoaded()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        while(!loader.isGameLoaded()) { try { Thread.sleep(50); } catch (Exception e) { } }
         return loader.loadGame();
     }
 

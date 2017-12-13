@@ -147,9 +147,9 @@ public class Menu {
     private Entity loadGame(String UID) {
         GameLoader loader = new GameLoader(UID);
         loader.loadInAssets();
-        while(!loader.assetsLoadedIn()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }
         loader.loadInRoot();
-        while(!loader.isGameLoaded()) { try { Thread.sleep(1000); } catch (Exception e) { } }
+        while(!loader.isGameLoaded()) { try { Thread.sleep(50); } catch (Exception e) { } }
         return loader.loadGame();
     }
 
@@ -160,9 +160,8 @@ public class Menu {
             gamingStage.setTitle(AUTHORING_TITLE);
             gamingStage.setMaximized(true);
             gamingStage.setResizable(false);
-            GameLoader loader = new GameLoader(UID);
-            try { Thread.sleep(5000); } catch (Exception e) { }
-            this.gaming = new GameWindow(gamingStage, loader.loadGame());
+            Entity root = loadGame(UID);
+            this.gaming = new GameWindow(gamingStage, root);
             gamingStage.setOnCloseRequest(event -> {
                 System.out.println("Done");
             });

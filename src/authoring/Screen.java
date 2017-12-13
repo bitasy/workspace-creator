@@ -6,7 +6,6 @@ import authoring.panels.reserved.MenuBarPanel;
 import database.User;
 import database.firebase.DatabaseConnector;
 import engine.entities.Entity;
-import engine.events.GamingEvent;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -57,8 +56,7 @@ public class Screen {
         root = new VBox();
         controller = new PanelController(rootEntity);
         errorMessage = new ErrorDisplay(PropertiesReader.value(REFLECT, ERROR_TITLE));
-        GamingEvent gameEvent = new GamingEvent(false);
-        gameEvent.recursiveFire(rootEntity);
+        VoogaPeaches.setIsGaming(false);
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         setupStage(stage, primaryScreenBounds);

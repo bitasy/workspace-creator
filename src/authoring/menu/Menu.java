@@ -6,6 +6,7 @@ import authoring.buttons.strategies.Logout;
 import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
+import database.fileloaders.ScriptLoader;
 import database.firebase.DatabaseConnector;
 import engine.entities.Entity;
 import javafx.scene.Scene;
@@ -160,11 +161,10 @@ public class Menu {
             gamingStage.setTitle(AUTHORING_TITLE);
             gamingStage.setMaximized(true);
             gamingStage.setResizable(false);
-            GameLoader loader = new GameLoader(UID);
-            try { Thread.sleep(5000); } catch (Exception e) { }
-            this.gaming = new GameWindow(gamingStage, loader.loadGame());
+            Entity root = loadGame(UID);
+            this.gaming = new GameWindow(gamingStage, root);
             gamingStage.setOnCloseRequest(event -> {
-                System.out.println("Done");
+
             });
         }
     }
@@ -177,6 +177,7 @@ public class Menu {
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
+        ScriptLoader.cache();
         authoring = new Screen(authoringStage, new Entity());
         authoringStage.setOnCloseRequest(event -> {
             myStage.close();

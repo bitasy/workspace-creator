@@ -2,15 +2,20 @@ package authoring.panels.reserved;
 
 import authoring.Panel;
 import authoring.PanelController;
+import authoring.buttons.strategies.Logout;
 import authoring.menuactions.SaveAction;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import main.VoogaPeaches;
 import util.Loader;
 import util.MenuReader;
+import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
-import util.PropertiesReader;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -24,14 +29,29 @@ import java.util.*;
  */
 public class MenuBarPanel implements Panel {
 
-    //TODO: Do you care about the lines within the menubar sections?
+    private static final String SCREENLAYOUT = "screenlayout";
+    private static final String MENUBARPATH = "menubarpath";
+    private static final String WORKSPACEDATA = "workspacedata";
+    private static final String CSSPATH = "csspath";
+    private static final String CSS = "css";
+    private static final String PANELS = "panels";
+    private static final String THEMES = "themes";
+    private static final String WORKSPACES = "workspaces";
+    private static final String MENU = "Menu";
+    private static final String SAVE = "Save";
+    private static final String THEME_MESSAGE = "THEME_MESSAGE";
+    private static final String CSS_EXTENSION = ".css";
+    private static final String PANEL_TOGGLE = "PANEL_TOGGLE";
+    private static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
+    private static final String USER = "User: ";
+
     private MenuBar bar;
     private PanelController controller;
     private Set<String> workspaces;
     private Set<String> panels;
     private Set<String> themes;
 
-    private String menuPath = PropertiesReader.value("screenlayout","menubarpath");
+    private String menuPath = PropertiesReader.value(SCREENLAYOUT, MENUBARPATH);
     private MenuReader reader;
 
     public MenuBarPanel(Set<String> workspaces, Set<String> panels) throws FileNotFoundException {
@@ -42,8 +62,6 @@ public class MenuBarPanel implements Panel {
 
         reader = new MenuReader(menuPath, this, getViewList());
         bar.getMenus().addAll(reader.getMenus());
-
-        bar.getStyleClass().add("menu-bar");
     }
 
     /**
@@ -52,10 +70,9 @@ public class MenuBarPanel implements Panel {
      * @throws FileNotFoundException
      */
     private Set<String> createThemeList() throws FileNotFoundException {
-        String themePath = PropertiesReader.value("workspacedata", "csspath");
-        String[] allThemes = Loader.validFiles(themePath,"css");
-        Set<String> myThemes = new HashSet<String>(Arrays.asList(allThemes));
-        return myThemes;
+        String themePath = PropertiesReader.value(WORKSPACEDATA, CSSPATH);
+        String[] allThemes = Loader.validFiles(themePath, CSS);
+        return new HashSet<>(Arrays.asList(allThemes));
     }
 
     /**
@@ -66,9 +83,9 @@ public class MenuBarPanel implements Panel {
      */
     private Map<String, MenuItem[]> getViewList() {
         Map<String, MenuItem[]> viewMap = new HashMap<>();
-        viewMap.put("panels", getPanelList());
-        viewMap.put("themes", getThemeList());
-        viewMap.put("workspaces", getWorkspaceList());
+        viewMap.put(PANELS, getPanelList());
+        viewMap.put(THEMES, getThemeList());
+        viewMap.put(WORKSPACES, getWorkspaceList());
         return viewMap;
     }
 
@@ -77,7 +94,6 @@ public class MenuBarPanel implements Panel {
         for(String space : workspaces){
             MenuItem item = new MenuItem(space);
             item.setOnAction(e -> handleWorkspace(item));
-            item.getStyleClass().add("menu-item");
             workspaceTabs.add(item);
         }
         return workspaceTabs.toArray(new MenuItem[workspaceTabs.size()]);
@@ -87,7 +103,6 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> panelTabs = new ArrayList<>();
         for(String space : panels){
             MenuItem item = new MenuItem(space);
-            item.getStyleClass().add("menu-item");
             item.setOnAction(e -> handlePanel(item));
             panelTabs.add(item);
         }
@@ -102,7 +117,6 @@ public class MenuBarPanel implements Panel {
         List<MenuItem> themeOptions = new ArrayList<>();
         for(String theme : themes){
             MenuItem item = new MenuItem(theme);
-            item.getStyleClass().add("menu-item");
             item.setOnAction(e -> handleTheme(item));
             themeOptions.add(item);
         }
@@ -111,7 +125,11 @@ public class MenuBarPanel implements Panel {
 
     @Override
     public Region getRegion(){
-        return bar;
+        Menu user = new Menu(USER + VoogaPeaches.getUser().getUserName());
+        user.getItems().add(new Logout(bar));
+
+        HBox.setHgrow(bar, Priority.ALWAYS);
+        return new HBox(bar, new MenuBar(user));
     }
 
     @Override
@@ -121,11 +139,11 @@ public class MenuBarPanel implements Panel {
 
     @Override
     public String title(){
-        return "Menu";
+        return MENU;
     }
 
     public void setupItem(MenuItem newItem, String strategy) { //TODO: How is styling attached? put string somewhere else
-        if(strategy.equals("Save")) newItem.setOnAction(e -> new SaveAction(controller).execute());
+        if(strategy.equals(SAVE)) newItem.setOnAction(e -> new SaveAction(controller).execute());
     }
 
     /**
@@ -133,7 +151,7 @@ public class MenuBarPanel implements Panel {
      * @param item the menuitem that is selected
      */
     public void handleTheme(MenuItem item) {
-        PubSub.getInstance().publish("THEME_MESSAGE", new StringMessage(item.getText()+".css"));
+        PubSub.getInstance().publish(THEME_MESSAGE, new StringMessage(item.getText() + CSS_EXTENSION));
     }
 
     /**
@@ -141,7 +159,7 @@ public class MenuBarPanel implements Panel {
      * @param item the menuitem that is selected
      */
     private void handlePanel(MenuItem item) {
-        PubSub.getInstance().publish("PANEL_TOGGLE", new StringMessage(item.getText()));
+        PubSub.getInstance().publish(PANEL_TOGGLE, new StringMessage(item.getText()));
     }
 
     /**
@@ -149,6 +167,6 @@ public class MenuBarPanel implements Panel {
      * @param item the menuitem that is selected
      */
     private void handleWorkspace(MenuItem item) {
-        PubSub.getInstance().publish("WORKSPACE_CHANGE", new StringMessage(item.getText()));
+        PubSub.getInstance().publish(WORKSPACE_CHANGE, new StringMessage(item.getText()));
     }
 }

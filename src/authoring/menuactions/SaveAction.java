@@ -1,14 +1,14 @@
 package authoring.menuactions;
 
 import authoring.MenuAction;
-import authoring.menu.GameSavePrompt;
-
 import authoring.PanelController;
+import authoring.menu.GameSavePrompt;
 
 /**
  * Defines the MenuAction that saves the game currently being worked on in the authoring environment.
  */
 public class SaveAction implements MenuAction{
+
     private final PanelController panelController;
 
     /**

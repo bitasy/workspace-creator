@@ -17,6 +17,13 @@ import java.io.IOException;
  */
 public class MiddleCameraWorkspace extends AbstractWorkspace {
 
+    private static final String BOTTOM = "bottom";
+    private static final String LEFT = "left";
+    private static final String RIGHT = "right";
+    private static final String LEFT_DIVISION_STRING = "leftdivision";
+    private static final String RIGHT_DIVISION_STRING = "rightdivision";
+    private static final String BODY_DIVISION_STRING = "bodydivision";
+    private static final String EMPTY_STRING = "";
     private Positions positions;
 
     private SplitPane body;
@@ -41,14 +48,14 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
 
     @Override
     protected Positions positionList() {
-        positions = new Positions("bottom", "left", "right");
+        positions = new Positions(BOTTOM, LEFT, RIGHT);
         initialize();
         return positions;
     }
 
     @Override
     protected String defaultPosition() {
-        return "right";
+        return RIGHT;
     }
 
     @Override
@@ -93,27 +100,36 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     @Override
     protected void loadFile() throws IOException {
         super.loadFile();
-        leftDivision = getDoubleValue("leftdivision");
-        rightDivision = getDoubleValue("rightdivision");
-        bodyDivision = getDoubleValue("bodydivision");
+        leftDivision = getDoubleValue(LEFT_DIVISION_STRING);
+        rightDivision = getDoubleValue(RIGHT_DIVISION_STRING);
+        bodyDivision = getDoubleValue(BODY_DIVISION_STRING);
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
+    }
+
+    @Override
+    protected void saveState(){
+        setDividerProperties();
     }
 
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
-        left = positions.getPosition("left").getPane();
-        bottom = positions.getPosition("bottom").getPane();
-        right = positions.getPosition("right").getPane();
+        left = positions.getPosition(LEFT).getPane();
+        bottom = positions.getPosition(BOTTOM).getPane();
+        right = positions.getPosition(RIGHT).getPane();
     }
 
     private void setDividerFields() {
         bodyDivision = body.getDividerPositions()[0];
         leftDivision = middle.getDividerPositions()[0];
         rightDivision = middle.getDividerPositions()[1];
-        properties.setProperty("leftdivision", leftDivision + "");
-        properties.setProperty("rightdivision", rightDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
+        setDividerProperties();
+    }
+
+    private void setDividerProperties() {
+        properties.setProperty(LEFT_DIVISION_STRING, leftDivision + EMPTY_STRING);
+        properties.setProperty(RIGHT_DIVISION_STRING, rightDivision + EMPTY_STRING);
+        properties.setProperty(BODY_DIVISION_STRING, bodyDivision + EMPTY_STRING);
     }
 }

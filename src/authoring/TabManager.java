@@ -9,9 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import main.VoogaPeaches;
-import util.pubsub.PubSub;
-import util.pubsub.messages.StringMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +20,9 @@ import java.util.function.Consumer;
  * @author Brian Nieves
  */
 public class TabManager {
+
+    private static final String PANEL = "panel";
+    private static final String COLOR_STRING = "#555555";
     private final List<TabPane> tabPanes = new ArrayList<>();
     private final Stage markerStage;
 
@@ -33,14 +33,14 @@ public class TabManager {
     public TabManager(Positions positions) {
         for(String position : positions.allPositions()){
             TabPane myPane = positions.getPosition(position).getPane();
-            myPane.getStyleClass().add("panel");
+            myPane.getStyleClass().add(PANEL);
             tabPanes.add(myPane);
 
         }
         markerStage = new Stage();
         markerStage.setAlwaysOnTop(true);
         markerStage.initStyle(StageStyle.UNDECORATED);
-        Rectangle dummy = new Rectangle(3, 10, Color.web("#555555"));
+        Rectangle dummy = new Rectangle(3, 10, Color.web(COLOR_STRING));
         StackPane markerStack = new StackPane();
         markerStack.getChildren().add(dummy);
         Scene myScene = new Scene(markerStack);

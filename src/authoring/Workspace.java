@@ -16,6 +16,12 @@ public interface Workspace {
     Region getWorkspace();
 
     /**
+     * Returns the title of the workspace.
+     * @return the title
+     */
+    String title();
+
+    /**
      * Adds a region that displays the camera to the workspace. This is not a tabbable Panel and thus must be displayed in the workspace at all times.
      * @param cameraPanel the cameraPanel's region
      */

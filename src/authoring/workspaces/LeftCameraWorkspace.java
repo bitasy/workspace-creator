@@ -22,6 +22,7 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     private static final String MIDDLE_DIVISION_STRING = "middledivision";
     private static final String BODY_DIVISION_STRING = "bodydivision";
     private static final String EMPTY_STRING = "";
+    private static final String TITLE = "Left Camera Workspace";
 
     private Positions positions;
     private SplitPane body;
@@ -41,6 +42,11 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     public LeftCameraWorkspace(double width, double height, PanelManager manager) throws IOException{
         super(width, height, manager);
 
+    }
+
+    @Override
+    public String title(){
+        return TITLE;
     }
 
     @Override

@@ -17,8 +17,13 @@ import java.io.IOException;
  */
 public class LeftCameraWorkspace extends AbstractWorkspace {
 
-    private Positions positions;
+    private static final String RIGHT = "right";
+    private static final String BOTTOM = "bottom";
+    private static final String MIDDLE_DIVISION_STRING = "middledivision";
+    private static final String BODY_DIVISION_STRING = "bodydivision";
+    private static final String EMPTY_STRING = "";
 
+    private Positions positions;
     private SplitPane body;
     private SplitPane middle;
     private TabPane bottom;
@@ -40,14 +45,14 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
 
     @Override
     protected Positions positionList() {
-        positions = new Positions("right", "bottom");
+        positions = new Positions(RIGHT, BOTTOM);
         initialize();
         return positions;
     }
 
     @Override
     protected String defaultPosition() {
-        return "right";
+        return RIGHT;
     }
 
     @Override
@@ -74,8 +79,8 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     @Override
     protected void loadFile() throws IOException {
         super.loadFile();
-        middleDivision = getDoubleValue("middledivision");
-        bodyDivision = getDoubleValue("bodydivision");
+        middleDivision = getDoubleValue(MIDDLE_DIVISION_STRING);
+        bodyDivision = getDoubleValue(BODY_DIVISION_STRING);
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(middleDivision);
     }
@@ -99,17 +104,26 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
         body.setMinHeight(height);
     }
 
+    @Override
+    protected void saveState(){
+        setDividerProperties();
+    }
+
     private void initialize() {
         body = new SplitPane();
         middle = new SplitPane();
-        bottom = positions.getPosition("bottom").getPane();
-        right = positions.getPosition("right").getPane();
+        bottom = positions.getPosition(BOTTOM).getPane();
+        right = positions.getPosition(RIGHT).getPane();
     }
 
     private void setDividerFields() {
         middleDivision = middle.getDividerPositions()[0];
         bodyDivision = body.getDividerPositions()[0];
-        properties.setProperty("middledivision", middleDivision + "");
-        properties.setProperty("bodydivision", bodyDivision + "");
+        setDividerProperties();
+    }
+
+    private void setDividerProperties() {
+        properties.put(MIDDLE_DIVISION_STRING, middleDivision + "");
+        properties.put(BODY_DIVISION_STRING, bodyDivision + "");
     }
 }

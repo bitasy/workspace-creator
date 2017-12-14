@@ -1,9 +1,7 @@
 package main;
 
-import authoring.Screen;
-import authoring.menu.Menu;
-import database.User;
 import authoring.menu.Login;
+import database.User;
 import database.firebase.FirebaseConnector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -15,7 +13,8 @@ import javafx.stage.Stage;
  */
 public class VoogaPeaches extends Application {
 
-    static public User currentUser;
+    static private User currentUser;
+    static private boolean isGaming;
 
     @Override
 	public void start(Stage stage) {
@@ -29,9 +28,13 @@ public class VoogaPeaches extends Application {
         super.stop();
     }
 
-    public static void changeUser(User newUser) {currentUser = newUser;}
+    public static void changeUser(User newUser) { currentUser = newUser; }
 
-    public static User getUser() {return currentUser; }
+    public static User getUser() { return currentUser; }
+
+    public static boolean getIsGaming() { return isGaming; }
+
+    public static void setIsGaming( boolean gaming ) { isGaming = gaming; }
 
     public static void main(String[] args){
         launch();

@@ -62,12 +62,12 @@ public class PanelController {
      * engine start to run script
      */
     public void play() {
-        try {
+        /*try { TODO put sound in engine if possible
             soundEngine.loopSound(musicProperty.get());
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException | NullPointerException e) {
             //Do nothing: Don't play invalid sound
-        }
-        //myEngine.play();
+        }*/
+        myEngine.play();
     }
 
     /**

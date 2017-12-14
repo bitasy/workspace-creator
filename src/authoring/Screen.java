@@ -52,11 +52,11 @@ public class Screen {
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage){
+    public Screen(Stage stage, Entity rootEntity){
         root = new VBox();
-        controller = new PanelController();
+        controller = new PanelController(rootEntity);
         errorMessage = new ErrorDisplay(PropertiesReader.value(REFLECT, ERROR_TITLE));
-
+        VoogaPeaches.setIsGaming(false);
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         setupStage(stage, primaryScreenBounds);
@@ -165,16 +165,9 @@ public class Screen {
         } catch (IOException e){
             errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
             errorMessage.displayError();
-        } catch (ObjectIdNotFoundException e) {
-            System.out.println("problem with saving!");
-        } catch (InterruptedException e) {
-            System.out.println("problem with saving!");
+        } catch (ObjectIdNotFoundException | InterruptedException e) {
+            new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
         }
-    }
-
-    public void load(Entity root) {
-        System.out.println("In screen: " + root.UIDforObject());
-        controller.load(root);
     }
 
     /**

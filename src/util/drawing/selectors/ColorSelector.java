@@ -1,9 +1,9 @@
 package util.drawing.selectors;
 
-import java.util.function.Consumer;
-
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
+
+import java.util.function.Consumer;
 
 /**
  * Allows Colors to be chosen and notifies listener.

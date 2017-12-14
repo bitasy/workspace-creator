@@ -1,11 +1,7 @@
 package authoring.panels.tabbable;
 
 import authoring.Panel;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.ParallelCamera;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 

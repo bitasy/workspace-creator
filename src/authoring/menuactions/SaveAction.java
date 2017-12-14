@@ -1,8 +1,9 @@
 package authoring.menuactions;
 
 import authoring.MenuAction;
-import authoring.PanelController;
 import authoring.menu.GameSavePrompt;
+
+import authoring.PanelController;
 
 /**
  * Defines the MenuAction that saves the game currently being worked on in the authoring environment.

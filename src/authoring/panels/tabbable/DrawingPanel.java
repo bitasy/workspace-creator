@@ -1,14 +1,24 @@
 package authoring.panels.tabbable;
 
 import authoring.Panel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import util.PropertiesReader;
 import util.drawing.ImageCanvasPane;
 
 import java.io.File;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**

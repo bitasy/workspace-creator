@@ -9,13 +9,16 @@ import database.User;
 import database.fileloaders.ScriptLoader;
 import database.firebase.DatabaseConnector;
 import engine.entities.Entity;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
@@ -64,7 +67,7 @@ public class Menu {
     private static final String AUTHORING_TOOLTIP = "authoring";
     private static final String PLAYING_TOOLTIP = "playing";
     private static final String NEWGAME_TOOLTIP = "newgame";
-    public static final String DASH = " -- ";
+    private static final String DASH = " -- ";
     private static final String USER = "User: ";
 
     private Pane myRoot;
@@ -127,6 +130,7 @@ public class Menu {
      */
     private void authoringPressed() {
         if (validOpen()) {
+            System.out.println("authoring pressed");
             String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
@@ -141,7 +145,6 @@ public class Menu {
             });
         }
     }
-
 
     private Entity loadGame(String UID) {
         GameLoader loader = new GameLoader(UID);
@@ -181,7 +184,6 @@ public class Menu {
             authoring.save();
             DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
             try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
-
         });
     }
 
@@ -200,8 +202,8 @@ public class Menu {
         grid.add(authoringButton,1,0);
         grid.add(playButton,2,0);
         grid.setHgap(HGAP);
-        System.out.println(authoringButton.getBoundsInLocal().getWidth());
-        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO - 25);
+        double gridOffset = WIDTH / 2 - (1.5) * newGame.getMinWidth() - HGAP;
+        grid.setLayoutX(gridOffset);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
 
         javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());

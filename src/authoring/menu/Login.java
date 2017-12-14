@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -31,6 +30,7 @@ import util.exceptions.ObjectIdNotFoundException;
  * @author Kelly Zhang
  */
 public class Login {
+
 
     private static final int INSET = 5;
     private static final String TITLE = "VoogaPeaches: Login to Your Account";
@@ -60,10 +60,6 @@ public class Login {
         myStage.setResizable(false);
         myStage.setTitle(TITLE);
         updateTheme();
-    }
-
-    private void createButtons() {
-
     }
 
     /**

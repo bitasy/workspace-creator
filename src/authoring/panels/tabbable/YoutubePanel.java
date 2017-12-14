@@ -35,6 +35,7 @@ public class YoutubePanel implements Panel {
     private List<WebView> loadedVideos;
     private WebView myVideo;
 
+
     public YoutubePanel() {
         myAreaOut = new HBox();
         myArea = new VBox();
@@ -67,7 +68,7 @@ public class YoutubePanel implements Panel {
     private void createDropDownMenu() {
         //https://docs.oracle.com/javafx/2/ui_controls/choice-box.htm
         videosDropDown = new ChoiceBox<>(FXCollections.observableArrayList(videoLinks));
-        videosDropDown.setTooltip(new Tooltip(TOOLTIP_PROMPT));
+        videosDropDown.setTooltip(new Tooltip("Select a video"));
 
         videosDropDown.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -93,6 +94,7 @@ public class YoutubePanel implements Panel {
         webEngine.load(video);
         return webView;
     }
+
 
     @Override
     public Region getRegion() {

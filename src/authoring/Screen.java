@@ -165,10 +165,8 @@ public class Screen {
         } catch (IOException e){
             errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
             errorMessage.displayError();
-        } catch (ObjectIdNotFoundException e) {
-            System.out.println("problem with saving!");
-        } catch (InterruptedException e) {
-            System.out.println("problem with saving!");
+        } catch (ObjectIdNotFoundException | InterruptedException e) {
+            new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
         }
     }
 

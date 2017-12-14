@@ -80,6 +80,8 @@ public class Screen {
         stage.setScene(scene);
         stage.show();
 
+        System.out.println("WIDTH = " + camera.getCAMERA().getBoundsInLocal().getWidth());
+        System.out.println("HEIGHT = " + camera.getCAMERA().getBoundsInLocal().getHeight());
         errorMessage.displayError();
     }
 

@@ -128,7 +128,6 @@ public class Menu {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
-            authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);

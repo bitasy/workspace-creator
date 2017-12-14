@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.VoogaPeaches;
+import util.pubsub.PubSub;
+import util.pubsub.messages.StringMessage;
 
 import java.util.ArrayList;
 import java.util.List;

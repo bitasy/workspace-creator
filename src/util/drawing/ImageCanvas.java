@@ -1,5 +1,7 @@
 package util.drawing;
 
+import java.util.function.Consumer;
+
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,8 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Rotate;
-
-import java.util.function.Consumer;
 
 /**
  * The main canvas that is drawn on by a user. It is primarily edited by drawing tools

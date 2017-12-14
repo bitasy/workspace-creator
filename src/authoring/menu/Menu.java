@@ -8,6 +8,7 @@ import database.User;
 import database.firebase.DatabaseConnector;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import database.jsonhelpers.JSONHelper;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
@@ -39,7 +40,7 @@ public class Menu {
     private static final String MENU_LAYOUT = "menulayout";
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "height"));
-    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production";
+    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production -- ";
     private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
     private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
     private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newgamepic");
@@ -64,6 +65,7 @@ public class Menu {
     private static final String AUTHORING_TOOLTIP = "authoring";
     private static final String PLAYING_TOOLTIP = "playing";
     private static final String NEWGAME_TOOLTIP = "newgame";
+    public static final String DASH = " -- ";
     private static final String USER = "User: ";
 
     private Pane myRoot;
@@ -126,11 +128,12 @@ public class Menu {
     private void authoringPressed() {
         if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
             String UID = list.getSelectedUID();
-            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
+            authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
             authoring = new Screen(authoringStage);
+            GameLoader loader = new GameLoader(UID, e -> { authoring.load(e); });
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();

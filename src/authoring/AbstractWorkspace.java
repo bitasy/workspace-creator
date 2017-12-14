@@ -2,8 +2,6 @@ package authoring;
 
 import authoring.Positions.Position;
 import authoring.panels.PanelManager;
-import javafx.event.Event;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import util.PropertiesReader;
@@ -25,8 +23,14 @@ import java.util.function.Function;
  * @author Brian Nieves
  */
 public abstract class AbstractWorkspace implements Workspace{
-    
+
     private static final String DATA = "workspacedata";
+    private static final String VISIBILITY_TAG = "visibilitytag";
+    private static final String FILEPATH = "filepath";
+    private static final String DATAHEADER = "dataheader";
+    private static final String PANEL_TOGGLE = "PANEL_TOGGLE";
+    private static final String LOAD_TAB = "LOAD_TAB";
+    private static final String PUT_TAB = "PUT_TAB";
     private boolean defaultVisibility = Boolean.parseBoolean(PropertiesReader.value(DATA, "defaultvisibility"));
     protected final Properties properties = new Properties();
     
@@ -71,13 +75,13 @@ public abstract class AbstractWorkspace implements Workspace{
 
         panelPositions.forEach((name, pos) -> properties.setProperty(name, pos.toString()));
         visibilities.forEach((name, bool) -> properties.setProperty(
-                String.format(PropertiesReader.value(DATA, "visibilitytag"), name),
+                String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), name),
                 Boolean.toString(bool))
         );
 
         positions.clear();
 
-        saveToFile(new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName())), properties);
+        saveToFile(new File(String.format(PropertiesReader.value(DATA, FILEPATH), this.getClass().getSimpleName())), properties);
     }
 
     /**
@@ -85,7 +89,7 @@ public abstract class AbstractWorkspace implements Workspace{
      * @throws IOException if the file cannot be read
      */
     protected void loadFile() throws IOException {
-        File file = new File(String.format(PropertiesReader.value(DATA, "filepath"), this.getClass().getSimpleName()));
+        File file = new File(String.format(PropertiesReader.value(DATA, FILEPATH), this.getClass().getSimpleName()));
         if(file.exists()){
             FileInputStream input = new FileInputStream(file);
             properties.load(input);
@@ -96,7 +100,7 @@ public abstract class AbstractWorkspace implements Workspace{
                     visibilities.put(panel,
                             Boolean.parseBoolean(
                                     properties.getProperty(
-                                            String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
+                                            String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), panel))));
                 } else {
                     properties.setProperty(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
@@ -147,7 +151,7 @@ public abstract class AbstractWorkspace implements Workspace{
     protected void saveToFile(File file, Properties properties) throws IOException{
         saveState();
         OutputStream output = new FileOutputStream(file);
-        properties.store(output, String.format(PropertiesReader.value(DATA, "dataheader"), getClass().getSimpleName()));
+        properties.store(output, String.format(PropertiesReader.value(DATA, DATAHEADER), getClass().getSimpleName()));
         output.close();
     }
 
@@ -165,7 +169,7 @@ public abstract class AbstractWorkspace implements Workspace{
     private void createFile(File location) throws IOException{
         for(String panel : manager.getPanels()){
             properties.setProperty(panel, defaultPosition.toString());
-            properties.setProperty(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), Boolean.toString(defaultVisibility));
+            properties.setProperty(String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), panel), Boolean.toString(defaultVisibility));
         }
         saveToFile(location, properties);
     }
@@ -196,14 +200,14 @@ public abstract class AbstractWorkspace implements Workspace{
     }
 
     private void subscribeToChannels() {
-        PubSub.getInstance().subscribe("PANEL_TOGGLE", panelToggle);
-        PubSub.getInstance().subscribeSync("LOAD_TAB", loadTab);
-        PubSub.getInstance().subscribe("PUT_TAB", putTab);
+        PubSub.getInstance().subscribe(PANEL_TOGGLE, panelToggle);
+        PubSub.getInstance().subscribeSync(LOAD_TAB, loadTab);
+        PubSub.getInstance().subscribe(PUT_TAB, putTab);
     }
 
     private void disconnect() {
-        PubSub.getInstance().unsubscribe("PANEL_TOGGLE", panelToggle);
-        PubSub.getInstance().unsubscribeSync("LOAD_TAB");
-        PubSub.getInstance().unsubscribe("PUT_TAB", putTab);
+        PubSub.getInstance().unsubscribe(PANEL_TOGGLE, panelToggle);
+        PubSub.getInstance().unsubscribeSync(LOAD_TAB);
+        PubSub.getInstance().unsubscribe(PUT_TAB, putTab);
     }
 }

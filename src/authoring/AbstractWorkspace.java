@@ -2,8 +2,14 @@ package authoring;
 
 import authoring.Positions.Position;
 import authoring.panels.PanelManager;
+import database.jsonhelpers.JSONDataFolders;
+import database.jsonhelpers.JSONDataManager;
+import javafx.event.Event;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import main.VoogaPeaches;
+import org.json.JSONObject;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.Message;
@@ -23,16 +29,10 @@ import java.util.function.Function;
  * @author Brian Nieves
  */
 public abstract class AbstractWorkspace implements Workspace{
-
+    
     private static final String DATA = "workspacedata";
-    private static final String VISIBILITY_TAG = "visibilitytag";
-    private static final String FILEPATH = "filepath";
-    private static final String DATAHEADER = "dataheader";
-    private static final String PANEL_TOGGLE = "PANEL_TOGGLE";
-    private static final String LOAD_TAB = "LOAD_TAB";
-    private static final String PUT_TAB = "PUT_TAB";
     private boolean defaultVisibility = Boolean.parseBoolean(PropertiesReader.value(DATA, "defaultvisibility"));
-    protected final Properties properties = new Properties();
+    protected Map<String, Object> properties;
     
     private Position defaultPosition;
     private PanelManager manager;
@@ -73,15 +73,15 @@ public abstract class AbstractWorkspace implements Workspace{
     public void deactivate() throws IOException {
         disconnect();
 
-        panelPositions.forEach((name, pos) -> properties.setProperty(name, pos.toString()));
-        visibilities.forEach((name, bool) -> properties.setProperty(
-                String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), name),
+        panelPositions.forEach((name, pos) -> properties.put(name, pos.toString()));
+        visibilities.forEach((name, bool) -> properties.put(
+                String.format(PropertiesReader.value(DATA, "visibilitytag"), name),
                 Boolean.toString(bool))
         );
 
         positions.clear();
 
-        saveToFile(new File(String.format(PropertiesReader.value(DATA, FILEPATH), this.getClass().getSimpleName())), properties);
+        saveToFile();
     }
 
     /**
@@ -89,27 +89,29 @@ public abstract class AbstractWorkspace implements Workspace{
      * @throws IOException if the file cannot be read
      */
     protected void loadFile() throws IOException {
-        File file = new File(String.format(PropertiesReader.value(DATA, FILEPATH), this.getClass().getSimpleName()));
-        if(file.exists()){
-            FileInputStream input = new FileInputStream(file);
-            properties.load(input);
+        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
+        JSONObject blueprint = datamanager.readJSONFile(VoogaPeaches.getUser().getUserName());
+        String name = getClass().getSimpleName();
+
+        if(((JSONObject)blueprint.get("properties")).has(name)){
+            properties = ((JSONObject)((JSONObject)blueprint.get("properties")).get(name)).toMap();
             for(String panel : manager.getPanels()){
-                Position position = positions.getPosition(properties.getProperty(panel));
+                Position position = positions.getPosition((String)properties.get(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
                     visibilities.put(panel,
-                            Boolean.parseBoolean(
-                                    properties.getProperty(
-                                            String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), panel))));
+                            Boolean.parseBoolean(   (String)
+                                    properties.get(
+                                            String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
                 } else {
-                    properties.setProperty(panel, defaultPosition.toString());
+                    properties.put(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
                     visibilities.put(panel, defaultVisibility);
                 }
                 loadPanel(panel);
             }
         } else {
-            createFile(file);
+            createFile();
             loadFile();
         }
     }
@@ -139,20 +141,20 @@ public abstract class AbstractWorkspace implements Workspace{
      * @return the double value
      */
     protected double getDoubleValue(String key) {
-        return Double.parseDouble(properties.getProperty(key));
+        return Double.parseDouble((String) properties.get(key));
     }
 
     /**
-     * Saves the given workspace state to the settings file for the workspace. Used to save the current workspace data.
-     * @param file the workspace file
-     * @param properties the state of the workspace to save
+     * Saves the given workspace state to the user settings file for the workspace. Used to save the current workspace data.
      * @throws IOException if the file cannot be written to
      */
-    protected void saveToFile(File file, Properties properties) throws IOException{
+    protected void saveToFile() throws IOException{
         saveState();
-        OutputStream output = new FileOutputStream(file);
-        properties.store(output, String.format(PropertiesReader.value(DATA, DATAHEADER), getClass().getSimpleName()));
-        output.close();
+
+        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
+        JSONObject blueprint = datamanager.readJSONFile(VoogaPeaches.getUser().getUserName());
+        ((JSONObject)blueprint.get("properties")).put(getClass().getSimpleName(), properties);
+        datamanager.writeJSONFile(VoogaPeaches.getUser().getUserName(), blueprint);
     }
 
     /**
@@ -166,12 +168,13 @@ public abstract class AbstractWorkspace implements Workspace{
         return tab;
     }
 
-    private void createFile(File location) throws IOException{
+    private void createFile() throws IOException{
+        properties = new HashMap<>();
         for(String panel : manager.getPanels()){
-            properties.setProperty(panel, defaultPosition.toString());
-            properties.setProperty(String.format(PropertiesReader.value(DATA, VISIBILITY_TAG), panel), Boolean.toString(defaultVisibility));
+            properties.put(panel, defaultPosition.toString());
+            properties.put(String.format(PropertiesReader.value(DATA, "visibilitytag"), panel), Boolean.toString(defaultVisibility));
         }
-        saveToFile(location, properties);
+        saveToFile();
     }
 
     private void toggle(String panel){
@@ -200,14 +203,14 @@ public abstract class AbstractWorkspace implements Workspace{
     }
 
     private void subscribeToChannels() {
-        PubSub.getInstance().subscribe(PANEL_TOGGLE, panelToggle);
-        PubSub.getInstance().subscribeSync(LOAD_TAB, loadTab);
-        PubSub.getInstance().subscribe(PUT_TAB, putTab);
+        PubSub.getInstance().subscribe("PANEL_TOGGLE", panelToggle);
+        PubSub.getInstance().subscribeSync("LOAD_TAB", loadTab);
+        PubSub.getInstance().subscribe("PUT_TAB", putTab);
     }
 
     private void disconnect() {
-        PubSub.getInstance().unsubscribe(PANEL_TOGGLE, panelToggle);
-        PubSub.getInstance().unsubscribeSync(LOAD_TAB);
-        PubSub.getInstance().unsubscribe(PUT_TAB, putTab);
+        PubSub.getInstance().unsubscribe("PANEL_TOGGLE", panelToggle);
+        PubSub.getInstance().unsubscribeSync("LOAD_TAB");
+        PubSub.getInstance().unsubscribe("PUT_TAB", putTab);
     }
 }

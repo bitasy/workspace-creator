@@ -69,12 +69,10 @@ public class WorkspaceManager {
     }
 
     /**
-     * Saves all of the loaded workspace settings to their respective files.
+     * Saves the currently active workspace.
      */
-    public void saveWorkspaces() throws IOException {
-        for(Workspace workspace : workspaces.values()){
-            workspace.deactivate();
-        }
+    public void saveWorkspace() throws IOException {
+        currentWorkspace.deactivate();
     }
 
     /**

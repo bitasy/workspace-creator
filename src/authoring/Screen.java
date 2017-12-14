@@ -156,7 +156,7 @@ public class Screen {
      */
     public void save(){
         try {
-            workspaceManager.saveWorkspaces();
+            workspaceManager.saveWorkspace();
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
             db.addToDatabase(VoogaPeaches.getUser());
             // Have to force a sleep to wait for data to finish sending, but

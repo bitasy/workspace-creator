@@ -81,7 +81,6 @@ public class Menu {
         addTitle();
         setupGames();
         addButtons();
-        myRoot.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
         updateTheme();
     }
 
@@ -202,7 +201,8 @@ public class Menu {
         grid.add(authoringButton,1,0);
         grid.add(playButton,2,0);
         grid.setHgap(HGAP);
-        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO);
+        System.out.println(authoringButton.getBoundsInLocal().getWidth());
+        grid.setLayoutX(WIDTH * GRID_WIDTH_RATIO - 25);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
 
         javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());

@@ -48,6 +48,7 @@ public class Loader{
     public static Map<String, Object> loadObjects(String path, Object... args) throws FileNotFoundException {
         Map<String, Object> objects = new HashMap<>();
         for(String name : validFiles(path, JAVA_EXT)){
+            System.out.println(name);
             try {
                 Class klass = Class.forName(pathToQualifier(path) + name);
                 Class[] classes = new Class[args.length];
@@ -55,7 +56,9 @@ public class Loader{
                     classes[i] = checkType(args[i].getClass());
                 }
                 Constructor constructor = klass.getConstructor(classes);
+                System.out.println(args);
                 Object object = constructor.newInstance(args);
+                System.out.println(object);
                 objects.put(name, object);
             } catch (ClassNotFoundException e) {
                 errorMessage.addMessage(String.format(PropertiesReader.value("reflect", "nopanel"), e.getMessage()));

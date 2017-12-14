@@ -4,7 +4,6 @@ import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
 import database.jsonhelpers.JSONDataFolders;
 import database.jsonhelpers.JSONDataManager;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import org.json.JSONObject;

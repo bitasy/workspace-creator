@@ -1,10 +1,10 @@
 package util.drawing.selectors;
 
-import javafx.scene.control.ChoiceBox;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+
+import javafx.scene.control.ChoiceBox;
 
 /**
  * Allows Stroke to be chosen and notifies listener.

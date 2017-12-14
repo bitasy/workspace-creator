@@ -66,6 +66,7 @@ public class ScriptEditorPanel implements Panel {
                     }
                     String filename = potentialScript.getName();
                     name.setText(filename.substring(0, filename.indexOf(".")));
+                    s.close();
                 } catch (FileNotFoundException e1) {
                     new ErrorDisplay(FILE_NOT_FOUND, SCRIPT_EDITOR_CAN_T_LOAD_STUFF).displayError();
                 }

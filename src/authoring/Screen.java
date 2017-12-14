@@ -5,18 +5,15 @@ import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
 import database.User;
 import database.firebase.DatabaseConnector;
-import database.jsonhelpers.JSONHelper;
 import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
-import org.json.JSONObject;
 import util.ErrorDisplay;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -159,7 +156,7 @@ public class Screen {
      */
     public void save(){
         try {
-            workspaceManager.saveWorkspaces();
+            workspaceManager.saveWorkspace();
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
             db.addToDatabase(VoogaPeaches.getUser());
             // Have to force a sleep to wait for data to finish sending, but

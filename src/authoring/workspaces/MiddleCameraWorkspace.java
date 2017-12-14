@@ -128,8 +128,8 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     }
 
     private void setDividerProperties() {
-        properties.setProperty(LEFT_DIVISION_STRING, leftDivision + EMPTY_STRING);
-        properties.setProperty(RIGHT_DIVISION_STRING, rightDivision + EMPTY_STRING);
-        properties.setProperty(BODY_DIVISION_STRING, bodyDivision + EMPTY_STRING);
+        properties.put(LEFT_DIVISION_STRING, leftDivision + EMPTY_STRING);
+        properties.put(RIGHT_DIVISION_STRING, rightDivision + EMPTY_STRING);
+        properties.put(BODY_DIVISION_STRING, bodyDivision + EMPTY_STRING);
     }
 }

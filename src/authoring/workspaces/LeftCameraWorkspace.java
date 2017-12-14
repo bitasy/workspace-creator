@@ -119,13 +119,11 @@ public class LeftCameraWorkspace extends AbstractWorkspace {
     private void setDividerFields() {
         middleDivision = middle.getDividerPositions()[0];
         bodyDivision = body.getDividerPositions()[0];
-        properties.setProperty(MIDDLE_DIVISION_STRING, middleDivision + EMPTY_STRING);
-        properties.setProperty(BODY_DIVISION_STRING, bodyDivision + EMPTY_STRING);
         setDividerProperties();
     }
 
     private void setDividerProperties() {
-        properties.setProperty(MIDDLE_DIVISION_STRING, middleDivision + "");
-        properties.setProperty(BODY_DIVISION_STRING, bodyDivision + "");
+        properties.put(MIDDLE_DIVISION_STRING, middleDivision + "");
+        properties.put(BODY_DIVISION_STRING, bodyDivision + "");
     }
 }

@@ -110,7 +110,7 @@ public class WorkspaceManager {
      */
     private void switchWorkspace(String newWorkspace) throws IOException {
         Workspace workspace = workspaces.get(newWorkspace);
-        if(newWorkspace == null){
+        if(workspace == null){
             workspace = workspaces.get(PropertiesReader.value(DEFUALTS, WORKSPACE));
         }
         if(currentWorkspace != null){

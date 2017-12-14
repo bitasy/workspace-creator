@@ -100,10 +100,7 @@ public class Login {
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
             try {
                 db.addToDatabase(newUser);
-                // Have to force a sleep to wait for data to finish sending, but
-                // with actual project this shouldn't be a problem
-                Thread.sleep(1000);//TODO replace with PauseTransition if possible
-            } catch (ObjectIdNotFoundException | InterruptedException e) {
+            } catch (ObjectIdNotFoundException e) {
                 System.out.println(e.getMessage());
             }
             Stage menuStage = new Stage();

@@ -2,11 +2,10 @@ package authoring;
 
 import authoring.panels.PanelManager;
 import authoring.panels.reserved.CameraPanel;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import util.ErrorDisplay;
 import main.VoogaPeaches;
+import util.ErrorDisplay;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;

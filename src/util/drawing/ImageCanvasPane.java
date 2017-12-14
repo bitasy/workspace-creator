@@ -1,13 +1,5 @@
 package util.drawing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import javax.imageio.ImageIO;
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -21,6 +13,13 @@ import javafx.scene.paint.Color;
 import util.drawing.selectors.ColorSelector;
 import util.drawing.selectors.StrokeSelector;
 import util.drawing.selectors.ToolSelector;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * 

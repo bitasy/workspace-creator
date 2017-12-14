@@ -1,25 +1,22 @@
 package authoring.menu;
 
+import authoring.GameWindow.GameWindow;
 import authoring.Screen;
 import authoring.buttons.strategies.Logout;
 import authoring.buttons.strategies.MenuButton;
 import database.GameLoader;
 import database.User;
+import database.fileloaders.ScriptLoader;
 import database.firebase.DatabaseConnector;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import database.jsonhelpers.JSONHelper;
 import engine.entities.Entity;
-import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import main.VoogaPeaches;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
@@ -27,7 +24,6 @@ import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
 import java.io.File;
-import java.util.Stack;
 
 /**
  *
@@ -74,7 +70,9 @@ public class Menu {
     private Pane myRoot;
     private Stage myStage;
     private Screen authoring;
+    private GameWindow gaming;
     private Stage authoringStage = new Stage();
+    private Stage gamingStage = new Stage();
     private GameSelectionList list;
 
     public Menu(Stage stage) {
@@ -129,15 +127,14 @@ public class Menu {
      * Handles switching to the Authoring screen with the pencil image is clicked
      */
     private void authoringPressed() {
-        if (!authoringStage.isShowing() && list.getSelectionModel().getSelectedItem() != null) {
+        if (validOpen()) {
             String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setTitle(AUTHORING_TITLE);
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            GameLoader loader = new GameLoader(UID);
-            try { Thread.sleep(5000); } catch (Exception e) { }
-            this.authoring = new Screen(authoringStage,loader.loadGame());
+            Entity root = loadGame(UID);
+            this.authoring = new Screen(authoringStage,root);
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();
@@ -147,12 +144,39 @@ public class Menu {
         }
     }
 
-    private void playPressed(){ }
+
+    private Entity loadGame(String UID) {
+        GameLoader loader = new GameLoader(UID);
+        loader.loadInAssets();
+        while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }
+        loader.loadInRoot();
+        while(!loader.isGameLoaded()) { try { Thread.sleep(50); } catch (Exception e) { } }
+        return loader.loadGame();
+    }
+
+    private void playPressed(){
+        if (validOpen()) {
+            String UID = list.getSelectedUID();
+            gamingStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
+            gamingStage.setTitle(AUTHORING_TITLE);
+            gamingStage.setMaximized(true);
+            gamingStage.setResizable(false);
+            Entity root = loadGame(UID);
+            this.gaming = new GameWindow(gamingStage, root);
+            gamingStage.setOnCloseRequest(event -> {
+            });
+        }
+    }
+
+    private boolean validOpen() {
+        return !gamingStage.isShowing() && !gamingStage.isShowing() && list.getSelectionModel().getSelectedItem() != null;
+    }
 
     private void newGamePressed(){
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
+        ScriptLoader.cache();
         authoring = new Screen(authoringStage, new Entity());
         authoringStage.setOnCloseRequest(event -> {
             myStage.close();

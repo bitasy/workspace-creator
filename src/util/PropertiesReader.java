@@ -1,7 +1,6 @@
 package util;
 
 import java.io.File;
-import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -10,7 +9,7 @@ import java.util.ResourceBundle;
  * Static class that reads in the properties files and returns requested
  * values from specific properties files
  *
- * @author  Walker Willetts
+ * @author Walker Willetts
  * @author Kelly Zhang
  */
 public class PropertiesReader {
@@ -68,7 +67,6 @@ public class PropertiesReader {
         } catch (Exception e) {
             //TODO: reload from database to try to find the correct propertiesFile and/or key
             // if that fails then return empty string/error message
-            System.out.print(propertiesFile + " : " + key);
             throw new IllegalStateException(NO_PROP_FOUND);
         }
     }

@@ -9,13 +9,16 @@ import database.User;
 import database.fileloaders.ScriptLoader;
 import database.firebase.DatabaseConnector;
 import engine.entities.Entity;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
 import util.PropertiesReader;
@@ -128,6 +131,7 @@ public class Menu {
      */
     private void authoringPressed() {
         if (validOpen()) {
+            System.out.println("authoring pressed");
             String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setTitle(AUTHORING_TITLE);

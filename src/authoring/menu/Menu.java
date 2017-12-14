@@ -148,7 +148,6 @@ public class Menu {
         }
     }
 
-
     private Entity loadGame(String UID) {
         GameLoader loader = new GameLoader(UID);
         loader.loadInAssets();

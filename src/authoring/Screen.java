@@ -5,6 +5,9 @@ import authoring.panels.reserved.CameraPanel;
 import authoring.panels.reserved.MenuBarPanel;
 import database.User;
 import database.firebase.DatabaseConnector;
+import database.jsonhelpers.JSONDataFolders;
+import database.jsonhelpers.JSONDataManager;
+import database.jsonhelpers.JSONHelper;
 import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -154,6 +157,9 @@ public class Screen {
      * saves the workspace information to their files
      */
     public void save(){
+        User currentUser = VoogaPeaches.getUser();
+        JSONDataManager manager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
+        manager.writeJSONFile(currentUser.getUserName(), JSONHelper.JSONForObject(currentUser));
         try {
             workspaceManager.saveWorkspace();
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);

@@ -152,7 +152,10 @@ public class Menu {
     }
 
     private Entity loadGame(String UID) {
-        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.GAMES);
+        /*JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.GAMES);
+        JSONObject obj = datamanager.readJSONFile("Realm of the Mad God/root.json");
+        return new JSONToObjectConverter<Entity>(Entity.class).createObjectFromJSON(Entity.class, obj);*/
+
         GameLoader loader = new GameLoader(UID);
         loader.loadInAssets();
         while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }

@@ -79,6 +79,7 @@ public class Screen {
         Scene scene = new Scene(root, width, height);
         updateTheme();
 
+
         stage.setScene(scene);
         stage.show();
         errorMessage.displayError();

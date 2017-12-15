@@ -61,6 +61,7 @@ public class ScriptEditorPanel implements Panel {
             if(potentialScript.exists()){
                 try {
                     Scanner s = new Scanner(potentialScript);
+                    editor.clear();
                     while(s.hasNextLine()){
                         editor.appendText(s.nextLine()+"\n");
                     }

@@ -8,6 +8,9 @@ import database.GameLoader;
 import database.User;
 import database.fileloaders.ScriptLoader;
 import database.firebase.DatabaseConnector;
+import database.jsonhelpers.JSONDataFolders;
+import database.jsonhelpers.JSONDataManager;
+import database.jsonhelpers.JSONToObjectConverter;
 import engine.entities.Entity;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -21,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
+import org.json.JSONObject;
 import util.PropertiesReader;
 import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
@@ -135,6 +139,7 @@ public class Menu {
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
+            ScriptLoader.cache();
             Entity root = loadGame(UID);
             this.authoring = new Screen(authoringStage,root);
             authoringStage.setOnCloseRequest(event -> {
@@ -147,6 +152,7 @@ public class Menu {
     }
 
     private Entity loadGame(String UID) {
+        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.GAMES);
         GameLoader loader = new GameLoader(UID);
         loader.loadInAssets();
         while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }

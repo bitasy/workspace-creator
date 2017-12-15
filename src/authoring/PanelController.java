@@ -47,14 +47,14 @@ public class PanelController {
     }
 
     /**
-     * engine start to run script
+     * engine start to run grid_move
      */
     public void play() {
         myEngine.play();
     }
 
     /**
-     * engine stop to run script
+     * engine stop to run grid_move
      */
     public void pause() {
         myEngine.pause();

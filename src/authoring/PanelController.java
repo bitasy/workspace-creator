@@ -59,7 +59,7 @@ public class PanelController {
     }
 
     /**
-     * engine start to run script
+     * engine start to run grid_move
      */
     public void play() {
         /*try { TODO put sound in engine if possible
@@ -71,7 +71,7 @@ public class PanelController {
     }
 
     /**
-     * engine stop to run script
+     * engine stop to run grid_move
      */
     public void pause() {
         soundEngine.removeAllSounds();

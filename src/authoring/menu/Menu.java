@@ -130,7 +130,7 @@ public class Menu {
      */
     private void authoringPressed() {
         if (validOpen()) {
-            System.out.println("authoring pressed");
+            VoogaPeaches.setIsGaming(false);
             String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
@@ -157,6 +157,7 @@ public class Menu {
 
     private void playPressed(){
         if (validOpen()) {
+            VoogaPeaches.setIsGaming(true);
             String UID = list.getSelectedUID();
             gamingStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             gamingStage.setTitle(AUTHORING_TITLE);

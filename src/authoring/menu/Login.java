@@ -98,11 +98,11 @@ public class Login {
             manager.writeJSONFile(userTextField.getText().trim(), JSONHelper.JSONForObject(newUser));
             VoogaPeaches.changeUser(newUser);
             DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
-            try {
-                db.addToDatabase(newUser);
-            } catch (ObjectIdNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
+            //try {
+             //   db.addToDatabase(newUser);
+            //} catch (ObjectIdNotFoundException e) {
+               // System.out.println(e.getMessage());
+            //}
             Stage menuStage = new Stage();
             Menu myMenu = new Menu(menuStage);
             myStage.close();

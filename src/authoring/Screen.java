@@ -59,7 +59,6 @@ public class Screen {
         root = new VBox();
         controller = new PanelController(rootEntity);
         errorMessage = new ErrorDisplay(PropertiesReader.value(REFLECT, ERROR_TITLE));
-        VoogaPeaches.setIsGaming(false);
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         setupStage(stage, primaryScreenBounds);
@@ -162,16 +161,16 @@ public class Screen {
         manager.writeJSONFile(currentUser.getUserName(), JSONHelper.JSONForObject(currentUser));
         try {
             workspaceManager.saveWorkspace();
-            DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
-            db.addToDatabase(VoogaPeaches.getUser());
+          //  DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
+           // db.addToDatabase(VoogaPeaches.getUser());
             // Have to force a sleep to wait for data to finish sending, but
             // with actual project this shouldn't be a problem
-            Thread.sleep(1000);//TODO replace with PauseTransition if possible
+            //Thread.sleep(1000);//TODO replace with PauseTransition if possible
         } catch (IOException e){
-            errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
-            errorMessage.displayError();
-        } catch (ObjectIdNotFoundException | InterruptedException e) {
-            new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
+      //      errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
+        //    errorMessage.displayError();
+        //} catch (ObjectIdNotFoundException | InterruptedException e) {
+          //  new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
         }
     }
 

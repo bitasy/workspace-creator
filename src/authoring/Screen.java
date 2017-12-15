@@ -156,16 +156,16 @@ public class Screen {
     public void save(){
         try {
             workspaceManager.saveWorkspaces();
-            DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
-            db.addToDatabase(VoogaPeaches.getUser());
+          //  DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
+           // db.addToDatabase(VoogaPeaches.getUser());
             // Have to force a sleep to wait for data to finish sending, but
             // with actual project this shouldn't be a problem
-            Thread.sleep(1000);//TODO replace with PauseTransition if possible
+            //Thread.sleep(1000);//TODO replace with PauseTransition if possible
         } catch (IOException e){
-            errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
-            errorMessage.displayError();
-        } catch (ObjectIdNotFoundException | InterruptedException e) {
-            new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
+      //      errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
+        //    errorMessage.displayError();
+        //} catch (ObjectIdNotFoundException | InterruptedException e) {
+          //  new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
         }
     }
 

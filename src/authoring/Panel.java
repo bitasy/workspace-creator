@@ -3,7 +3,7 @@ package authoring;
 import javafx.scene.layout.Region;
 
 /**
- * A Panel is the functional unit of the VoogaSalad authoring environment. Every panel has a single purpose and a single place to be shown on the screen. Panels can be opened and closed at will by the user, and are held in a TabView for each area with the exception of the Menu Bar.
+ * A Panel is the functional unit of the Peaches authoring environment. Every panel has a single purpose and a single place to be shown on the screen. Panels can be opened and closed at will by the user, and are held in a TabView for each area with the exception of the Menu Bar.
  * @author Brian Nieves
  * @author Kelly Zhang
  */

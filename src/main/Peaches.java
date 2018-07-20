@@ -10,7 +10,7 @@ import javafx.stage.Stage;
  * @author Brian Nieves
  * @author Kelly Zhang
  */
-public class VoogaPeaches extends Application {
+public class Peaches extends Application {
 
     static private User currentUser;
     static private boolean isGaming;

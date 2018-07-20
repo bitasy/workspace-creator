@@ -10,7 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.Loader;
 import util.MenuReader;
 import util.PropertiesReader;
@@ -125,7 +125,7 @@ public class MenuBarPanel implements Panel {
 
     @Override
     public Region getRegion(){
-        Menu user = new Menu(USER + VoogaPeaches.getUser().getUserName());
+        Menu user = new Menu(USER + Peaches.getUser().getUserName());
         user.getItems().add(new Logout(bar));
 
         HBox.setHgrow(bar, Priority.ALWAYS);

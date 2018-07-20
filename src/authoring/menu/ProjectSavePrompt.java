@@ -4,7 +4,7 @@ import authoring.PanelController;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
-import main.VoogaPeaches;
+import main.Peaches;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class ProjectSavePrompt {
 
     private TextInputDialog createChoiceDialog() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.getDialogPane().getStylesheets().add(VoogaPeaches.getUser().getThemeName());
+        dialog.getDialogPane().getStylesheets().add(Peaches.getUser().getThemeName());
         dialog.getDialogPane().getStyleClass().add(PANEL);
         dialog.getDialogPane().getButtonTypes().remove(0);
         dialog.getDialogPane().getButtonTypes().add(0, new ButtonType(SAVE_GAME, ButtonBar.ButtonData.OK_DONE));

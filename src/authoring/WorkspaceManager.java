@@ -4,7 +4,7 @@ import authoring.panels.PanelManager;
 import authoring.panels.reserved.MainPanel;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.ErrorDisplay;
 import util.Loader;
 import util.PropertiesReader;
@@ -75,8 +75,8 @@ public class WorkspaceManager {
      * Saves the currently active workspace.
      */
     public void saveWorkspace() {
-        VoogaPeaches.getUser().setWorkspace(currentWorkspace.title());
-        VoogaPeaches.getUser().save();
+        Peaches.getUser().setWorkspace(currentWorkspace.title());
+        Peaches.getUser().save();
         currentWorkspace.deactivate();
     }
 
@@ -94,7 +94,7 @@ public class WorkspaceManager {
             Workspace workspace = (Workspace) workspaces.get(space);
             this.workspaces.put(workspace.title(), workspace);
         }
-        switchWorkspace(VoogaPeaches.getUser().getWorkspaceName());
+        switchWorkspace(Peaches.getUser().getWorkspaceName());
     }
 
     /**

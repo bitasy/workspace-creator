@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 
 /**
- * TabManager handles the tabs and their location in the various TabPanes on the screen for a workspace. It uses and conforms with the requirements of the inner VoogaTab class, and allows for workspace customization.
+ * TabManager handles the tabs and their location in the various TabPanes on the screen for a workspace. It uses and conforms with the requirements of the inner MovingTab class, and allows for workspace customization.
  * @author Brian Nieves
  */
 public class TabManager {
@@ -54,7 +54,7 @@ public class TabManager {
     public void remove(String panel){
         for(TabPane tabs : tabPanes){
             for(Tab tab : tabs.getTabs()){
-                String tabpanel = ((VoogaTab)tab).getPanelName();
+                String tabpanel = ((MovingTab)tab).getPanelName();
                 if(tabpanel.equals(panel)){
                     tabs.getTabs().remove(tab);
                     return;
@@ -69,7 +69,7 @@ public class TabManager {
      * @return the new tab
      */
     public Tab newTab(String title){
-        VoogaTab tab = new VoogaTab(title, markerStage, tabPanes);
+        MovingTab tab = new MovingTab(title, markerStage, tabPanes);
         if(onTabClose == null) throw new IllegalStateException();
         tab.setOnCloseRequest(e -> onTabClose.accept(e));
         return tab;

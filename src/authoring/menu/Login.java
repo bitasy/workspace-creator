@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.PropertiesReader;
 
 import java.io.FileInputStream;
@@ -34,7 +34,7 @@ public class Login {
 
 
     private static final int INSET = 5;
-    private static final String TITLE = "VoogaPeaches: Login to Your Account";
+    private static final String TITLE = "Peaches: Login to Your Account";
     private static final int SPACING = 10;
     private static final String USER_NAME = "User Name";
     private static final String LOGIN = "Login";
@@ -97,7 +97,7 @@ public class Login {
         if(!userTextField.getText().trim().isEmpty()){
             User newUser = new User(userTextField.getText().trim());
             newUser.save();
-            VoogaPeaches.changeUser(newUser);
+            Peaches.changeUser(newUser);
             Stage menuStage = new Stage();
             new Menu(menuStage, newUser);
             myStage.close();
@@ -116,7 +116,7 @@ public class Login {
 
             Gson gson = new Gson();
             User user = gson.fromJson(reader, User.class);
-            VoogaPeaches.changeUser(user);
+            Peaches.changeUser(user);
             Stage menuStage = new Stage();
             new Menu(menuStage, user);
             myStage.close();

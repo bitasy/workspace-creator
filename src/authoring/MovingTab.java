@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.pubsub.PubSub;
 import util.pubsub.messages.MoveTabMessage;
 import util.pubsub.messages.StringMessage;
@@ -29,15 +29,15 @@ import java.util.List;
 /**
  * A draggable tab that can optionally be detached from its tab pane and shown
  * in a separate window. This can be added to any normal TabPane, however a
- * TabPane with draggable tabs must *only* have DraggableTabs, normal tabs and
- * DraggableTabs mixed will cause issues! Edited for reuse by Brian Nieves.
+ * TabPane with draggable tabs must *only* have MovingTabs, normal tabs and
+ * MovingTabs mixed will cause issues! Edited for reuse by Brian Nieves.
  * <p>
  * @author Michael Berry
  * @author Brian Nieves
  * @author Kelly Zhang
  * @see <a href = "http://berry120.blogspot.co.uk/2014/01/draggable-and-detachable-tabs-in-javafx.html">Draggable and detachable tabs in JavaFX 2</a>
  */
-public class VoogaTab extends Tab{
+public class MovingTab extends Tab{
 
     private static final String BACKGROUND_COLOR = "-fx-background-color:#DDDDDD;";
     private static final String THEME_MESSAGE = "THEME_MESSAGE";
@@ -59,7 +59,7 @@ public class VoogaTab extends Tab{
      * <p>
      * @param text the text to appear on the tag label.
      */
-    public VoogaTab(String text, Stage markerStage, List<TabPane> panes) {
+    public MovingTab(String text, Stage markerStage, List<TabPane> panes) {
         tabPanes = panes;
         this.markerStage = markerStage;
         nameLabel = new Label(text);
@@ -96,7 +96,7 @@ public class VoogaTab extends Tab{
         if(!t.isStillSincePress()) {
             Point2D screenPoint = new Point2D(t.getScreenX(), t.getScreenY());
             TabPane oldTabPane = getTabPane();
-            int oldIndex = oldTabPane.getTabs().indexOf(VoogaTab.this);
+            int oldIndex = oldTabPane.getTabs().indexOf(MovingTab.this);
             InsertData insertData = getInsertData(screenPoint);
             if(insertData != null) {
                 int addIndex = insertData.getIndex();
@@ -115,7 +115,7 @@ public class VoogaTab extends Tab{
             newStage.setOnHiding(t1 -> {
                 tabPanes.remove(pane);
                 for (Iterator i = pane.getTabs().iterator(); i.hasNext();) {
-                    VoogaTab tab = (VoogaTab)i.next();
+                    MovingTab tab = (MovingTab)i.next();
                     TabPaneBehavior behavior = ((TabPaneSkin) getTabPane().getSkin()).getBehavior();
                     if (behavior.canCloseTab(tab)) {
                         i.remove();
@@ -123,15 +123,15 @@ public class VoogaTab extends Tab{
                     }
                 }
             });
-            getTabPane().getTabs().remove(VoogaTab.this);
-            pane.getTabs().add(VoogaTab.this);
+            getTabPane().getTabs().remove(MovingTab.this);
+            pane.getTabs().add(MovingTab.this);
             pane.getTabs().addListener((ListChangeListener<Tab>) change -> {
                 if(pane.getTabs().isEmpty()) {
                     newStage.hide();
                 }
             });
             Scene newScene = new Scene(pane);
-            newScene.getStylesheets().add(VoogaPeaches.getUser().getThemeName());
+            newScene.getStylesheets().add(Peaches.getUser().getThemeName());
             PubSub.getInstance().subscribe(
                     THEME_MESSAGE,
                     (message) -> {
@@ -186,7 +186,7 @@ public class VoogaTab extends Tab{
     }
 
     private void handleSwitch(TabPane oldTabPane, int oldIndex, InsertData insertData, int addIndex) {
-        oldTabPane.getTabs().remove(VoogaTab.this);
+        oldTabPane.getTabs().remove(MovingTab.this);
         if(oldIndex < addIndex && oldTabPane == insertData.getInsertPane()) {
             addIndex--;
         }
@@ -198,7 +198,7 @@ public class VoogaTab extends Tab{
         PauseTransition p = new PauseTransition(Duration.millis(150 + 20));
         final int index = addIndex;
         p.setOnFinished(e -> {
-            insertData.getInsertPane().getTabs().add(index, VoogaTab.this);
+            insertData.getInsertPane().getTabs().add(index, MovingTab.this);
             insertData.getInsertPane().selectionModelProperty().get().select(index);
         });
         p.play();
@@ -248,7 +248,7 @@ public class VoogaTab extends Tab{
                         for(int i = 0; i < tabPane.getTabs().size() - 1; i++) {
                             Tab leftTab = tabPane.getTabs().get(i);
                             Tab rightTab = tabPane.getTabs().get(i + 1);
-                            if(leftTab instanceof VoogaTab && rightTab instanceof VoogaTab) {
+                            if(leftTab instanceof MovingTab && rightTab instanceof MovingTab) {
                                 Rectangle2D leftTabRect = getAbsoluteRect(leftTab);
                                 Rectangle2D rightTabRect = getAbsoluteRect(rightTab);
                                 if(betweenX(leftTabRect, rightTabRect, screenPoint.getX())) {
@@ -273,7 +273,7 @@ public class VoogaTab extends Tab{
     }
 
     private Rectangle2D getAbsoluteRect(Tab tab) {
-        Control node = ((VoogaTab) tab).getLabel();
+        Control node = ((MovingTab) tab).getLabel();
         return getAbsoluteRect(node);
     }
 

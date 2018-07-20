@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
@@ -33,9 +33,8 @@ public class Menu {
     private static final String MENU_LAYOUT = "menulayout";
     private static final double WIDTH = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "width"));
     private static final double HEIGHT = Double.parseDouble(PropertiesReader.value(MENU_LAYOUT, "height"));
-    private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production -- ";
+    private static final String AUTHORING_TITLE = "Peaches: A Programmers for Peaches Production -- ";
     private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
-    private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
     private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newprojectpic");
     private static final String TITLE = PropertiesReader.value(MENU_LAYOUT,"title");
     private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
@@ -45,7 +44,6 @@ public class Menu {
     private static final String THEME_MESSAGE = "THEME_MESSAGE";
     private static final String PANEL = "panel";
     private static final int HGAP = 50;
-    private static final double GRID_WIDTH_RATIO = 0.28;
     private static final double GRID_HEIGHT_RATIO = 0.7;
     private static final int SELECTION_LIST_XOFFSET = 100;
     private static final double SELECTION_WIDTH_RATIO = 0.5;
@@ -56,7 +54,6 @@ public class Menu {
     private static final int TITLE_WIDTH_CENTER = 2;
     private static final int TITLE_HEIGHT_CENTER = 2;
     private static final String AUTHORING_TOOLTIP = "authoring";
-    private static final String PLAYING_TOOLTIP = "playing";
     private static final String NEWGAME_TOOLTIP = "newproject";
     private static final String DASH = " -- ";
     private static final String USER = "User: ";
@@ -102,7 +99,7 @@ public class Menu {
      * Used to set the initial theme, subscribe to PubSub and get new themes as they are published
      */
     private void updateTheme() {
-        String initialTheme = VoogaPeaches.getUser().getThemeName();
+        String initialTheme = Peaches.getUser().getThemeName();
         myRoot.getStylesheets().add(initialTheme);
         PubSub.getInstance().publish(THEME_MESSAGE,new StringMessage(initialTheme));
         PubSub.getInstance().subscribe(
@@ -122,7 +119,7 @@ public class Menu {
      */
     private void openProjectPressed() {
         if (validOpen()) {
-            VoogaPeaches.setIsGaming(false);
+            Peaches.setIsGaming(false);
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
@@ -165,14 +162,14 @@ public class Menu {
         grid.setLayoutX(gridOffset);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
 
-        javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + VoogaPeaches.getUser().getUserName());
+        javafx.scene.control.Menu user = new javafx.scene.control.Menu(USER + Peaches.getUser().getUserName());
         user.getItems().add(new Logout(grid));
         MenuBar bar = new MenuBar(user);
         myRoot.getChildren().addAll(bar, grid);
     }
 
     /**
-     * Adds the Vooga Peaches text to the menu
+     * Adds the Peaches text to the menu
      */
     private void addTitle() {
         ImageView title = new ImageView(new File(TITLE_IMAGE_PATH).toURI().toString());

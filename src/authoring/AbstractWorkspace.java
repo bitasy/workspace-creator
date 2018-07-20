@@ -4,7 +4,7 @@ import authoring.Positions.Position;
 import authoring.panels.PanelManager;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import main.VoogaPeaches;
+import main.Peaches;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.Message;
@@ -53,7 +53,7 @@ public abstract class AbstractWorkspace implements Workspace{
         visibilities = new HashMap<>();
         defaultPosition = positions.getPosition(defaultPosition());
         tabManager = new TabManager(positions);
-        tabManager.setOnTabClose(e -> visibilities.put(((VoogaTab)e.getTarget()).getPanelName(), false));
+        tabManager.setOnTabClose(e -> visibilities.put(((MovingTab)e.getTarget()).getPanelName(), false));
         setupWorkspace(width, height);
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractWorkspace implements Workspace{
      */
     protected void loadFile() throws IOException {
 
-        User user = VoogaPeaches.getUser();
+        User user = Peaches.getUser();
         properties = user.getProperties().get(title());
         if(properties != null) {
             for(String panel : manager.getPanels()){
@@ -143,8 +143,8 @@ public abstract class AbstractWorkspace implements Workspace{
     protected void saveToFile() {
         saveState();
 
-        VoogaPeaches.getUser().getProperties().put(title(), properties);
-        VoogaPeaches.getUser().save();
+        Peaches.getUser().getProperties().put(title(), properties);
+        Peaches.getUser().save();
     }
 
     /**

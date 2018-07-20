@@ -1,8 +1,7 @@
 package main;
 
+import authoring.User;
 import authoring.menu.Login;
-import database.User;
-import database.firebase.FirebaseConnector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -24,8 +23,8 @@ public class VoogaPeaches extends Application {
 
     @Override
     public void stop() throws Exception{
-        FirebaseConnector.closeFirebaseApp();
         super.stop();
+        currentUser.save();
     }
 
     public static void changeUser(User newUser) { currentUser = newUser; }

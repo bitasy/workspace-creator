@@ -2,7 +2,7 @@ package authoring.menuactions;
 
 import authoring.MenuAction;
 import authoring.PanelController;
-import authoring.menu.GameSavePrompt;
+import authoring.menu.ProjectSavePrompt;
 
 /**
  * Defines the MenuAction that saves the game currently being worked on in the authoring environment.
@@ -21,6 +21,6 @@ public class SaveAction implements MenuAction{
 
     @Override
     public void execute(){
-        GameSavePrompt save = new GameSavePrompt(panelController);
+        //ProjectSavePrompt save = new ProjectSavePrompt(panelController);
     }
 }

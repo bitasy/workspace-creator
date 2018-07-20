@@ -66,10 +66,10 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     }
 
     @Override
-    public void addCameraPanel(Region cameraPanel) {
-        cameraPanel.setMinWidth(0);
-        cameraPanel.setMinHeight(0);
-        ((SplitPane)body.getItems().get(0)).getItems().set(1, cameraPanel);
+    public void addMainPanel(Region mainPanel) {
+        mainPanel.setMinWidth(0);
+        mainPanel.setMinHeight(0);
+        ((SplitPane)body.getItems().get(0)).getItems().set(1, mainPanel);
         body.setDividerPositions(bodyDivision);
         middle.setDividerPositions(leftDivision, rightDivision);
     }
@@ -80,7 +80,7 @@ public class MiddleCameraWorkspace extends AbstractWorkspace {
     }
 
     @Override
-    public void deactivate() throws IOException{
+    public void deactivate(){
         setDividerFields();
         super.deactivate();
     }

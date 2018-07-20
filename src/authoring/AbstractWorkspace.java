@@ -2,24 +2,18 @@ package authoring;
 
 import authoring.Positions.Position;
 import authoring.panels.PanelManager;
-import database.jsonhelpers.JSONDataFolders;
-import database.jsonhelpers.JSONDataManager;
-import javafx.event.Event;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import main.VoogaPeaches;
-import org.json.JSONObject;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
 import util.pubsub.messages.Message;
 import util.pubsub.messages.MoveTabMessage;
 import util.pubsub.messages.StringMessage;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -32,7 +26,7 @@ public abstract class AbstractWorkspace implements Workspace{
     
     private static final String DATA = "workspacedata";
     private boolean defaultVisibility = Boolean.parseBoolean(PropertiesReader.value(DATA, "defaultvisibility"));
-    protected Map<String, Object> properties;
+    protected Map<String, String> properties;
     
     private Position defaultPosition;
     private PanelManager manager;
@@ -70,7 +64,7 @@ public abstract class AbstractWorkspace implements Workspace{
     }
 
     @Override
-    public void deactivate() throws IOException {
+    public void deactivate() {
         disconnect();
 
         panelPositions.forEach((name, pos) -> properties.put(name, pos.toString()));
@@ -89,20 +83,18 @@ public abstract class AbstractWorkspace implements Workspace{
      * @throws IOException if the file cannot be read
      */
     protected void loadFile() throws IOException {
-        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-        JSONObject blueprint = datamanager.readJSONFile(VoogaPeaches.getUser().getUserName());
-        String name = getClass().getSimpleName();
 
-        if(((JSONObject)blueprint.get("properties")).has(name)){
-            properties = ((JSONObject)((JSONObject)blueprint.get("properties")).get(name)).toMap();
+        User user = VoogaPeaches.getUser();
+        properties = user.getProperties().get(title());
+        if(properties != null) {
             for(String panel : manager.getPanels()){
-                Position position = positions.getPosition((String)properties.get(panel));
+                Position position = positions.getPosition(properties.get(panel));
                 if(position != null){
                     panelPositions.put(panel, position);
                     visibilities.put(panel,
-                            Boolean.parseBoolean(   (String)
+                            Boolean.parseBoolean(
                                     properties.get(
-                                            String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
+                                        String.format(PropertiesReader.value(DATA, "visibilitytag"), panel))));
                 } else {
                     properties.put(panel, defaultPosition.toString());
                     panelPositions.put(panel, defaultPosition);
@@ -148,13 +140,11 @@ public abstract class AbstractWorkspace implements Workspace{
      * Saves the given workspace state to the user settings file for the workspace. Used to save the current workspace data.
      * @throws IOException if the file cannot be written to
      */
-    protected void saveToFile() throws IOException{
+    protected void saveToFile() {
         saveState();
 
-        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-        JSONObject blueprint = datamanager.readJSONFile(VoogaPeaches.getUser().getUserName());
-        ((JSONObject)blueprint.get("properties")).put(getClass().getSimpleName(), properties);
-        datamanager.writeJSONFile(VoogaPeaches.getUser().getUserName(), blueprint);
+        VoogaPeaches.getUser().getProperties().put(title(), properties);
+        VoogaPeaches.getUser().save();
     }
 
     /**

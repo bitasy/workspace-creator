@@ -1,14 +1,11 @@
 package authoring;
 
 import authoring.panels.PanelManager;
-import authoring.panels.reserved.CameraPanel;
-import database.jsonhelpers.JSONDataFolders;
-import database.jsonhelpers.JSONDataManager;
+import authoring.panels.reserved.MainPanel;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import org.json.JSONObject;
-import util.ErrorDisplay;
 import main.VoogaPeaches;
+import util.ErrorDisplay;
 import util.Loader;
 import util.PropertiesReader;
 import util.pubsub.PubSub;
@@ -30,14 +27,13 @@ public class WorkspaceManager {
     private static final String WORKSPACE_CHANGE = "WORKSPACE_CHANGE";
     private static final String IO_ERROR = "IO Error";
     private static final String COULD_NOT_SWITCH_WORKSPACE_ERROR = "Couldn't switch workspace";
-    private static final String WORKSPACE_NAME = "workspaceName";
     private static final String DEFUALTS = "defaults";
     private static final String WORKSPACE = "workspace";
 
     private Pane currentWorkspaceArea;
     private Map<String, Workspace> workspaces = new HashMap<>();
     private PanelManager panelManager;
-    private CameraPanel cameraPanel;
+    private MainPanel mainPanel;
     private Workspace currentWorkspace;
 
     /**
@@ -45,13 +41,13 @@ public class WorkspaceManager {
      * @author Brian Nieves
      * @param workspaceArea the area of the screen to display the current workspace in
      * @param panelManager the manager of the panels to display in the workspace
-     * @param cameraPanel the camera panel to add to the workspaces manually
+     * @param mainPanel the camera panel to add to the workspaces manually
      * @throws IOException if the workspace directory cannot be found
      */
-    public WorkspaceManager(Pane workspaceArea, PanelManager panelManager, CameraPanel cameraPanel) throws IOException {
+    public WorkspaceManager(Pane workspaceArea, PanelManager panelManager, MainPanel mainPanel) throws IOException {
         currentWorkspaceArea = workspaceArea;
         this.panelManager = panelManager;
-        this.cameraPanel = cameraPanel;
+        this.mainPanel = mainPanel;
 
         createWorkspaces(workspaceArea.minWidthProperty().doubleValue(), workspaceArea.minHeightProperty().doubleValue());
 
@@ -78,11 +74,9 @@ public class WorkspaceManager {
     /**
      * Saves the currently active workspace.
      */
-    public void saveWorkspace() throws IOException {
-        JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-        JSONObject blueprint = datamanager.readJSONFile(VoogaPeaches.getUser().getUserName());
-        blueprint.put(WORKSPACE_NAME, currentWorkspace.title());
-        datamanager.writeJSONFile(VoogaPeaches.getUser().getUserName(), blueprint);
+    public void saveWorkspace() {
+        VoogaPeaches.getUser().setWorkspace(currentWorkspace.title());
+        VoogaPeaches.getUser().save();
         currentWorkspace.deactivate();
     }
 
@@ -118,7 +112,7 @@ public class WorkspaceManager {
         }
         currentWorkspace = workspace;
         workspace.activate();
-        workspace.addCameraPanel(cameraPanel.getRegion());
+        workspace.addMainPanel(mainPanel.getRegion());
         currentWorkspaceArea.getChildren().clear();
         Region workRegion = workspace.getWorkspace();
         workRegion.setMaxHeight(currentWorkspaceArea.getMaxHeight());

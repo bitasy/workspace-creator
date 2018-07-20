@@ -1,11 +1,7 @@
 package authoring.menu;
 
-import database.User;
-import database.firebase.DatabaseConnector;
-import database.jsonhelpers.JSONDataFolders;
-import database.jsonhelpers.JSONDataManager;
-import database.jsonhelpers.JSONHelper;
-import database.jsonhelpers.JSONToObjectConverter;
+import authoring.User;
+import com.google.gson.Gson;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,8 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
-import org.json.JSONObject;
-import util.exceptions.ObjectIdNotFoundException;
+import util.PropertiesReader;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -41,6 +42,7 @@ public class Login {
     private static final String LIGHT_CSS = "light.css";
     private static final String PANEL = "panel";
     private static final String ERROR = "Unrecognized username.";
+
     public static final int WIDTH = 350;
     public static final int HEIGHT = 125;
     private Stage myStage;
@@ -81,7 +83,7 @@ public class Login {
         Button signupButton = new Button(CREATE_PROFILE);
         signupButton.setOnAction(e -> createAccount() );
         grid.add(signupButton, 1, 0);
-        error = new Label(ERROR);
+        error = new Label();
         error.setVisible(false);
         vbox.getChildren().addAll(userLabel, userTextField, grid, error);
         return vbox;
@@ -94,17 +96,10 @@ public class Login {
     private void createAccount(){
         if(!userTextField.getText().trim().isEmpty()){
             User newUser = new User(userTextField.getText().trim());
-            JSONDataManager manager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-            manager.writeJSONFile(userTextField.getText().trim(), JSONHelper.JSONForObject(newUser));
+            newUser.save();
             VoogaPeaches.changeUser(newUser);
-            DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
-            //try {
-             //   db.addToDatabase(newUser);
-            //} catch (ObjectIdNotFoundException e) {
-               // System.out.println(e.getMessage());
-            //}
             Stage menuStage = new Stage();
-            Menu myMenu = new Menu(menuStage);
+            new Menu(menuStage, newUser);
             myStage.close();
         }
     }
@@ -116,30 +111,23 @@ public class Login {
      * it'll publish the current theme and workspace.
      */
     private void loginPressed() {
-        DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-        JSONDataManager manager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-        JSONObject blueprint = manager.readJSONFile(userTextField.getText());
-        if (blueprint != null) {
-            JSONToObjectConverter<User> converter = new JSONToObjectConverter<>(User.class);
-            User user = converter.createObjectFromJSON(User.class, blueprint);
+        try (Reader reader = new InputStreamReader(new FileInputStream(
+                PropertiesReader.value("filepaths", "users") + userTextField.getText() + ".json"), StandardCharsets.UTF_8)){
+
+            Gson gson = new Gson();
+            User user = gson.fromJson(reader, User.class);
             VoogaPeaches.changeUser(user);
             Stage menuStage = new Stage();
-            Menu myMenu = new Menu(menuStage);
-            menuStage.setOnCloseRequest(event -> {
-                //TODO: SIMRAN HALP
-                try {
-                    connector.addToDatabase(VoogaPeaches.getUser());
-                } catch (ObjectIdNotFoundException e) {
-                    // do nothing
-                }
-            });
+            new Menu(menuStage, user);
             myStage.close();
+        } catch (IOException e) {
+            error.setText(ERROR);
+            error.setVisible(true);
         }
-        error.setVisible(true);
     }
 
     private void updateTheme() {
-        myArea.getStylesheets().add(LIGHT_CSS); //update from database
+        myArea.getStylesheets().add(LIGHT_CSS);
         myArea.getStyleClass().add(PANEL);
     }
 }

@@ -1,4 +1,3 @@
-# voogasalad
+# Workspace Creator
 
-Game Authoring and Player Project
-
+Create your own workspaces and working environments. Detailed README coming.

@@ -1,14 +1,8 @@
 package authoring;
 
 import authoring.panels.PanelManager;
-import authoring.panels.reserved.CameraPanel;
+import authoring.panels.reserved.MainPanel;
 import authoring.panels.reserved.MenuBarPanel;
-import database.User;
-import database.firebase.DatabaseConnector;
-import database.jsonhelpers.JSONDataFolders;
-import database.jsonhelpers.JSONDataManager;
-import database.jsonhelpers.JSONHelper;
-import engine.entities.Entity;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -16,10 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.VoogaPeaches;
 import util.ErrorDisplay;
 import util.PropertiesReader;
-import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
@@ -49,15 +41,18 @@ public class Screen {
     private PanelManager panelManager;
     private WorkspaceManager workspaceManager;
     private ErrorDisplay errorMessage;
-    private CameraPanel camera;
+    private MainPanel mainPanel;
+
+    private User user;
 
     /**
      * Creates a new Screen and adds it to the stage after population. The size of the Screen is determined by the user's computer screen size.
      * @param stage the stage to add the Screen to
      */
-    public Screen(Stage stage, Entity rootEntity){
+    public Screen(Stage stage, User user){
         root = new VBox();
-        controller = new PanelController(rootEntity);
+        this.user = user;
+        controller = new PanelController();
         errorMessage = new ErrorDisplay(PropertiesReader.value(REFLECT, ERROR_TITLE));
         //SceenBounds Code courtesy of <a href = "http://www.java2s.com/Code/Java/JavaFX/GetScreensize.htm">java2s</a>
         Rectangle2D primaryScreenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
@@ -89,7 +84,7 @@ public class Screen {
      * sets the initial theme as the user's preference (or the default if a new user), also subscribes to pubsub to allow for updating across all screens for the user's theme
      */
     private void updateTheme() {
-        root.getStylesheets().add(VoogaPeaches.getUser().getThemeName()); //update from database
+        root.getStylesheets().add(user.getThemeName()); //update from database
         PubSub.getInstance().subscribe(
                 THEME_MESSAGE,
                 (message) -> {
@@ -98,7 +93,7 @@ public class Screen {
                     }
                     String newTheme = ((StringMessage) message).readMessage();
                     root.getStylesheets().add(newTheme);
-                    VoogaPeaches.getUser().setTheme(newTheme);
+                    user.setTheme(newTheme);
                 }
         );
         //TODO: on screen close update the database with the theme file name string
@@ -113,16 +108,16 @@ public class Screen {
     }
 
     /**
-     * Sets up the Screen by creating the Menu Bar and the Camera. Then adds the camera's display Region to the workspace and adds all the elements to the Screen.
-     * @param width the width of the Screen, used to scale the camera appropriately.
+     * Sets up the Screen by creating the Menu Bar and the Camera. Then adds the mainPanel's display Region to the workspace and adds all the elements to the Screen.
+     * @param width the width of the Screen, used to scale the mainPanel appropriately.
      */
     private void setupScreen(double width, double height) throws IOException {
         double cameraWidthRatio = getDoubleValue(CAMERA_WIDTH_SCALE);
         double cameraWidth = width * cameraWidthRatio;
         double cameraHeight = cameraWidth * getDoubleValue(CAMERA_HEIGHT_TO_WIDTH_RATIO);
 
-        camera = new CameraPanel(cameraWidth, cameraHeight);
-        camera.setController(controller);
+        mainPanel = new MainPanel(cameraWidth, cameraHeight);
+        mainPanel.setController(controller);
 
         Pane workspaceArea = new Pane();
         workspaceArea.setMinWidth(width);
@@ -131,13 +126,13 @@ public class Screen {
         workspaceArea.setMaxHeight(height);
 
 
-        workspaceManager = new WorkspaceManager(workspaceArea, panelManager, camera);
+        workspaceManager = new WorkspaceManager(workspaceArea, panelManager, mainPanel);
         MenuBarPanel bar = new MenuBarPanel(workspaceManager.getWorkspaces(), panelManager.getPanels());
         bar.setController(controller);
 
-        Region cameraRegion = camera.getRegion();
-        cameraRegion.setMinWidth(CAMERA_MIN_WIDTH);
-        cameraRegion.setMinHeight(CAMERA_MIN_HEIGHT);
+        Region mainRegion = mainPanel.getRegion();
+        mainRegion.setMinWidth(CAMERA_MIN_WIDTH);
+        mainRegion.setMinHeight(CAMERA_MIN_HEIGHT);
         root.getChildren().addAll(bar.getRegion(), workspaceArea);
     }
 
@@ -154,25 +149,11 @@ public class Screen {
     }
 
     /**
-     * saves the workspace information to their files
+     * Saves the workspace information to a file.
      */
     public void save(){
-        User currentUser = VoogaPeaches.getUser();
-        JSONDataManager manager = new JSONDataManager(JSONDataFolders.USER_SETTINGS);
-        manager.writeJSONFile(currentUser.getUserName(), JSONHelper.JSONForObject(currentUser));
-        try {
-            workspaceManager.saveWorkspace();
-          //  DatabaseConnector<User> db = new DatabaseConnector<>(User.class);
-           // db.addToDatabase(VoogaPeaches.getUser());
-            // Have to force a sleep to wait for data to finish sending, but
-            // with actual project this shouldn't be a problem
-            //Thread.sleep(1000);//TODO replace with PauseTransition if possible
-        } catch (IOException e){
-      //      errorMessage.addMessage(String.format(PropertiesReader.value(REFLECT,IO_ERROR), e.getMessage()));
-        //    errorMessage.displayError();
-        //} catch (ObjectIdNotFoundException | InterruptedException e) {
-          //  new ErrorDisplay("Save Problem", "Problem with Saving!").displayError();
-        }
+        workspaceManager.saveWorkspace();
+        user.save();
     }
 
     /**

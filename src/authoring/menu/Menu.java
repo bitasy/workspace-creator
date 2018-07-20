@@ -1,32 +1,19 @@
 package authoring.menu;
 
-import authoring.GameWindow.GameWindow;
 import authoring.Screen;
 import authoring.buttons.strategies.Logout;
 import authoring.buttons.strategies.MenuButton;
-import database.GameLoader;
-import database.User;
-import database.fileloaders.ScriptLoader;
-import database.firebase.DatabaseConnector;
-import database.jsonhelpers.JSONDataFolders;
-import database.jsonhelpers.JSONDataManager;
-import database.jsonhelpers.JSONToObjectConverter;
-import engine.entities.Entity;
-import javafx.scene.Group;
+import authoring.User;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.VoogaPeaches;
-import org.json.JSONObject;
 import util.PropertiesReader;
-import util.exceptions.ObjectIdNotFoundException;
 import util.pubsub.PubSub;
 import util.pubsub.messages.StringMessage;
 
@@ -49,7 +36,7 @@ public class Menu {
     private static final String AUTHORING_TITLE = "VoogaPeaches: A Programmers for Peaches Production -- ";
     private static final String AUTHORING_IMAGE = PropertiesReader.value(MENU_LAYOUT,"authorpic");
     private static final String PLAYER_IMAGE = PropertiesReader.value(MENU_LAYOUT,"playerpic");
-    private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newgamepic");
+    private static final String NEW_GAME_IMAGE = PropertiesReader.value(MENU_LAYOUT,"newprojectpic");
     private static final String TITLE = PropertiesReader.value(MENU_LAYOUT,"title");
     private static final String TITLE_IMAGE_PATH = PropertiesReader.value(MENU_LAYOUT, "voogapic");
     private static final double SELECTION_HEIGHT_RATIO = 0.28;
@@ -70,23 +57,24 @@ public class Menu {
     private static final int TITLE_HEIGHT_CENTER = 2;
     private static final String AUTHORING_TOOLTIP = "authoring";
     private static final String PLAYING_TOOLTIP = "playing";
-    private static final String NEWGAME_TOOLTIP = "newgame";
+    private static final String NEWGAME_TOOLTIP = "newproject";
     private static final String DASH = " -- ";
     private static final String USER = "User: ";
 
     private Pane myRoot;
     private Stage myStage;
     private Screen authoring;
-    private GameWindow gaming;
     private Stage authoringStage = new Stage();
     private Stage gamingStage = new Stage();
-    private GameSelectionList list;
+    private ProjectSelectionList list;
+    private User user;
 
-    public Menu(Stage stage) {
+    public Menu(Stage stage, User user) {
         myStage = stage;
+        this.user = user;
         setupStage();
         addTitle();
-        setupGames();
+        setupProjects();
         addButtons();
         updateTheme();
     }
@@ -101,10 +89,10 @@ public class Menu {
     }
 
     /**
-     * Adds the game selector in the middle of the screen.
+     * Adds the project selector in the middle of the screen.
      */
-    private void setupGames() {
-        list = new GameSelectionList(SELECTION_LIST_WIDTH, SELECTION_LIST_HEIGHT);
+    private void setupProjects() {
+        list = new ProjectSelectionList(SELECTION_LIST_WIDTH, SELECTION_LIST_HEIGHT);
         list.setLayoutX(WIDTH * SELECTION_WIDTH_RATIO - SELECTION_LIST_XOFFSET);
         list.setLayoutY(HEIGHT * SELECTION_HEIGHT_RATIO);
         myRoot.getChildren().add(list);
@@ -132,49 +120,16 @@ public class Menu {
     /**
      * Handles switching to the Authoring screen with the pencil image is clicked
      */
-    private void authoringPressed() {
+    private void openProjectPressed() {
         if (validOpen()) {
             VoogaPeaches.setIsGaming(false);
-            String UID = list.getSelectedUID();
             authoringStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
             authoringStage.setMaximized(true);
             authoringStage.setResizable(false);
-            ScriptLoader.cache();
-            Entity root = loadGame(UID);
-            this.authoring = new Screen(authoringStage,root);
+            this.authoring = new Screen(authoringStage, user);
             authoringStage.setOnCloseRequest(event -> {
                 myStage.close();
                 authoring.save();
-                DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-                try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
-            });
-        }
-    }
-
-    private Entity loadGame(String UID) {
-        /*JSONDataManager datamanager = new JSONDataManager(JSONDataFolders.GAMES);
-        JSONObject obj = datamanager.readJSONFile("Realm of the Mad God/root.json");
-        return new JSONToObjectConverter<Entity>(Entity.class).createObjectFromJSON(Entity.class, obj);*/
-
-        GameLoader loader = new GameLoader(UID);
-        loader.loadInAssets();
-        while(!loader.assetsLoadedIn()) { try { Thread.sleep(50); } catch (Exception e) { } }
-        loader.loadInRoot();
-        while(!loader.isGameLoaded()) { try { Thread.sleep(50); } catch (Exception e) { } }
-        return loader.loadGame();
-    }
-
-    private void playPressed(){
-        if (validOpen()) {
-            VoogaPeaches.setIsGaming(true);
-            String UID = list.getSelectedUID();
-            gamingStage.setTitle(AUTHORING_TITLE + DASH + list.getSelectionModel().getSelectedItem());
-            gamingStage.setTitle(AUTHORING_TITLE);
-            gamingStage.setMaximized(true);
-            gamingStage.setResizable(false);
-            Entity root = loadGame(UID);
-            this.gaming = new GameWindow(gamingStage, root);
-            gamingStage.setOnCloseRequest(event -> {
             });
         }
     }
@@ -183,36 +138,30 @@ public class Menu {
         return !gamingStage.isShowing() && !gamingStage.isShowing() && list.getSelectionModel().getSelectedItem() != null;
     }
 
-    private void newGamePressed(){
+    private void newProjectPressed(){
         authoringStage.setTitle(AUTHORING_TITLE);
         authoringStage.setMaximized(true);
         authoringStage.setResizable(false);
-        ScriptLoader.cache();
-        authoring = new Screen(authoringStage, new Entity());
+        authoring = new Screen(authoringStage, user);
         authoringStage.setOnCloseRequest(event -> {
             myStage.close();
             authoring.save();
-            DatabaseConnector<User> connector = new DatabaseConnector<>(User.class);
-            try { connector.addToDatabase(VoogaPeaches.getUser()); } catch (ObjectIdNotFoundException e) {}
         });
     }
 
     /**
-     * Creates the two buttons and connects them to opening the Authoring and Game Playing Environments
+     * Creates the two buttons and connects them to opening the Authoring and Project Playing Environments
      */
     private void addButtons() {
-        Button authoringButton = new MenuButton(() -> authoringPressed(), AUTHORING_IMAGE).getButton();
+        Button authoringButton = new MenuButton(() -> openProjectPressed(), AUTHORING_IMAGE).getButton();
         authoringButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, AUTHORING_TOOLTIP)));
-        Button playButton = new MenuButton(() -> playPressed(), PLAYER_IMAGE).getButton();
-        playButton.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, PLAYING_TOOLTIP)));
-        Button newGame = new MenuButton(() -> newGamePressed(), NEW_GAME_IMAGE ).getButton();
-        newGame.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, NEWGAME_TOOLTIP)));
+        Button newProject = new MenuButton(() -> newProjectPressed(), NEW_GAME_IMAGE ).getButton();
+        newProject.setTooltip(new Tooltip(PropertiesReader.value(MENU_LAYOUT, NEWGAME_TOOLTIP)));
         GridPane grid = new GridPane();
-        grid.add(newGame, 0,0);
+        grid.add(newProject, 0,0);
         grid.add(authoringButton,1,0);
-        grid.add(playButton,2,0);
         grid.setHgap(HGAP);
-        double gridOffset = WIDTH / 2 - (1.5) * newGame.getMinWidth() - HGAP;
+        double gridOffset = WIDTH / 2 - (1.5) * newProject.getMinWidth() - HGAP;
         grid.setLayoutX(gridOffset);
         grid.setLayoutY(HEIGHT * GRID_HEIGHT_RATIO);
 
